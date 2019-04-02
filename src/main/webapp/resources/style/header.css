@@ -1,0 +1,23 @@
+#header {
+	display:flex;	
+	font-size:0.7em;
+}
+
+#header div.logo{
+	flex:1;
+}
+
+#header img{
+	height:9em;	
+}
+
+#header div.identification label{
+	width:9em;
+}
+
+#header fieldset {
+    padding: 1em;
+    border: 1px #82aa37 solid;
+    margin: 0.5em;
+    border-radius: 0.4em;
+}

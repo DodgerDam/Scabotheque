@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd"> 
+       
+<tiles-definitions>
+
+    <definition name="base.definition" template="/vues/layout.jsp">
+    	<put-attribute name="header"  value="/vues/header.jsp" />
+    	<put-attribute name="menu"  value="/vues/menu.jsp" />
+    	<put-attribute name="menu-v2"  value="/vues/menu-v2.jsp" />
+    	<put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/vues/footer.jsp" />  
+    </definition>
+
+    <definition name="listeAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/listeAdherents.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="showAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/showAdherent.jsp" />
+        <put-attribute name="pageName"  value="showAdh" />
+    </definition>
+
+	<definition name="addAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/addAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+    
+	<definition name="editActiviteAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editActiviteAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="editAdministratifAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editAdministratifAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+    <definition name="editContactAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editContactAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="editIdentiteAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editIdentiteAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="editExploitationAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editExploitationAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="listIdLibelle" extends="base.definition">
+        <put-attribute name="body"  value="/vues/parametrage/listeIdLibelle.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+    <definition name="enCours" extends="base.definition">
+        <put-attribute name="body"  value="/vues/enCours.jsp" />
+        <put-attribute name="pageName"  value="enCours" />
+    </definition>
+
+<!--     <definition name="listeCourses" extends="base.definition"> -->
+<!--         <put-attribute name="body"  value="/vues/pageTest/listeCourses.jsp" /> -->
+<!--         <put-attribute name="pageName"  value="listeCourses" /> -->
+<!--     </definition> -->
+
+<!--     <definition name="creation" extends="base.definition"> -->
+<!--         <put-attribute name="body"  value="/vues/pageTest/creation.jsp" /> -->
+<!--         <put-attribute name="pageName"  value="creation" /> -->
+<!--     </definition> -->
+
+<!--     <definition name="suppression" extends="base.definition"> -->
+<!--         <put-attribute name="body"  value="/vues/pageTest/suppression.jsp" /> -->
+<!--         <put-attribute name="pageName"  value="suppression" /> -->
+<!--     </definition> -->
+
+<!--     <definition name="modification" extends="base.definition"> -->
+<!--         <put-attribute name="body"  value="/vues/pageTest/modification.jsp" /> -->
+<!--         <put-attribute name="pageName"  value="modification" /> -->
+<!--     </definition> -->
+    
+<!--     <definition name="liens" extends="base.definition"> -->
+<!--         <put-attribute name="body"  value="/vues/enCours.jsp" /> -->
+<!--         <put-attribute name="pageName"  value="enCours" /> -->
+<!--     </definition> -->
+</tiles-definitions>

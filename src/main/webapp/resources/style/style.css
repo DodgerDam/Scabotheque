@@ -1,0 +1,271 @@
+@import 'commun.css';
+@import 'header.css';
+
+
+ 
+/* Forms --------------------------------------------------------------------------------------- */
+
+button{
+	padding: 10px;
+	margin:5px;
+    color: #ffffff;
+    display: inline-block;
+    min-width: 220px;
+    background-color: #82aa37;
+    border: 0 none;
+    border-radius: 0.4em;
+    -webkit-appearance: none;
+    font-weight: bold;
+    }
+    
+legend {
+    font-weight: bold;
+/*     color: #0568CD; */
+}
+
+/* form div { */
+/* 	display:flex; */
+/* 	margin: 0.5em; */
+/* } */
+
+form .valeur{
+	width:30em;
+}
+
+form label {
+    float: left;
+    width: 25em;
+    margin: 3px 0px 0px 0px;
+}
+
+form input {
+    margin: 3px 3px 0px 0px;
+    border: 1px #999 solid ;
+    
+}
+
+/* form .errors{ */
+/* 	color:red;     */
+/* } */
+
+input {
+    margin: 3px 3px 0px 0px;
+    border: 1px #999 solid ;
+    
+}
+
+form input.sansLabel {
+    margin-left: 200px;
+}
+
+/* Styles et couleurs -------------------------------------------------------------------------- */
+.requis {
+    color: #c00;
+}
+
+.errors {
+    color: #f53;
+    
+}
+
+.succes {
+    color: #090;
+}
+
+/* .info { */
+/*     font-style: italic; */
+/*     color: #E8A22B; */
+/* } */
+
+/* Détail adherents et modification -------------------------------------------------------------------------- */
+
+#showAdherent, #editAdherent, #listeIdLibelle{
+	display:flex;
+	flex-direction:column;
+	font-size:1.3em;
+}
+
+#showAdherent H2{
+    font-size: 2.35294em;
+    line-height: 40px;
+   	text-align:center;
+    color: #004462;
+    font-size: 1.76471em;
+    margin: 0 0 10px;
+}
+
+#listeIdLibelle .showDetail{
+	text-align :center;	
+}
+
+#editAdherent .editButton, #listeIdLibelle .editButton{
+	text-align :right;	
+}
+
+#editAdherent .entete{
+    align-items: center;
+	display: grid;
+    grid-template-columns: 7em 1fr 7em;
+    padding: 0.2em 0.4em;
+}
+
+#showAdherent .entete{
+    align-items: center;
+	display: grid;
+    grid-template-columns: 8em 1fr;
+    padding: 0.2em 0.4em;
+}
+
+#editAdherent .entete{
+/*     align-items: center; */
+/* 	display: grid; */
+/*     grid-template-columns: 7em 1fr 7em; */
+/*     padding: 0.2em 0.4em; */
+    text-align : center;
+}
+
+#showAdherent .entete img, #editAdherent .entete img{
+	width:7em;
+}
+
+#editAdherent .showDetail {
+	display: grid;
+    grid-template-columns: 12em 1fr 2em;
+	padding: 0.2em 0.4em;
+}
+
+#editAdherent label{
+	width:auto;
+}
+
+#showAdherent .showDetail{
+	align-items: center;
+	display: grid;
+    grid-template-columns: 12em 1fr 2em;
+	padding: 0.2em 0.4em;
+}
+
+#showAdherent fieldset , #editAdherent fieldset{
+    background-color: #ffffff;
+    border: 1px solid #d4d4d4;
+    border-radius: 0.4em;
+}
+
+#showAdherent svg, #editAdherent svg{
+	heigth:1.5em;
+	width:1.5em;
+}
+
+/* #showAdherent label { */
+/*     float: left; */
+/*     margin: 0 0.5em; */
+/* } */
+
+/* #showAdherent label .valeur{ */
+	
+/* } */
+
+/* Liste des adherents -------------------------------------------------------------------------- */
+#listeAdherents {
+	display :flex;
+	flex-direction:column;
+	width: 100%;
+}
+
+#listeAdherents .list {
+	display:flex;
+	}
+
+#listeAdherents .photo {
+	float:left;
+	margin:auto;
+	text-align:center;
+	width:7em;
+/* 	border: 1px solid gray; */
+}
+
+#listeAdherents .photo img{
+		width:5em;
+		height:5em;
+	}
+
+#listeAdherents .detail {
+	background-color: #ffffff;
+	border: 1px solid #d4d4d4;
+	border-radius: 0.4em;
+	flex:1;
+	margin:0.2em;
+	padding: 0.4em;
+}
+
+#listeAdherents .detail a{
+    color: #004462;
+	text-decoration: none; 
+  }
+
+#listeAdherents .info{
+	display :flex;
+	}  
+
+#listeAdherents .code{
+	flex:1;
+    display: grid;
+    grid-template-columns: 4em 1fr;
+	margin:auto;
+	}  
+
+#listeAdherents .statut{
+	flex:1;
+    display: grid;
+    grid-template-columns: 4em 1fr;
+	margin:auto;
+	}  
+
+#listeAdherents .raccourcis{
+	-flex:1;
+	margin:auto;
+	text-align:right;
+}  
+
+#listeAdherents .etatAdh{
+    display: grid;
+    grid-template-columns: 4em 1fr 2em ;
+}  
+
+#listeAdherents .detail a:hover {
+    text-decoration: underline; }
+}
+#listeAdherents td, #customers th {
+/*   border: 1px solid #ddd; */
+  padding: 5px;
+}
+
+#listeAdherents .link{
+	width:25px;
+}
+
+#listeAdherents .detail img{
+	height:20px;
+	align:center;
+	width:20px;
+}
+
+
+
+
+
+/* #adherents tr:nth-child(even){background-color: #e8e8e8;} */
+
+/* #adherents tr:hover {background-color: #ddd;} */
+
+/* #listeAdherents th { */
+/*   padding-top: 12px; */
+/*   padding-bottom: 12px; */
+/*   text-align: center; */
+/*   color: white; */
+/* } */
+
+svg {
+	width:2em;
+	height:2em;
+}
