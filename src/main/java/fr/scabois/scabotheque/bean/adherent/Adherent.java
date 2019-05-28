@@ -1,76 +1,121 @@
-package fr.scabois.scabotheque.controller.adherent.edit;
+package fr.scabois.scabotheque.bean.adherent;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import fr.scabois.scabotheque.bean.adherent.Etat;
-import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
-import fr.scabois.scabotheque.bean.adherent.Pole;
-import fr.scabois.scabotheque.bean.adherent.Role;
-import fr.scabois.scabotheque.bean.adherent.Secteur;
-import fr.scabois.scabotheque.bean.adherent.Tournee;
 import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
 
-public class EditAdherent {
-    // @NotEmpty(message="{modification.course.quantite.notempty}")
-    // @Pattern(regexp="\\d*", message="{modification.course.quantite.numerique}")
-    // message="{modification.course.quantite.numerique}")
-    // @NotEmpty(message = "{modification.notempty}")
-    // @Pattern(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}", message =
-    // "{modification.course.quantite.numerique}")
-    // private String mail;
-    // @NotNull(message = "{modification.notempty}")
-    // @Min(value = 0L, message = "modification.number.positive")
+@Entity
+@Table(name = "adherent")
+public class Adherent {
 
-    @NotEmpty(message = "{modification.notempty}")
     private String adresse;
+
+    @Column(name = "adresse_complement")
     private String adresseComplement;
+
+    @ManyToOne
     private Agence agence;
+
+    @ManyToOne
     private Ape ape;
-    @NotEmpty(message = "{modification.notempty}")
+
+    @Column(name = "code_adh")
     private String code;
-    @NotEmpty(message = "{modification.notempty}")
+
+    @Column(name = "code_erp")
     private String codeERP;
-    // la présence de la commune est testée dans le controleur
+
+    @ManyToOne
     private Commune commune;
+
+    @Column(name = "contact_comptable")
     private String contactComptable;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
+    @OneToMany(mappedBy = "adherent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<AdherentContact> contacts = new ArrayList<>();
+
+    @Column(name = "cloture_exercice")
     private Date dateClotureExe;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+
+    @Column(name = "date_entree")
     private Date dateEntree;
-    @NotEmpty(message = "{modification.notempty}")
+
+    @Column(name = "denom_sociale")
     private String denomination;
+
+    @ManyToOne
     private Etat etat;
+
+    @ManyToOne
+    @JoinColumn(name = "form_juridique_id")
     private FormeJuridique formeJuridique;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "adhesion_artipole")
     private boolean isArtipole;
+
+    @Column(name = "charte_artipole")
     private boolean isCharteArtipole;
+
+    @Column(name = "facebook_artipole")
     private boolean isFacebookArtipole;
+
+    @Column(name = "flocage_artipole")
     private boolean isFlocageArtipole;
+
+    @Column(name = "formation_commerce")
     private boolean isFormationCommerce;
+
+    @Column(name = "outil_dechargement")
     private boolean isOutilDechargement;
+
+    @Column(name = "site_web_artipole")
     private boolean isWebArtipole;
-    @NotEmpty(message = "{modification.notempty}")
+
     private String libelle;
+
+    @Column(name = "num_rep_metier")
     private String numRepMetier;
-    // la présence de la commune est testée dans le controleur
+    @ManyToOne
     private Pole pole;
-    // la présence de la commune est testée dans le controleur
+
+    @ManyToOne
+    @JoinColumn(name = "rcs_rm_commune_id")
     private Commune rcsCommune;
-    @NotEmpty(message = "{modification.notempty}")
+
+    @Column(name = "rcs_rm")
     private String rcsRm;
+
+    @ManyToOne
     private Role role;
-    // la présence de la commune est testée dans le controleur
+
+    @ManyToOne
     private Secteur secteur;
-    @NotNull(message = "{modification.notempty}")
+
     private Integer siren;
+
     private Long siret;
+
+    @ManyToOne
     private Tournee tournee;
 
     public String getAdresse() {
@@ -103,6 +148,10 @@ public class EditAdherent {
 
     public String getContactComptable() {
 	return contactComptable;
+    }
+
+    public List<AdherentContact> getContacts() {
+	return contacts;
     }
 
     public Date getDateClotureExe() {
@@ -229,6 +278,11 @@ public class EditAdherent {
 	this.contactComptable = contactComptable;
     }
 
+    public void setContacts(List<AdherentContact> contacts) {
+	this.contacts.clear();
+	this.contacts.addAll(contacts);
+    }
+
     public void setDateClotureExe(Date dateClotureExe) {
 	this.dateClotureExe = dateClotureExe;
     }
@@ -273,10 +327,6 @@ public class EditAdherent {
 	this.isFormationCommerce = isFormationCommerce;
     }
 
-    public void setIsOutilDechargement(boolean outilDechargement) {
-	this.isOutilDechargement = outilDechargement;
-    }
-
     public void setIsWebArtipole(boolean isWebArtipole) {
 	this.isWebArtipole = isWebArtipole;
     }
@@ -287,6 +337,10 @@ public class EditAdherent {
 
     public void setNumRepMetier(String numRepMetier) {
 	this.numRepMetier = numRepMetier;
+    }
+
+    public void setOutilDechargement(boolean outilDechargement) {
+	this.isOutilDechargement = outilDechargement;
     }
 
     public void setPole(Pole pole) {
@@ -320,5 +374,8 @@ public class EditAdherent {
     public void setTournee(Tournee tournee) {
 	this.tournee = tournee;
     }
+
+//    @Column(name = "nb_parts")
+//    private Integer nbParts;
 
 }

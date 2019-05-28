@@ -1,22 +1,28 @@
 package fr.scabois.scabotheque.dao;
 
 import java.util.List;
+import java.util.Map;
 
-import fr.scabois.scabotheque.bean.Activite;
-import fr.scabois.scabotheque.bean.Adherent;
-import fr.scabois.scabotheque.bean.Agence;
-import fr.scabois.scabotheque.bean.Ape;
-import fr.scabois.scabotheque.bean.Commune;
-import fr.scabois.scabotheque.bean.Etat;
-import fr.scabois.scabotheque.bean.FormeJuridique;
-import fr.scabois.scabotheque.bean.Pole;
-import fr.scabois.scabotheque.bean.Role;
-import fr.scabois.scabotheque.bean.Secteur;
-import fr.scabois.scabotheque.bean.Tournee;
+import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.Etat;
+import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
+import fr.scabois.scabotheque.bean.adherent.Pole;
+import fr.scabois.scabotheque.bean.adherent.Role;
+import fr.scabois.scabotheque.bean.adherent.Secteur;
+import fr.scabois.scabotheque.bean.adherent.Tournee;
+import fr.scabois.scabotheque.bean.commun.Activite;
+import fr.scabois.scabotheque.bean.commun.Agence;
+import fr.scabois.scabotheque.bean.commun.Ape;
+import fr.scabois.scabotheque.bean.commun.Commune;
+import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 
 public interface IAdherentDAO {
 
     void createActivite(String libelle);
+
+    void createAdherent(Adherent adherent);
 
     void createAgence(String libelle);
 
@@ -26,13 +32,21 @@ public interface IAdherentDAO {
 
     void createSecteur(String libelle);
 
+    void createTypeContact(String libelle);
+
+    void editAdherent(Adherent pAdherent);
+
     List<Activite> loadActivites();
 
     List<Activite> loadActivitesAdherents();
 
     Adherent loadAdherent(int idAdh);
 
+    Map<TypeContact, AdherentContact> LoadAdherentContact(int adhId);
+
     List<Adherent> loadAdherents();
+
+    List<Adherent> loadAdherents(CriteriaAdherent criteria);
 
     List<Agence> loadAgences();
 
@@ -52,7 +66,19 @@ public interface IAdherentDAO {
 
     List<Tournee> loadTournees();
 
-    void saveAdherent(Adherent pAdherent);
+    List<TypeContact> loadTypeContact();
+
+    void saveAdherentContacts(List<AdherentContact> contacts);
+
+    void saveAgences(List<Agence> agences);
+
+    void savePoles(List<Pole> poles);
+
+    void saveRoles(List<Role> roles);
+
+    void saveSecteur(List<Secteur> secteurs);
+
+    void saveTypeContacts(List<TypeContact> typeContacts);
 
     void supprimeActivite(Integer id);
 
@@ -63,6 +89,8 @@ public interface IAdherentDAO {
     void supprimeRole(Integer id);
 
     void supprimeSecteur(Integer id);
+
+    void supprimeTypeContact(Integer id);
 
 //    void addAdherents(final Adherent adherent);
 //    

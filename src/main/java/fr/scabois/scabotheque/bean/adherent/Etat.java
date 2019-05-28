@@ -1,4 +1,4 @@
-package fr.scabois.scabotheque.bean;
+package fr.scabois.scabotheque.bean.adherent;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

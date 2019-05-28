@@ -1,4 +1,4 @@
-package fr.scabois.scabotheque.bean;
+package fr.scabois.scabotheque.bean.commun;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,30 +7,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pole")
-public class Pole implements HasIdLibelle {
+@Table(name = "code_ape")
+public class Ape {
 
+    private String code;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String libelle;
 
-    @Override
+    public String getCode() {
+	return code;
+    }
+
     public Integer getId() {
 	return id;
     }
 
-    @Override
     public String getLibelle() {
-	return libelle;
+	return code + " - " + libelle;
     }
 
-    @Override
+    public void setCode(String code) {
+	this.code = code;
+    }
+
     public void setId(final Integer pId) {
 	id = pId;
     }
 
-    @Override
     public void setLibelle(final String pLibelle) {
 	libelle = pLibelle;
     }

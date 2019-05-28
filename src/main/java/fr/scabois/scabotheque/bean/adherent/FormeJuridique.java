@@ -1,4 +1,4 @@
-package fr.scabois.scabotheque.bean;
+package fr.scabois.scabotheque.bean.adherent;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,13 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="code_ape")
-public class Ape {
+@Table(name="forme_juridique")
+public class FormeJuridique {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
-    private String code;
     private String libelle;
 
     public Integer getId() {
@@ -24,15 +23,7 @@ public class Ape {
         id = pId;
     }
 
-    public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getLibelle() {
+    public String getLibelle() {
         return libelle;
     }
 

@@ -4,16 +4,16 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-public class EditListForm {
+public class EditIdLibListForm {
 
     @Valid
-    private List<EditList> list;
+    private List<EditIdLibList> list;
 
-    public void setList(final List<EditList> list) {
+    public void setList(final List<EditIdLibList> list) {
 	this.list = list;
     }
 
-    public List<EditList> getList() {
+    public List<EditIdLibList> getList() {
 	return list;
     }
 }
