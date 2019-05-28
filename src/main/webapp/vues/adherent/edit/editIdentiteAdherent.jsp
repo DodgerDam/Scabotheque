@@ -4,6 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -18,7 +19,7 @@
 		<div>
 			<h2>${adhToEdit.adherent.denomination}</h2>
 			<div>
-				<span class="label"><spring:message code="label.code"/></span>
+				<span class="label"><spring:message code="label.codeAdh"/></span>
 				<span class="data" > ${adhToEdit.adherent.code} </span>
 			</div>
 		</div>
@@ -55,16 +56,20 @@
 	<form:input type="hidden" path="adherent.isFormationCommerce"/>
 	<form:input type="hidden" path="adherent.etat.id"/>
 
-	
-
 	<fieldset>
 	   	<legend><spring:message code="label.identite"/></legend>
 	   	
 	   	<div class="showDetail">
-			<form:label path="adherent.code" ><spring:message code="label.libelle"/></form:label>
+			<form:label path="adherent.code" ><spring:message code="label.codeAdh"/></form:label>
 			<form:label path="adherent.code" >${adhToEdit.adherent.code}</form:label>
 			<form:input type="hidden" name="adherent.code" path="adherent.code"/>
 			<b><i><form:errors class="valeur" path="adherent.code" /></i></b>
+		</div>
+
+	   	<div class="showDetail">
+			<form:label path="adherent.codeERP" ><spring:message code="label.codeERP"/></form:label>
+			<form:input class="valeur" name="adherent.codeERP" path="adherent.codeERP"/>
+			<b><i><form:errors class="valeur" path="adherent.codeERP" /></i></b>
 		</div>
 		
 		<div class="showDetail">
@@ -93,42 +98,43 @@
 		
 		<div class="showDetail">
 			<form:label path="adherent.commune" ><spring:message code="label.commune"/></form:label>
-			<form:label class="valeur"  id="communeAdhLibelle" path="adherent.commune" >${adhToEdit.adherent.commune.codePostal} - ${adhToEdit.adherent.commune.libelle}</form:label>
+			<form:label id="communeAdhLibelle" path="adherent.commune" class="valeur" >${adhToEdit.adherent.commune.codePostal} - ${adhToEdit.adherent.commune.libelle}</form:label>
 			<form:input id="communeAdh" type="hidden" path="adherent.commune.id"/>
 			<form:input type="hidden" path="adherent.commune.codePostal"/>
 			<form:input type="hidden" path="adherent.commune.libelle"/>
-			<span><a href="#" id="editCommune"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			<span><a href="#" id="editCommune"><svg><use xlink:href="<c:url value="/resources/images/icones.svg#edit"/>"></use></svg></a></span>
 		</div>
 	</fieldset>
 
 	<div class="editButton">
 		<button id="save" type="submit">Enregistrer</button>
-		<c:url value="/showAdherent" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
+		<c:url value="/adherentDetail" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
 		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 
 </form:form>
 
+<div id="overlay"></div>
 <div  id="dialogCommune" title="Selection de la commune" >
-<%-- 		<form> --%>
-		<span>commune actuel </span>
-		<span id="currentCommune"></span></br>
-		
-		<span>recherche de la nouvelle </span>
-		<span>saisir le code postal</span>
-		<input id="filterCP" type="text" />
-		<select id="communeListe" multiple></select>
-<%-- 		</form> --%>
+
+	<span>Recherche de la commune:</span>
+	<input id="filterCP" type="text" placeholder="Code postale ou Nom"  />
+	<br>
+	<select id="communeListe" class="communeListe" multiple >
+		<option value="" >trop de résultat</option>
+	</select>
+
 </div>
 
 <script>
 $( function() {
 	communeDialog = $('#dialogCommune').dialog({
-		resizable:false,
-	    modal:true,
-	    autoOpen:false,
-	    height:400,
-	    width:315,
+		
+		show: "fade",
+        hide: "fade",
+        resizable: false,
+        autoOpen: false,
+	    modal: true,
 
 	    buttons: {
 	    	"Selectionner" : function() {
@@ -159,108 +165,17 @@ $( function() {
  		var params={filter: $("#filterCP").val()};
  		console.log (params);
 		
-		$.get("loadCommuneListe",params, function(response) {
+		$.get("/scabotheque/loadCommuneListe",params, function(response) {
 			console.log("retour servlet : " + response.length);
-
-			        $selectList = $("#communeListe");
-			        $selectList.find("option").remove();  
-			        $.each(JSON.parse(response), function(index, commune) {
-				        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
-			        });                   
-			 
-			    });
+	        $selectList = $("#communeListe");
+	        $selectList.find("option").remove();  
+	        $.each(JSON.parse(response), function(index, commune) {
+		        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
+	        });                   
+		});
 	}
-	
-//     var dialog, form,
- 
-//       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-//       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-//       name = $( "#name" ),
-//       email = $( "#email" ),
-//       password = $( "#password" ),
-//       allFields = $( [] ).add( name ).add( email ).add( password ),
-//       tips = $( ".validateTips" );
- 
-//     function updateTips( t ) {
-//       tips
-//         .text( t )
-//         .addClass( "ui-state-highlight" );
-//       setTimeout(function() {
-//         tips.removeClass( "ui-state-highlight", 1500 );
-//       }, 500 );
-//     }
- 
-//     function checkLength( o, n, min, max ) {
-//       if ( o.val().length > max || o.val().length < min ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( "Length of " + n + " must be between " +
-//           min + " and " + max + "." );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function checkRegexp( o, regexp, n ) {
-//       if ( !( regexp.test( o.val() ) ) ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( n );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function addUser() {
-//       var valid = true;
-//       allFields.removeClass( "ui-state-error" );
- 
-//       valid = valid && checkLength( name, "username", 3, 16 );
-//       valid = valid && checkLength( email, "email", 6, 80 );
-//       valid = valid && checkLength( password, "password", 5, 16 );
- 
-//       valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-//       valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-//       valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
- 
-//       if ( valid ) {
-//         $( "#users tbody" ).append( "<tr>" +
-//           "<td>" + name.val() + "</td>" +
-//           "<td>" + email.val() + "</td>" +
-//           "<td>" + password.val() + "</td>" +
-//         "</tr>" );
-//         dialog.dialog( "close" );
-//       }
-//       return valid;
-//     }
- 
-//     dialog = $( "#dialog-form" ).dialog({
-//       autoOpen: false,
-//       height: 400,
-//       width: 350,
-//       modal: true,
-//       buttons: {
-//         "Create an account": addUser,
-//         Cancel: function() {
-//           dialog.dialog( "close" );
-//         }
-//       },
-//       close: function() {
-//         form[ 0 ].reset();
-//         allFields.removeClass( "ui-state-error" );
-//       }
-//     });
- 
-//     form = dialog.find( "form" ).on( "submit", function( event ) {
-//       event.preventDefault();
-//       addUser();
-//     });
- 
-//     $( "#create-user" ).button().on( "click", function() {
-//       dialog.dialog( "open" );
-//     });
   } );
   </script>
-</head>
-<body>
+<!-- </head> -->
+<!-- <body> -->
  

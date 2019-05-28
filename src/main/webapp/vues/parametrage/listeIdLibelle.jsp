@@ -5,35 +5,21 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<form:form method="post" action="parametrage">
-	<div style="display:flex;">
-		<div>
-			<input type="text" name="findString" placeholder="Texte à rechercher"  value=""/>
-			<spring:message code="count.adherent" arguments="${listIdLib.list.size()}"/>
-		</div>
-		<div>
-			<button type="submit">Rechercher</button>
-	    </div>
-	</div>
-	
-</form:form>
-
 <div id="listeIdLibelle">
-	<form:form method="post" modelAttribute="creation" action="ajout${pageLink}" id="type" value="agence">
+	<form:form method="post" modelAttribute="creation" action="ajout${pageLink}" id="type" >
 		<spring:message code="label.libelle" />
         <form:input path="libelle"/>
-        <b><i><form:errors path="libelle" cssclass="error"/></i></b><br>
-        <input type="submit"/>
+		<button id="save" type="submit"><spring:message code="label.ajout" /></button>
+<!--         <input type="submit"> -->
+        <form:errors class="errors" path="libelle"/>
     </form:form>
 
 	<form:form method="post" modelAttribute="editList" action="edit${pageLink}">
 		<div class="showDetail">
-			<span class="label"><spring:message code="label.libelle"/></span>
 	
 			<c:forEach items="${editList.list}" var="idLibelle" varStatus="status">
 					<div>
 						<form:input type="hidden" name="list[${status.index}].id" path="list[${status.index}].id"/>
-<%-- 						<form:errors class="errors" path="list[${status.index}].id" /> --%>
 					</div>
 				
 					<div class="showDetail">
@@ -46,8 +32,11 @@
 			</c:forEach>
 		</div>
 		<div class="editButton">
-			<input type="submit">
+			<button id="save" type="submit">Enregistrer</button>
+<!-- 			<input type="submit"> -->
 	    </div>
 	</form:form>
+	
+	<span class="errors" > ${erreur} </span>
 	
 </div>

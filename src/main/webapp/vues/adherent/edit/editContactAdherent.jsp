@@ -5,264 +5,101 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<!-- <script src="resources/js/selectCommune.js"></script> -->
-<!-- <script src="resources/js/jquery.js"></script> -->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   
-
-<!-- <div id="masque"> -->
-<!-- 	Le contenu de cet élément est masqué au chargement de la page. -->
-<!-- 	</div> -->
-
-<!-- 	<a href="#" id="afficher">Afficher l'élément</a> -->
-
-<form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editAdherent">
-	<form:input type="hidden" path="adherent.id"/>
-
+<form:form id="editAdherentContact" method="post" modelAttribute="contactToEdit" action="editAdherentContact" >
 	<div class="entete">
+				
 		<div class="photo">
 			<img src="<c:url value="/resources/images/noAdh.png" />" />
 		</div>
 		<div>
-			<h2>${adhToEdit.adherent.denomination}</h2>
+			<h2>${adherent.denomination}</h2>
 			<div>
-				<span class="label"><spring:message code="label.code"/></span>
-				<span class="data" > ${adhToEdit.adherent.code} </span>
+				<span class="label"><spring:message code="label.codeAdh"/></span>
+				<span class="data" > ${adherent.code} </span>
 			</div>
 		</div>
 	</div>
 
-	<form:input type="hidden" name="adherent.code" path="adherent.code"/>
-	<form:input type="hidden" name="adherent.libelle" path="adherent.libelle"/>
-	<form:input type="hidden" name="adherent.denomination" path="adherent.denomination"/>
-	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/>
-	<form:input type="hidden" name="adherent.adresseComplement" path="adherent.adresseComplement"/>
-	<form:input type="hidden" path="adherent.commune.id"/>
-	<form:input type="hidden" path="adherent.pole.id"/>
-	<form:input type="hidden" path="adherent.isArtipole"/>
-	<form:input type="hidden" path="adherent.isCharteArtipole"/>
-	<form:input type="hidden" path="adherent.isFlocageArtipole"/>
-	<form:input type="hidden" path="adherent.isWebArtipole"/>
-	<form:input type="hidden" path="adherent.isFacebookArtipole"/>
-	<form:input type="hidden" path="adherent.agence.id"/>
-	<form:input type="hidden" path="adherent.secteur.id"/>
-	<form:input type="hidden" path="adherent.tournee.id"/>
-	<form:input type="hidden" path="adherent.isOutilDechargement"/>
-	<form:input type="hidden" path="adherent.dateEntree"/>
-	<form:input type="hidden" path="adherent.role.id"/>
-	<form:input type="hidden" path="adherent.formeJuridique.id"/>
-	<form:input type="hidden" path="adherent.siren"/>
-	<form:input type="hidden" path="adherent.siret"/>
-	<form:input type="hidden" path="adherent.ape.id"/>
-	<form:input type="hidden" path="adherent.numRepMetier"/>
-	<form:input type="hidden" path="adherent.rcsRm"/>
-	<form:input type="hidden" path="adherent.rcsCommune.id"/>
-	<form:input type="hidden" path="adherent.dateClotureExe"/>
-	<form:input type="hidden" path="adherent.contactComptable"/>
-	<form:input type="hidden" path="adherent.isFormationCommerce"/>
-	<form:input type="hidden" path="adherent.etat.id"/>
-
 	<fieldset>
-	   	<legend><spring:message code="label.activite"/></legend>
-	
-		<div class="showDetail">
-			<form:label path="adherent.pole" ><spring:message code="label.pole"/></form:label>
-			<form:select class="valeur" name="adherent.pole" path="adherent.pole.id">
-				<form:options items="${poleList}" itemValue="id" itemLabel="libelle" />
-			</form:select>
-			<b><i><form:errors path="adherent.pole" /></i></b>
-		</div>
+	   	<legend><spring:message code="label.contacts"/></legend>
 
-		<div  class="showDetail">
-			<form:label path="adherent.isArtipole" ><spring:message code="label.adhArtipole"/></form:label>
-			<form:checkbox path="adherent.isArtipole"/>
-		</div>
+			
+			<c:forEach items="${contactToEdit.adherentContacts}" var="adherentContacts" varStatus="status">
+			
+				<div>
+					<c:out value="${adherentContacts.type.libelle}"/>
+				</div>
+				<div class="showDetail">
+					
+					<!-- Permet de ne pas perdre les données autre que celles modifié -->
+					<form:input type="hidden" path="adherentContacts[${status.index}].id"/>
+					<form:input type="hidden" path="adherentContacts[${status.index}].adherentId"/>
+					<form:input type="hidden" path="adherentContacts[${status.index}].type.libelle"/>
+					<form:input type="hidden" path="adherentContacts[${status.index}].typeContactId"/>
+				
+					<form:select class="valeur" path="adherentContacts[${status.index}].civilite" >
+						<form:option  value="Mr">Mr</form:option>
+						<form:option  value="Mme">Mme</form:option>
+					</form:select>
+				
+					<spring:message code="label.nom" var="message"/>
+					<form:input class="valeur" path="adherentContacts[${status.index}].nom" placeholder="${message}"/>
 
-		<div  class="showDetail">
-			<form:label path="adherent.isArtipole" ><spring:message code="label.charteArtipole"/></form:label>
-			<form:checkbox path="adherent.isCharteArtipole"/>
-		</div>
+					<spring:message code="label.prenom" var="message"/>
+					<form:input class="valeur" path="adherentContacts[${status.index}].prenom" placeholder="${message}"/>
+				
+					<spring:message code="label.mail" var="message"/>
+					<form:input class="valeur" path="adherentContacts[${status.index}].mail" placeholder="${message}"/>
 
-		<div class="showDetail">
-			<form:label path="adherent.isArtipole" ><spring:message code="label.flocageArtipole"/></form:label>
-			<form:checkbox path="adherent.isFlocageArtipole"/>
-		</div>
-
-		<div class="showDetail">
-			<form:label path="adherent.isArtipole" ><spring:message code="label.siteArtipole"/></form:label>
-			<form:checkbox path="adherent.isWebArtipole"/>
-		</div>
-
-		<div class="showDetail">
-			<form:label path="adherent.isArtipole" ><spring:message code="label.facebookArtipole"/></form:label>
-			<form:checkbox path="adherent.isFacebookArtipole"/>
-		</div>
-	
+					<spring:message code="label.fixe" var="message"/>
+					<form:input class="valeur" path="adherentContacts[${status.index}].fixe" placeholder="${message}"/>
+					
+					<spring:message code="label.mobile" var="message"/>
+					<form:input class="valeur" path="adherentContacts[${status.index}].mobile" placeholder="${message}"/>
+					
+				</div>
+				<div><b><i><form:errors class="valeur" path="adherentContacts[${status.index}].nom" escape="false"/></i></b></div>
+				<div><b><i><form:errors class="valeur" path="adherentContacts[${status.index}].prenom" /></i></b></div>
+				<div><b><i><form:errors class="valeur" path="adherentContacts[${status.index}].mail" /></i></b></div>
+				<div><b><i><form:errors class="valeur" path="adherentContacts[${status.index}].fixe" /></i></b></div>
+		</c:forEach>
 	</fieldset>
 
-	<div>
+	<div class="editButton">
+		<button id="copieAll" type="button">Copier le premier dans tous les contacts</button>
 		<button id="save" type="submit">Enregistrer</button>
-		<c:url value="/showAdherent" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
+		<c:url value="/adherentDetail" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
 		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 
 </form:form>
 
-<div  id="dialogCommune" title="Selection de la commune" >
-<%-- 		<form> --%>
-		<span>commune actuel </span>
-		<span id="currentCommune"></span></br>
-		
-		<span>recherche de la nouvelle </span>
-		<span>saisir le code postal</span>
-		<input id="filterCP" type="text" />
-		<select id="communeListe" multiple></select>
-<%-- 		</form> --%>
-</div>
-
 <script>
-$( function() {
-	communeDialog = $('#dialogCommune').dialog({
-		resizable:false,
-	    modal:true,
-	    autoOpen:false,
-	    height:400,
-	    width:315,
-
-	    buttons: {
-	    	"Selectionner" : function() {
-	        	$("#communeAdh").val($('#communeListe :selected').val());
-	        	$("#communeAdhLibelle").text($('#communeListe :selected').text());
-				$(this).dialog("close");
-				return true;
-	        },
-	        "Annuler" : function() {
-	        	$(this).dialog("close");
-				return false;
-	        }
-	      }
-	    });
+$(function() {
 	
-	$('#currentCommune').text($('#communeAdhLibelle').text());
-	  
-	$('#editCommune').click(function(e){ 
-		communeDialog.dialog("open");
-	});
-	
-	$('#filterCP').bind("keyup", function(){
-		populateListe();
-	});
-	  
-	
-	function populateListe(){
- 		var params={filter: $("#filterCP").val()};
- 		console.log (params);
+	$('#copieAll').click(function(e){ 
+		console.log ("c'est bien, t'as cliqué ... ");
 		
-		$.get("loadCommuneListe",params, function(response) {
-			console.log("retour servlet : " + response.length);
+		console.log($("#adherentContacts0\\.nom").val());
+		$("input[id*='\\.nom']").val($("#adherentContacts0\\.nom").val());
+		$("input[id*='\\.prenom']").val($("#adherentContacts0\\.prenom").val());
+		$("input[id*='\\.mail']").val($("#adherentContacts0\\.mail").val());
+		$("input[id*='\\.fixe']").val($("#adherentContacts0\\.fixe").val());
+		$("input[id*='\\.mobile']").val($("#adherentContacts0\\.mobile").val());
 
-			        $selectList = $("#communeListe");
-			        $selectList.find("option").remove();  
-			        $.each(JSON.parse(response), function(index, commune) {
-				        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
-			        });                   
-			 
-			    });
-	}
+// 		$test = $("input[id*='\\.nom']");
+// 		console.log ("test : " + $test.val());
 	
-//     var dialog, form,
- 
-//       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-//       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-//       name = $( "#name" ),
-//       email = $( "#email" ),
-//       password = $( "#password" ),
-//       allFields = $( [] ).add( name ).add( email ).add( password ),
-//       tips = $( ".validateTips" );
- 
-//     function updateTips( t ) {
-//       tips
-//         .text( t )
-//         .addClass( "ui-state-highlight" );
-//       setTimeout(function() {
-//         tips.removeClass( "ui-state-highlight", 1500 );
-//       }, 500 );
-//     }
- 
-//     function checkLength( o, n, min, max ) {
-//       if ( o.val().length > max || o.val().length < min ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( "Length of " + n + " must be between " +
-//           min + " and " + max + "." );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function checkRegexp( o, regexp, n ) {
-//       if ( !( regexp.test( o.val() ) ) ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( n );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function addUser() {
-//       var valid = true;
-//       allFields.removeClass( "ui-state-error" );
- 
-//       valid = valid && checkLength( name, "username", 3, 16 );
-//       valid = valid && checkLength( email, "email", 6, 80 );
-//       valid = valid && checkLength( password, "password", 5, 16 );
- 
-//       valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-//       valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-//       valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
- 
-//       if ( valid ) {
-//         $( "#users tbody" ).append( "<tr>" +
-//           "<td>" + name.val() + "</td>" +
-//           "<td>" + email.val() + "</td>" +
-//           "<td>" + password.val() + "</td>" +
-//         "</tr>" );
-//         dialog.dialog( "close" );
-//       }
-//       return valid;
-//     }
- 
-//     dialog = $( "#dialog-form" ).dialog({
-//       autoOpen: false,
-//       height: 400,
-//       width: 350,
-//       modal: true,
-//       buttons: {
-//         "Create an account": addUser,
-//         Cancel: function() {
-//           dialog.dialog( "close" );
-//         }
-//       },
-//       close: function() {
-//         form[ 0 ].reset();
-//         allFields.removeClass( "ui-state-error" );
-//       }
-//     });
- 
-//     form = dialog.find( "form" ).on( "submit", function( event ) {
-//       event.preventDefault();
-//       addUser();
-//     });
- 
-//     $( "#create-user" ).button().on( "click", function() {
-//       dialog.dialog( "open" );
-//     });
+// 		$test.val("LE NOM");
+		
+	});
+		
   } );
   </script>
-</head>
-<body>
+<!-- </head> -->
+<!-- <body> -->
  

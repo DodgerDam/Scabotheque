@@ -1,6 +1,8 @@
 package fr.scabois.scabotheque.controller.adherent.edit;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -14,15 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import fr.scabois.scabotheque.bean.Adherent;
-import fr.scabois.scabotheque.bean.Agence;
-import fr.scabois.scabotheque.bean.Ape;
-import fr.scabois.scabotheque.bean.Etat;
-import fr.scabois.scabotheque.bean.FormeJuridique;
-import fr.scabois.scabotheque.bean.Pole;
-import fr.scabois.scabotheque.bean.Role;
-import fr.scabois.scabotheque.bean.Secteur;
-import fr.scabois.scabotheque.bean.Tournee;
+import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.Etat;
+import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
+import fr.scabois.scabotheque.bean.adherent.Pole;
+import fr.scabois.scabotheque.bean.adherent.Role;
+import fr.scabois.scabotheque.bean.adherent.Secteur;
+import fr.scabois.scabotheque.bean.adherent.Tournee;
+import fr.scabois.scabotheque.bean.commun.Agence;
+import fr.scabois.scabotheque.bean.commun.Ape;
+import fr.scabois.scabotheque.bean.commun.TypeContact;
 import fr.scabois.scabotheque.enums.PageType;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 
@@ -53,11 +57,45 @@ public class EditAdhController {
 
     }
 
+    private List<EditAdherentContact> adhContactToEdit(List<TypeContact> types, Adherent adherent) {
+	final List<EditAdherentContact> ret = new ArrayList<>();
+
+	// pour tous les type de contact
+	types.stream().forEach(t -> {
+	    // recherche si le contact exist
+	    Optional<AdherentContact> optionalContact = adherent.getContacts().stream()
+		    .filter(f -> f.getType().getId() == (t.getId())).findFirst();
+
+	    EditAdherentContact edit = new EditAdherentContact();
+	    // si il exist,, il faut le rendre editable
+	    if (optionalContact.isPresent()) {
+		edit.setAdherentId(optionalContact.get().getAdherent().getId());
+		edit.setFixe(optionalContact.get().getFixe());
+		edit.setId(optionalContact.get().getId());
+		edit.setMail(optionalContact.get().getMail());
+		edit.setMobile(optionalContact.get().getMobile());
+		edit.setNom(optionalContact.get().getNom());
+		edit.setNaissance(optionalContact.get().getNaissance());
+		edit.setPhoto(optionalContact.get().getPhoto());
+		edit.setPrenom(optionalContact.get().getPrenom());
+		edit.setType(optionalContact.get().getType());
+		edit.setTypeContactId(optionalContact.get().getType().getId());
+	    } else {
+		edit.setAdherentId(adherent.getId());
+		edit.setType(t);
+		edit.setTypeContactId(t.getId());
+	    }
+	    ret.add(edit);
+	});
+	return ret;
+    }
+
     public EditAdherent adhToEdit(Adherent adh) {
 	final EditAdherent editableAdh = new EditAdherent();
 
 	editableAdh.setId(adh.getId());
 	editableAdh.setCode(adh.getCode());
+	editableAdh.setCodeERP(adh.getCodeERP());
 	editableAdh.setLibelle(adh.getLibelle());
 	editableAdh.setDenomination(adh.getDenomination());
 	editableAdh.setFormeJuridique(adh.getFormeJuridique());
@@ -90,9 +128,9 @@ public class EditAdhController {
 	return editableAdh;
     }
 
-    @RequestMapping(value = { "/editActiviteAdh", "/editAdministratifAdh", "/editContactAdh", "/editExploitationAdh",
-	    "/editIdentiteAdh" }, method = RequestMethod.GET)
-    public String afficher(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
+    @RequestMapping(value = { "/edit/editActiviteAdh", "/edit/editAdministratifAdh", "/edit/editExploitationAdh",
+	    "/edit/editIdentiteAdh" }, method = RequestMethod.GET)
+    public String editAdherent(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
 	    HttpServletRequest request) {
 
 	addSelectLists(pModel);
@@ -114,7 +152,36 @@ public class EditAdhController {
 	pModel.addAttribute("pageType", PageType.LIST_ADHERENT);
 
 	// Implique que le nom des Tiles soit correctement alimenté
-	return request.getServletPath().replace("/", "");
+	return request.getServletPath().substring(6);
+    }
+
+    @RequestMapping(value = "/edit/editAdherentContact", method = RequestMethod.GET)
+    public String editContact(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
+	    HttpServletRequest request) {
+
+	addSelectLists(pModel);
+
+	final Adherent adh = service.LoadAdherent(idAdh);
+	final List<TypeContact> typeContacts = service.LoadTypeContact();
+	pModel.addAttribute("adherent", adh);
+	pModel.addAttribute("typeContacts", typeContacts);
+
+	if (pModel.get("contactToEdit") == null) {
+
+	    final EditAdherentContactsForm editAdhContactsForm = new EditAdherentContactsForm();
+
+	    // Rend les contacts adhernet éditable (avec des validations test)
+	    List<EditAdherentContact> editableAdhContacts = adhContactToEdit(typeContacts, adh);
+	    editAdhContactsForm.setAdherentContacts(editableAdhContacts);
+
+	    pModel.addAttribute("contactToEdit", editAdhContactsForm);
+	} else {
+	    pModel.addAttribute("contactToEdit", pModel.get("contactToEdit"));
+	}
+
+	pModel.addAttribute("pageType", PageType.LIST_ADHERENT);
+
+	return "editContactAdh";
     }
 
     public Adherent editToAdh(EditAdherent editAdh) {
@@ -122,6 +189,7 @@ public class EditAdhController {
 
 	adh.setId(editAdh.getId());
 	adh.setCode(editAdh.getCode());
+	adh.setCodeERP(editAdh.getCodeERP());
 	adh.setLibelle(editAdh.getLibelle());
 	adh.setDenomination(editAdh.getDenomination());
 	adh.setFormeJuridique(editAdh.getFormeJuridique());
@@ -154,9 +222,34 @@ public class EditAdhController {
 	return adh;
     }
 
-    @RequestMapping(value = { "/editActiviteAdh", "/editAdministratifAdh", "/editContactAdh", "/editExploitationAdh",
-	    "/editIdentiteAdh" }, method = RequestMethod.POST)
-    public String modifier(@Valid @ModelAttribute(value = "adhToEdit") final EditAdherentForm editForm,
+    private List<AdherentContact> editToContact(List<EditAdherentContact> adhContactEditable) {
+	List<TypeContact> types = service.LoadTypeContact();
+	List<AdherentContact> contacts = new ArrayList<>();
+
+	adhContactEditable.stream().forEach(e -> {
+	    AdherentContact contact = new AdherentContact();
+
+	    contact.setAdherent(service.LoadAdherent(e.getAdherentId()));
+	    contact.setType(types.stream().filter(t -> t.getId() == e.getTypeContactId()).findFirst().orElse(null));
+	    contact.setCivilite(e.getCivilite());
+	    contact.setFixe(e.getFixe());
+	    contact.setId(e.getId());
+	    contact.setMail(e.getMail());
+	    contact.setMobile(e.getMobile());
+	    contact.setNom(e.getNom());
+	    contact.setNaissance(e.getNaissance());
+	    contact.setPhoto(e.getPhoto());
+	    contact.setPrenom(e.getPrenom());
+
+	    contacts.add(contact);
+	});
+
+	return contacts;
+    }
+
+    @RequestMapping(value = { "/edit/editActiviteAdh", "/edit/editAdministratifAdh", "/edit/editExploitationAdh",
+	    "/edit/editIdentiteAdh" }, method = RequestMethod.POST)
+    public String modifieAdh(@Valid @ModelAttribute(value = "adhToEdit") final EditAdherentForm editForm,
 	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
 
 	EditAdherent adhEditable = editForm.getAdherent();
@@ -164,11 +257,30 @@ public class EditAdhController {
 
 	if (!pBindingResult.hasErrors()) {
 	    service.saveAdherent(adh);
-	    return "redirect:/showAdherent?idAdh=" + adh.getId();
+	    return "redirect:/adherentDetail?idAdh=" + adh.getId();
+	}
+
+	return editAdherent(editForm.getAdherent().getId(), pModel, request);
+    }
+
+    @RequestMapping(value = "/edit/editAdherentContact", method = RequestMethod.POST)
+    public String modifieContact(
+	    @Valid @ModelAttribute(value = "contactToEdit") final EditAdherentContactsForm editForm,
+	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
+
+	List<EditAdherentContact> adhContactEditable = editForm.getAdherentContacts();
+	System.out.println("id ..: " + adhContactEditable.get(0).getAdherentId());
+	int adhId = adhContactEditable.get(0).getAdherentId();
+
+	if (!pBindingResult.hasErrors()) {
+	    List<AdherentContact> contacts = editToContact(adhContactEditable);
+
+	    service.saveAdherentContact(contacts);
+	    return "redirect:/adherentDetail?idAdh=" + adhId;
 	}
 
 	// voir retour direct à la liste
-	return afficher(editForm.getAdherent().getId(), pModel, request);
+	return editContact(adhId, pModel, request);
     }
 
 }

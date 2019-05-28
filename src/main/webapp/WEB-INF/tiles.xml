@@ -11,17 +11,45 @@
     	<put-attribute name="menu-v2"  value="/vues/menu-v2.jsp" />
     	<put-attribute name="body" value="" />  
         <put-attribute name="footer" value="/vues/footer.jsp" />  
+        <put-attribute name="adherentBottomNavBar" value="/vues/adherent/bottomNavBar.jsp" />  
     </definition>
 
+    <definition name="login" extends="base.definition">
+        <put-attribute name="body"  value="/vues/login.jsp" />
+        <put-attribute name="pageName"  value="login" />
+    </definition>
+
+    <definition name="accessDenied" extends="base.definition">
+        <put-attribute name="body"  value="/vues/exceptions/forbidden.jsp" />
+        <put-attribute name="pageName"  value="accessDenied" />
+    </definition>
+
+	<!-- Vues Adherents -->
     <definition name="listeAdh" extends="base.definition">
         <put-attribute name="body"  value="/vues/adherent/listeAdherents.jsp" />
         <put-attribute name="pageName"  value="listeAdh" />
     </definition>
 
-	<definition name="showAdh" extends="base.definition">
-        <put-attribute name="body"  value="/vues/adherent/showAdherent.jsp" />
-        <put-attribute name="pageName"  value="showAdh" />
+	<definition name="adherentDetail" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentDetail.jsp" />
+        <put-attribute name="pageName"  value="adherentDetail" />
     </definition>
+
+	<definition name="adherentActivite" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentActivite.jsp" />
+        <put-attribute name="pageName"  value="adherentActivite" />
+    </definition>
+
+	<definition name="adherentAdministratif" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentAdministratif.jsp" />
+        <put-attribute name="pageName"  value="adherentAdministratif" />
+    </definition>
+
+	<definition name="adherentExploitation" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentExploitation.jsp" />
+        <put-attribute name="pageName"  value="adherentExploitation" />
+    </definition>
+
 
 	<definition name="addAdh" extends="base.definition">
         <put-attribute name="body"  value="/vues/adherent/addAdherent.jsp" />
@@ -63,28 +91,4 @@
         <put-attribute name="pageName"  value="enCours" />
     </definition>
 
-<!--     <definition name="listeCourses" extends="base.definition"> -->
-<!--         <put-attribute name="body"  value="/vues/pageTest/listeCourses.jsp" /> -->
-<!--         <put-attribute name="pageName"  value="listeCourses" /> -->
-<!--     </definition> -->
-
-<!--     <definition name="creation" extends="base.definition"> -->
-<!--         <put-attribute name="body"  value="/vues/pageTest/creation.jsp" /> -->
-<!--         <put-attribute name="pageName"  value="creation" /> -->
-<!--     </definition> -->
-
-<!--     <definition name="suppression" extends="base.definition"> -->
-<!--         <put-attribute name="body"  value="/vues/pageTest/suppression.jsp" /> -->
-<!--         <put-attribute name="pageName"  value="suppression" /> -->
-<!--     </definition> -->
-
-<!--     <definition name="modification" extends="base.definition"> -->
-<!--         <put-attribute name="body"  value="/vues/pageTest/modification.jsp" /> -->
-<!--         <put-attribute name="pageName"  value="modification" /> -->
-<!--     </definition> -->
-    
-<!--     <definition name="liens" extends="base.definition"> -->
-<!--         <put-attribute name="body"  value="/vues/enCours.jsp" /> -->
-<!--         <put-attribute name="pageName"  value="enCours" /> -->
-<!--     </definition> -->
 </tiles-definitions>

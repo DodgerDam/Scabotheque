@@ -5,19 +5,13 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<!-- <script src="resources/js/selectCommune.js"></script> -->
-<!-- <script src="resources/js/jquery.js"></script> -->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  
 
-<!-- <div id="masque"> -->
-<!-- 	Le contenu de cet élément est masqué au chargement de la page. -->
-<!-- 	</div> -->
-
-<!-- 	<a href="#" id="afficher">Afficher l'élément</a> -->
+<link type="text/css" rel="stylesheet" href="/resources/style/style.css" />
+<link type="text/css" rel="stylesheet" href="/resources/style/menu.css" />
+        
 
 <form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editActiviteAdh">
 	<form:input type="hidden" path="adherent.id"/>
@@ -29,7 +23,7 @@
 		<div>
 			<h2>${adhToEdit.adherent.denomination}</h2>
 			<div>
-				<span class="label"><spring:message code="label.code"/></span>
+				<span class="label"><spring:message code="label.codeAdh"/></span>
 				<span class="data" > ${adhToEdit.adherent.code} </span>
 			</div>
 		</div>
@@ -37,6 +31,7 @@
 
 <!-- Permet de ne pas perdre les données autre que celles modifié -->
 	<form:input type="hidden" name="adherent.code" path="adherent.code"/>
+	<form:input type="hidden" name="adherent.code" path="adherent.codeERP"/>
 	<form:input type="hidden" name="adherent.libelle" path="adherent.libelle"/>
 	<form:input type="hidden" name="adherent.denomination" path="adherent.denomination"/>
 	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/>
@@ -107,7 +102,7 @@
 
 	<div>
 		<button id="save" type="submit">Enregistrer</button>
-		<c:url value="/showAdherent" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
+		<c:url value="/adherentActivite" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
 		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 

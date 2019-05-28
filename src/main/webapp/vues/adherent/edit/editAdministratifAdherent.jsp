@@ -12,7 +12,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   
-<form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editAdministrationAdh">
+<form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editAdministratifAdh">
 	<form:input type="hidden" path="adherent.id"/>
 
 	<div class="entete">
@@ -22,7 +22,7 @@
 		<div>
 			<h2>${adhToEdit.adherent.denomination}</h2>
 			<div>
-				<span class="label"><spring:message code="label.code"/></span>
+				<span class="label"><spring:message code="label.codeAdh"/></span>
 				<span class="data" > ${adhToEdit.adherent.code} </span>
 			</div>
 		</div>
@@ -30,6 +30,7 @@
 
 <!-- Permet de ne pas perdre les données autre que celles modifié -->
 	<form:input type="hidden" name="adherent.code" path="adherent.code"/>
+	<form:input type="hidden" name="adherent.code" path="adherent.codeERP"/>
 	<form:input type="hidden" name="adherent.libelle" path="adherent.libelle"/>
 	<form:input type="hidden" name="adherent.denomination" path="adherent.denomination"/>
 	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/>
@@ -156,7 +157,7 @@
 
 	<div>
 		<button id="save" type="submit">Enregistrer</button>
-		<c:url value="/showAdherent" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
+		<c:url value="/adherentDetail" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
 		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 

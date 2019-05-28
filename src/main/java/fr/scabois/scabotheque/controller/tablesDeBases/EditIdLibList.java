@@ -2,13 +2,16 @@ package fr.scabois.scabotheque.controller.tablesDeBases;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class EditList {
-    @NotEmpty(message = "{modification.notempty}")
+public class EditIdLibList {
+//    @NotEmpty(message = "{modification.notempty}")
     private Integer id;
     @NotEmpty(message = "{modification.notempty}")
     private String libelle;
 
-    EditList(Integer id, String libelle) {
+    EditIdLibList() {
+    }
+
+    EditIdLibList(Integer id, String libelle) {
 	this.id = id;
 	this.libelle = libelle;
     }

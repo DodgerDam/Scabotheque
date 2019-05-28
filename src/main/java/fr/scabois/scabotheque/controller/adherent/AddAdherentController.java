@@ -1,26 +1,29 @@
 package fr.scabois.scabotheque.controller.adherent;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import fr.scabois.scabotheque.bean.Adherent;
-import fr.scabois.scabotheque.bean.Agence;
-import fr.scabois.scabotheque.bean.Ape;
-import fr.scabois.scabotheque.bean.Etat;
-import fr.scabois.scabotheque.bean.FormeJuridique;
-import fr.scabois.scabotheque.bean.Pole;
-import fr.scabois.scabotheque.bean.Role;
-import fr.scabois.scabotheque.bean.Secteur;
-import fr.scabois.scabotheque.bean.Tournee;
+import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.Etat;
+import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
+import fr.scabois.scabotheque.bean.adherent.Pole;
+import fr.scabois.scabotheque.bean.adherent.Role;
+import fr.scabois.scabotheque.bean.adherent.Secteur;
+import fr.scabois.scabotheque.bean.adherent.Tournee;
+import fr.scabois.scabotheque.bean.commun.Agence;
+import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.controller.adherent.edit.EditAdherent;
 import fr.scabois.scabotheque.controller.adherent.edit.EditAdherentForm;
 import fr.scabois.scabotheque.enums.PageType;
@@ -29,49 +32,12 @@ import fr.scabois.scabotheque.services.IServiceAdherent;
 @Controller
 public class AddAdherentController {
 
+    private EditAdherent adhEditable;
+    @Autowired
+    private MessageSource messages;
+
     @Autowired
     private IServiceAdherent service;
-    private EditAdherent adhEditable;
-
-    @RequestMapping(value = "/addAdherent", method = RequestMethod.GET)
-    public String afficher(final ModelMap pModel) {
-
-	addSelectLists(pModel);
-
-	if (pModel.get("adhToEdit") == null) {
-//	if (adhEditable == null) {
-
-//	    final Adherent adh = service.LoadAdherent(idAdh);
-	    final EditAdherentForm editAdhForm = new EditAdherentForm();
-
-	    // Rend l'adherent éditable (avec des validations test)
-	    EditAdherent editableAdh = new EditAdherent(); // adhToEdit(adh);
-	    editAdhForm.setAdherent(editableAdh);
-
-	    pModel.addAttribute("adhToEdit", editAdhForm);
-	} else {
-	    pModel.addAttribute("adhToEdit", pModel.get("adhToEdit"));
-	}
-
-	pModel.addAttribute("pageType", PageType.CREATE_ADHERENT);
-
-	return "addAdh";
-    }
-
-    @RequestMapping(value = "/addAdherent", method = RequestMethod.POST)
-    public String modifier(@Valid @ModelAttribute(value = "adhToAdd") final EditAdherentForm editForm,
-	    final BindingResult pBindingResult, final ModelMap pModel) {
-
-	adhEditable = editForm.getAdherent();
-	Adherent adh = editToAdh(adhEditable);
-
-	if (!pBindingResult.hasErrors()) {
-	    service.saveAdherent(adh);
-	}
-
-	// voir retour direct à la liste
-	return afficher(pModel);
-    }
 
     private void addSelectLists(final ModelMap pModel) {
 	List<Agence> agences = service.LoadAgences();
@@ -92,6 +58,33 @@ public class AddAdherentController {
 	pModel.addAttribute("secteurList", secteurs);
 	pModel.addAttribute("tourneeList", tournees);
 
+    }
+
+    @RequestMapping(value = "/addAdherent**", method = RequestMethod.GET)
+    public String afficher(final ModelMap pModel) {
+
+	// SecurityContextHolder.getContext().getAuthentication().getName();
+
+	addSelectLists(pModel);
+
+	if (pModel.get("adhToAdd") == null) {
+//	if (adhEditable == null) {
+
+//	    final Adherent adh = service.LoadAdherent(idAdh);
+	    final EditAdherentForm editAdhForm = new EditAdherentForm();
+
+	    // Rend l'adherent éditable (avec des validations test)
+	    EditAdherent editableAdh = new EditAdherent(); // adhToEdit(adh);
+	    editAdhForm.setAdherent(editableAdh);
+
+	    pModel.addAttribute("adhToAdd", editAdhForm);
+	} else {
+	    pModel.addAttribute("adhToAdd", pModel.get("adhToAdd"));
+	}
+
+	pModel.addAttribute("pageType", PageType.CREATE_ADHERENT);
+
+	return "addAdh";
     }
 
     public Adherent editToAdh(EditAdherent editAdh) {
@@ -131,41 +124,39 @@ public class AddAdherentController {
 	return adh;
     }
 
-    public EditAdherent adhToEdit(Adherent adh) {
-	final EditAdherent editableAdh = new EditAdherent();
+    @RequestMapping(value = "/addAdherent", method = RequestMethod.POST)
+    public String modifier(@Valid @ModelAttribute(value = "adhToAdd") final EditAdherentForm editForm,
+	    final BindingResult pBindingResult, final ModelMap pModel) {
 
-	editableAdh.setId(adh.getId());
-	editableAdh.setCode(adh.getCode());
-	editableAdh.setLibelle(adh.getLibelle());
-	editableAdh.setDenomination(adh.getDenomination());
-	editableAdh.setFormeJuridique(adh.getFormeJuridique());
-	editableAdh.setDateEntree(adh.getDateEntree());
-	editableAdh.setAdresse(adh.getAdresse());
-	editableAdh.setAdresseComplement(adh.getAdresseComplement());
-	editableAdh.setCommune(adh.getCommune());
-	editableAdh.setPole(adh.getPole());
-	editableAdh.setRole(adh.getRole());
-	editableAdh.setSecteur(adh.getSecteur());
-	editableAdh.setIsArtipole(adh.getIsArtipole());
-	editableAdh.setIsCharteArtipole(adh.getIsCharteArtipole());
-	editableAdh.setIsFlocageArtipole(adh.getIsFlocageArtipole());
-	editableAdh.setIsWebArtipole(adh.getIsWebArtipole());
-	editableAdh.setIsFormationCommerce(adh.getIsFormationCommerce());
-	editableAdh.setIsFacebookArtipole(adh.getIsFacebookArtipole());
-	editableAdh.setApe(adh.getApe());
-	editableAdh.setSiren(adh.getSiren());
-	editableAdh.setSiret(adh.getSiret());
-	editableAdh.setNumRepMetier(adh.getNumRepMetier());
-	editableAdh.setRcsRm(adh.getRcsRm());
-	editableAdh.setRcsCommune(adh.getRcsCommune());
-	editableAdh.setAgence(adh.getAgence());
-	editableAdh.setDateClotureExe(adh.getDateClotureExe());
-	editableAdh.setTournee(adh.getTournee());
-	editableAdh.setIsOutilDechargement(adh.getIsOutilDechargement());
-	editableAdh.setContactComptable(adh.getContactComptable());
-	editableAdh.setEtat(adh.getEtat());
+	adhEditable = editForm.getAdherent();
+	Adherent adh = editToAdh(adhEditable);
 
-	return editableAdh;
+	// test de la presence des objets
+	// na pas encore trouvé a le faire dans EditAdherent.js
+	if (adh.getCommune().getId() == null) {
+	    pBindingResult.addError(new FieldError("commune", "adherent.commune",
+		    messages.getMessage("modification.notempty", null, Locale.FRANCE)));
+	}
+	if (adh.getRcsCommune().getId() == null) {
+	    pBindingResult.addError(new FieldError("rcsCommune", "adherent.rcsCommune",
+		    messages.getMessage("modification.notempty", null, Locale.FRANCE)));
+	}
+	if (adh.getPole().getId() == null) {
+	    pBindingResult.addError(new FieldError("pole", "adherent.pole",
+		    messages.getMessage("modification.notempty", null, Locale.FRANCE)));
+	}
+	if (adh.getSecteur().getId() == null) {
+	    pBindingResult.addError(new FieldError("secteur", "adherent.secteur",
+		    messages.getMessage("modification.notempty", null, Locale.FRANCE)));
+	}
+
+	if (!pBindingResult.hasErrors()) {
+	    service.createAdherent(adh);
+	    return "redirect:/listeAdherents";
+	}
+
+	// voir retour direct à la liste
+	return afficher(pModel);
     }
 
 }

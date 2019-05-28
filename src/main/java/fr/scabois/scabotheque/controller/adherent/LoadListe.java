@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import fr.scabois.scabotheque.bean.Commune;
+import fr.scabois.scabotheque.bean.commun.Commune;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 
 @Controller
@@ -20,7 +20,7 @@ public class LoadListe {
     @Autowired
     private IServiceAdherent service;
 
-    @RequestMapping("/loadCommuneListe")
+    @RequestMapping("loadCommuneListe")
     public @ResponseBody String getFilterCommunes(@RequestParam(value = "filter") final String filter) {
 	List<Commune> communes = service.LoadCommunes();
 
@@ -31,7 +31,8 @@ public class LoadListe {
 	}).collect(Collectors.toList());
 
 	if (list.size() < 150) {
-	    String jsonList = new Gson().toJson(list);
+	    String jsonList = new Gson().toJson(list.stream()
+		    .sorted((o1, o2) -> o1.getLibelle().compareTo(o2.getLibelle())).collect(Collectors.toList()));
 	    return jsonList;
 	} else {
 	    return "[{\"id\":0,\"libelle\":\"Trop de resultat\",\"codePostal\":\"\"}]";
