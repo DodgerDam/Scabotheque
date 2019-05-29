@@ -32,6 +32,7 @@
 		</div>
 		<div>
 			<button type="submit">Rechercher</button>
+<!-- 			<button type="submit" style="min-width:10px">.</button> -->
 			<c:url value="/downloadFile" var="urlDownload">
 				<c:param name="findText" value="${criteria.text}"/>
 				<c:param name="poleId" value="${criteria.poleId}"/>

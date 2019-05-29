@@ -9,6 +9,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <link type="text/css" rel="stylesheet" href="<c:url value="/resources/style/style.css" />" />
         <link type="text/css" rel="stylesheet" href="<c:url value="/resources/style/menu.css" />" />
+        <link rel="shortcut icon" type="image/png" href="/resources/images/favicon.png"/>
         <title><spring:message code="titre.application"/></title>
     </head>
     <body>
