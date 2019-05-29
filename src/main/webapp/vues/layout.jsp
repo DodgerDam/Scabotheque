@@ -3,13 +3,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <link type="text/css" rel="stylesheet" href="<c:url value="/resources/style/style.css" />" />
         <link type="text/css" rel="stylesheet" href="<c:url value="/resources/style/menu.css" />" />
         <link rel="shortcut icon" type="image/png" href="/resources/images/favicon.png"/>
+		<link REL="SHORTCUT ICON" href="http://www.votre-site-internet.com/images/favicon.ico">
         <title><spring:message code="titre.application"/></title>
     </head>
     <body>
