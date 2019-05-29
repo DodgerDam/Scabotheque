@@ -1,0 +1,103 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:sec="http://www.springframework.org/schema/security"	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+<!-- 	<context:component-scan base-package="fr.scabois.scabotheque" /> -->
+	
+	<!-- 	Connection direct à la BDD A REVOIR CAR DANS TOUS LES FICHIERS XML -->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/scabothequeDB" />
+    </bean>
+
+	<!-- authorisation d'acces aux fichiers resources -->
+	<sec:http pattern="/resources/**" security="none"/> 
+		
+	<sec:http auto-config="true" use-expressions="true" >
+		<sec:intercept-url pattern="/addAdherent" access="hasRole('ROLE_ADMIN')" />
+
+		<sec:intercept-url pattern="/adherentDetail" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+<!-- 	 	<sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_pole', 'ROLE_ADMIN')" /> -->
+		<sec:intercept-url pattern="/parametrage" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+		<sec:intercept-url pattern="/edit/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+
+		<sec:intercept-url pattern="/login**" access="permitAll"/>
+		<sec:intercept-url pattern="/listeAdherents**" access="permitAll"/>
+		
+		<sec:form-login 
+		    login-page="/login" 
+		    default-target-url="/listeAdherents" 
+			authentication-failure-url="/login?error" 
+			username-parameter="username"
+			password-parameter="password" />
+<!-- 		<sec:logout logout-success-url="/listeAdherents"/> -->
+<!-- 		<sec:logout logout-success-url="/login?logout"  /> -->
+		
+		<sec:access-denied-handler error-page="/accessDenied"/>
+		
+		<!-- enable csrf protection -->
+		<sec:csrf/>
+	</sec:http>
+
+	
+	<!-- Mode LDAP en cour -->
+<!-- <sec:authentication-manager erase-credentials="true"> -->
+<!--          <sec:ldap-authentication-provider  -->
+<!--            user-search-filter="(uid={0})" -->
+<!--            user-search-base="ou=Scabois" -->
+<!--            group-search-filter="(uniqueMember={0})" -->
+<!--            group-search-base="ou=Scabois" -->
+<!--            group-role-attribute="cn" -->
+<!--            role-prefix="ROLE_"> -->
+<!--          </sec:ldap-authentication-provider> -->
+<!--  </sec:authentication-manager> -->
+ 
+<!--  <sec:ldap-server url="ldap://10.211.40.230" port="389" manager-dn="uid=scabois\Admininstrateur" manager-password="Coop39100choisey" /> -->
+
+<!-- 	<sec:authentication-manager alias="authenticationManager"> 837d61a351196d2dc4810d2d2f266b8cdffe445e-->
+<!--         <sec:ldap-authentication-provider -->
+<!--             user-search-filter="(uid={0})" user-search-base="ou=Scabois" -->
+<!--             group-search-filter="(uniqueMember={0})" group-search-base="ou=Scabois" -->
+<!--             group-role-attribute="cn" role-prefix="ROLE_"> -->
+<!--         </sec:ldap-authentication-provider> -->
+<!--     </sec:authentication-manager> -->
+
+<!--     <sec:ldap-server url="ldap://10.211.40.230:11389/o=local" -->
+<!--         manager-dn="uid=Administrateur,ou=system" manager-password="f884169fe1457b0aa45119d1e58d8b6a" /> -->
+
+
+
+
+
+ 	<!-- Mode BDD fonctionne aussi  --> 
+	<sec:authentication-manager>
+	  <sec:authentication-provider>
+	    <sec:password-encoder ref="passwordEncoder"/>
+    	<sec:jdbc-user-service data-source-ref="dataSource"
+		  users-by-username-query=
+		    "select username,password, enabled from users where username=?"
+		  authorities-by-username-query=
+		    "select username, role from user_roles where username =?  " />
+	  </sec:authentication-provider>
+	</sec:authentication-manager>
+	
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <constructor-arg name="strength" value="11"/>
+    </bean>
+	
+ 	<!-- Mode manuel Fonctionne   --> 
+<!-- 	<sec:authentication-manager> -->
+<!-- 		<sec:authentication-provider> -->
+<!-- 			<sec:user-service> -->
+<!-- 				<sec:user name="admin" password="{noop}Coop39100" authorities="ROLE_ADMIN" /> -->
+<!-- 				<sec:user name="pole" password="{noop}Scabois39" authorities="ROLE_pole" /> -->
+<!-- 			</sec:user-service> -->
+<!-- 		</sec:authentication-provider> -->
+<!-- 	</sec:authentication-manager> -->
+
+
+
+</beans>

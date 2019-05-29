@@ -19,8 +19,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumn;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTableColumns;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,12 +35,6 @@ public class ExcelControler {
 
     @Autowired
     private IServiceAdherent service;
-
-    private void addColonne(CTTableColumns columns, int id, String name) {
-	CTTableColumn column = columns.addNewTableColumn();
-	column.setId(id);
-	column.setName(name);
-    }
 
     @RequestMapping("/downloadFile")
     public void downloadFile(@RequestParam(value = "findText") final String findText,
