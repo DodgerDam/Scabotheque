@@ -18,16 +18,6 @@ import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
 
 public class EditAdherent {
-    // @NotEmpty(message="{modification.course.quantite.notempty}")
-    // @Pattern(regexp="\\d*", message="{modification.course.quantite.numerique}")
-    // message="{modification.course.quantite.numerique}")
-    // @NotEmpty(message = "{modification.notempty}")
-    // @Pattern(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}", message =
-    // "{modification.course.quantite.numerique}")
-    // private String mail;
-    // @NotNull(message = "{modification.notempty}")
-    // @Min(value = 0L, message = "modification.number.positive")
-
     @NotEmpty(message = "{modification.notempty}")
     private String adresse;
     private String adresseComplement;
@@ -59,6 +49,7 @@ public class EditAdherent {
     @NotEmpty(message = "{modification.notempty}")
     private String libelle;
     private String numRepMetier;
+    private String photo;
     // la présence de la commune est testée dans le controleur
     private Pole pole;
     // la présence de la commune est testée dans le controleur
@@ -163,6 +154,10 @@ public class EditAdherent {
 
     public String getNumRepMetier() {
 	return numRepMetier;
+    }
+
+    public String getPhoto() {
+	return photo;
     }
 
     public Pole getPole() {
@@ -287,6 +282,10 @@ public class EditAdherent {
 
     public void setNumRepMetier(String numRepMetier) {
 	this.numRepMetier = numRepMetier;
+    }
+
+    public void setPhoto(String photo) {
+	this.photo = photo;
     }
 
     public void setPole(Pole pole) {

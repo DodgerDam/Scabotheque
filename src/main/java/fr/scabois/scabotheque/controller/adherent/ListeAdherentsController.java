@@ -1,5 +1,6 @@
 package fr.scabois.scabotheque.controller.adherent;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,11 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.Pole;
 import fr.scabois.scabotheque.bean.adherent.Secteur;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.enums.PageType;
+import fr.scabois.scabotheque.services.ApplicationMailer;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 
 @Controller
 public class ListeAdherentsController {
+
+    @Autowired
+    public ApplicationMailer mailer;
+    private String msg = "";
 
     @Autowired
     private IServiceAdherent service;
@@ -32,19 +39,22 @@ public class ListeAdherentsController {
 	// List<Metier> adhMetier = service.LoadMetiersAdherents();
 	List<Pole> poles = service.LoadPoles();
 	List<Secteur> secteurs = service.LoadSecteurs();
+	List<ContactFonction> contactFonctions = service.LoadContactFonctions();
 
 	// pModel.addAttribute("adhMetierList", adhMetier);
 	pModel.addAttribute("polesList", poles);
 	pModel.addAttribute("secteursList", secteurs);
+	pModel.addAttribute("contactFonctionList", contactFonctions);
 
 	// Si on arrive de la requestMethode POST
 	if (pModel.get("listeAdherents") == null) {
-	    final List<Adherent> listeAdherents = service.LoadAdherents();
-	    // ajout filtre sur les actifs
-	    pModel.addAttribute("listeAdherents",
-		    listeAdherents.stream().filter(a -> a.getEtat().getId() == 1).collect(Collectors.toList()));
+	    // filtre en même temps sur les actifs
+	    List<Adherent> listeAdherents = service.LoadAdherents().stream().filter(a -> a.getEtat().getId() == 1)
+		    .sorted(Comparator.comparing(Adherent::getLibelle)).collect(Collectors.toList());
+	    pModel.addAttribute("listeAdherents", listeAdherents);
 
 	    final CriteriaAdherent criteria = new CriteriaAdherent();
+	    criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
 	    pModel.addAttribute("criteria", criteria);
 	}
 
@@ -59,27 +69,31 @@ public class ListeAdherentsController {
 
 	final List<Adherent> listeAdherents = service.LoadAdherents(criteria);
 
-//	// filtre la liste des adherents sur les libellés
-//	List<Adherent> filterList = listeAdherents.stream().filter(adh -> {
-//	    boolean isLib = adh.getLibelle().toUpperCase().contains(criteria.getText().toUpperCase());
-//	    boolean isCode = adh.getCode().toUpperCase().contains(criteria.getText().toUpperCase());
-//	    boolean isDenom = adh.getDenomination() == null ? false
-//		    : adh.getDenomination().toUpperCase().contains(criteria.getText().toUpperCase());
-//	    boolean isPole = criteria.getPoleId() == 0 ? true : adh.getPole().getId().equals(criteria.getPoleId());
-//	    boolean isSecteur = criteria.getSecteurId() == 0 ? true
-//		    : adh.getSecteur().getId().equals(criteria.getSecteurId());
-//	    boolean isActif = criteria.getIsActif() ? true : adh.getEtat().getId() == 1;
-//
-//	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif;
-//	}).collect(Collectors.toList());
+	pModel.addAttribute("listeAdherents", listeAdherents);
+	criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
+
+	return afficher(pModel);
+    }
+
+    @RequestMapping(value = "/sendMail", method = RequestMethod.POST)
+    public String sendMail(@ModelAttribute(value = "criteria") final CriteriaAdherent criteria,
+	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
+
+	try {
+	    mailer.sendHTMLMail(criteria.getSender(), "adrien.fort@scabois.fr", criteria.getObject(),
+		    criteria.getMessageMail() + criteria.getAdherentIds().toString());
+	    criteria.setAvertissement("Votre message est envoyé.");
+
+	} catch (Exception e) {
+	    criteria.setAvertissement("Une erreur est survenue, Le message na pas été envoyé.");
+	}
+
+//	return modifieAdh(criteria, pBindingResult, pModel, request);
+
+	final List<Adherent> listeAdherents = service.LoadAdherents(criteria);
 
 	pModel.addAttribute("listeAdherents", listeAdherents);
-	// renvois la liste des adherents filtré sur le pole
-//	pModel.addAttribute("listeAdherents", filterList.stream()
-//		.filter(adh -> criteria.getPole().getId() == 0 || adh.getPole().getId() == criteria.getPole().getId())
-//		.filter(adh -> criteria.getSecteur().getId() == 0
-//			|| adh.getSecteur().getId() == criteria.getSecteur().getId())
-//		.collect(Collectors.toList()));
+	criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
 
 	return afficher(pModel);
     }

@@ -5,25 +5,30 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-<form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editIdentiteAdh">
-	<form:input type="hidden" path="adherent.id"/>
-
+<div  class="editAdherentEntete" >
 	<div class="entete">
 		<div class="photo">
-			<img src="<c:url value="/resources/images/noAdh.png" />" />
+			<c:choose >
+				<c:when test = "${adhToEdit.adherent.photo == ''}"> 
+					<img src="<c:url value="/resources/images/noAdh.png" />" />
+				</c:when>
+				<c:otherwise> 						
+					<img src="${adhToEdit.adherent.photo}">
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div>
-			<h2>${adhToEdit.adherent.denomination}</h2>
+			<span class="scabotheque-h3">${adhToEdit.adherent.denomination}</span>
 			<div>
-				<span class="label"><spring:message code="label.codeAdh"/></span>
+				<span class="adherentLabel"><spring:message code="label.codeAdh"/></span>
 				<span class="data" > ${adhToEdit.adherent.code} </span>
 			</div>
 		</div>
 	</div>
+</div>
+
+<form:form class="editAdherent" method="post" modelAttribute="adhToEdit" action="editIdentiteAdh">
+	<form:input type="hidden" path="adherent.id"/>
 
 <!-- Permet de ne pas perdre les données autre que celles modifié -->
 <%-- 	<form:input type="hidden" name="adherent.code" path="adherent.code"/> --%>
@@ -57,7 +62,7 @@
 	<form:input type="hidden" path="adherent.etat.id"/>
 
 	<fieldset>
-	   	<legend><spring:message code="label.identite"/></legend>
+	   	<legend class="legend"><spring:message code="label.identite"/></legend>
 	   	
 	   	<div class="showDetail">
 			<form:label path="adherent.code" ><spring:message code="label.codeAdh"/></form:label>
@@ -102,17 +107,37 @@
 			<form:input id="communeAdh" type="hidden" path="adherent.commune.id"/>
 			<form:input type="hidden" path="adherent.commune.codePostal"/>
 			<form:input type="hidden" path="adherent.commune.libelle"/>
-			<span><a href="#" id="editCommune"><svg><use xlink:href="<c:url value="/resources/images/icones.svg#edit"/>"></use></svg></a></span>
+			<span><a href="#" id="editCommune"><svg><use xlink:href="<c:url value="/resources/images/icones.svg#edit"/>"></use></svg></a>
+			<b><i><form:errors class="error" path="adherent.commune" /></i></b></span>
 		</div>
 	</fieldset>
 
-	<div class="editButton">
-		<button id="save" type="submit">Enregistrer</button>
+	<div class="textAlignRight">
+		<button class="action-button" id="save" type="submit">Enregistrer</button>
 		<c:url value="/adherentDetail" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
-		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
+		<button class="action-button" id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 
 </form:form>
+
+<!--  Test chargement de photo  -->
+<form:form method="POST"  enctype="multipart/form-data" action="uploadFile?${_csrf.parameterName}=${_csrf.token}">
+	<div class="photo">
+		<c:choose >
+			<c:when test = "${adhToEdit.adherent.photo == ''}"> 
+				<img src="<c:url value="/resources/images/noAdh.png" />" />
+			</c:when>
+			<c:otherwise> 						
+				<img src="${adhToEdit.adherent.photo}">
+			</c:otherwise>
+		</c:choose>
+	</div>
+	<input type="hidden" value="${adhToEdit.adherent.id}" name="adhId"> 
+	Image à utiliser : <input type="file" name="file"  accept="image/x-png,image/gif,image/jpeg" /> <br /> 
+	<button class="action-button" id="photo" type="submit">Envoyer l'image</button>
+</form:form>	
+<!-- fin photo -->
+
 
 <div id="overlay"></div>
 <div  id="dialogCommune" title="Selection de la commune" >
@@ -157,7 +182,7 @@ $( function() {
 	});
 	
 	$('#filterCP').bind("keyup", function(){
-		populateListe();
+		setTimeout(populateListe,1000);
 	});
 	  
 	

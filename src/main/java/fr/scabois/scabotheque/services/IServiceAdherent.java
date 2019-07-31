@@ -1,10 +1,9 @@
 package fr.scabois.scabotheque.services;
 
 import java.util.List;
-import java.util.Map;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
-import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -15,15 +14,20 @@ import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
+import fr.scabois.scabotheque.enums.PageType;
 
 public interface IServiceAdherent {
     void createActivite(String libelle);
 
-    void createAdherent(Adherent dataAdherent);
+    int createAdherent(Adherent dataAdherent);
 
     void createAgence(String libelle);
+
+    void createContactAdherent(AdherentContactRole contact);
+
+    void createContactFonction(String libelle);
 
     void createPole(String libelle);
 
@@ -31,15 +35,16 @@ public interface IServiceAdherent {
 
     void createSecteur(String libelle);
 
-    void createTypeContact(String libelle);
-
     List<Activite> LoadActivites();
 
     List<Activite> LoadActivitesAdherents();
 
     Adherent LoadAdherent(int idAdh);
 
-    Map<TypeContact, AdherentContact> LoadAdherentContact(int adhId);
+    String LoadAdherentCommentaire(int idAdh, PageType pageType);
+
+//    Map<TypeContact, List<AdherentContact>> LoadAdherentContact(int adhId);
+    List<AdherentContactRole> LoadAdherentContact(int adhId);
 
     List<Adherent> LoadAdherents();
 
@@ -50,6 +55,8 @@ public interface IServiceAdherent {
     List<Ape> LoadCodeApes();
 
     List<Commune> LoadCommunes();
+
+    List<ContactFonction> LoadContactFonctions();
 
     List<Etat> LoadEtats();
 
@@ -63,31 +70,37 @@ public interface IServiceAdherent {
 
     List<Tournee> LoadTournees();
 
-    List<TypeContact> LoadTypeContact();
-
     void saveAdherent(final Adherent pAdherent);
 
-    void saveAdherentContact(List<AdherentContact> contacts);
+    void saveAdherentCommentaire(int adhId, PageType type, String commentaire);
 
-    void saveAgence(List<Agence> agences);
+    void saveAdherentContacts(List<AdherentContactRole> contacts);
 
-    void savePole(List<Pole> setEditList);
+    void saveAgences(List<Agence> agences);
 
-    void saveRole(List<Role> setEditList);
+    void saveContactFonctions(List<ContactFonction> contactFonctions);
 
-    void saveSecteur(List<Secteur> setEditList);
+    void savePoles(List<Pole> setEditList);
 
-    void saveTypeContact(List<TypeContact> typeContacts);
+    void saveRoles(List<Role> setEditList);
 
-    void supprimerActivite(Integer id);
+    void saveSecteurs(List<Secteur> setEditList);
 
-    void supprimerAgence(Integer id);
+    void setAdherentImage(int adhId, byte[] bytes);
 
-    void supprimerPole(Integer id);
+    void setContactImage(int contactId, byte[] bytes);
 
-    void supprimerRole(Integer id);
+    void supprimeActivite(Integer id);
 
-    void supprimerSecteur(Integer id);
+    void supprimeAdherentContact(Integer id);
 
-    void supprimerTypeContact(Integer id);
+    void supprimeAgence(Integer id);
+
+    void supprimeContactFonction(Integer id);
+
+    void supprimePole(Integer id);
+
+    void supprimeRole(Integer id);
+
+    void supprimeSecteur(Integer id);
 }

@@ -1,7 +1,5 @@
 package fr.scabois.scabotheque.bean.adherent;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,42 +10,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import fr.scabois.scabotheque.bean.HasId;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.Activite;
 
 @Entity
-@Table(name = "adherent_contact")
+@Table(name = "adherent_activite")
 public class AdherentContact implements HasId {
 
+    @ManyToOne
+    @JoinColumn(name = "type_contact_id")
+    private Activite activite;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adherent_id")
     private Adherent adherent;
-//    @JoinColumn(name = "adherent_id")
-//    private int adherentId;
-    private String civilite;
-    private String fixe;
+    private String commentaire;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String mail;
-    private String mobile;
-    private Date naissance;
-    private String nom;
-    private String photo;
-    private String prenom;
-    @ManyToOne
-    @JoinColumn(name = "type_contact_id")
-    private TypeContact type;
+    private int pourcentage;
+
+    public Activite getActivite() {
+	return activite;
+    }
 
     public Adherent getAdherent() {
 	return adherent;
     }
 
-    public String getCivilite() {
-	return civilite;
-    }
-
-    public String getFixe() {
-	return fixe;
+    public String getCommentaire() {
+	return commentaire;
     }
 
     @Override
@@ -55,44 +45,20 @@ public class AdherentContact implements HasId {
 	return id;
     }
 
-    public String getMail() {
-	return mail;
+    public int getPourcentage() {
+	return pourcentage;
     }
 
-    public String getMobile() {
-	return mobile;
-    }
-
-    public Date getNaissance() {
-	return naissance;
-    }
-
-    public String getNom() {
-	return nom;
-    }
-
-    public String getPhoto() {
-	return photo;
-    }
-
-    public String getPrenom() {
-	return prenom;
-    }
-
-    public TypeContact getType() {
-	return type;
+    public void setActivite(Activite activite) {
+	this.activite = activite;
     }
 
     public void setAdherent(Adherent adherent) {
 	this.adherent = adherent;
     }
 
-    public void setCivilite(String civilite) {
-	this.civilite = civilite;
-    }
-
-    public void setFixe(String fixe) {
-	this.fixe = fixe;
+    public void setCommentaire(String commentaire) {
+	this.commentaire = commentaire;
     }
 
     @Override
@@ -100,32 +66,8 @@ public class AdherentContact implements HasId {
 	this.id = id;
     }
 
-    public void setMail(String mail) {
-	this.mail = mail;
-    }
-
-    public void setMobile(String mobile) {
-	this.mobile = mobile;
-    }
-
-    public void setNaissance(Date naissance) {
-	this.naissance = naissance;
-    }
-
-    public void setNom(String nom) {
-	this.nom = nom;
-    }
-
-    public void setPhoto(String photo) {
-	this.photo = photo;
-    }
-
-    public void setPrenom(String prenom) {
-	this.prenom = prenom;
-    }
-
-    public void setType(TypeContact type) {
-	this.type = type;
+    public void setPourcentage(int pourcentage) {
+	this.pourcentage = pourcentage;
     }
 
 }

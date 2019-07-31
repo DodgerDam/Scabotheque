@@ -40,6 +40,11 @@
         <put-attribute name="pageName"  value="adherentActivite" />
     </definition>
 
+	<definition name="adherentArtipole" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentArtipole.jsp" />
+        <put-attribute name="pageName"  value="adherentArtipole" />
+    </definition>
+
 	<definition name="adherentAdministratif" extends="base.definition">
         <put-attribute name="body"  value="/vues/adherent/adherentAdministratif.jsp" />
         <put-attribute name="pageName"  value="adherentAdministratif" />
@@ -50,6 +55,10 @@
         <put-attribute name="pageName"  value="adherentExploitation" />
     </definition>
 
+	<definition name="adherentInformatique" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/adherentInformatique.jsp" />
+        <put-attribute name="pageName"  value="adherentInformatique" />
+    </definition>
 
 	<definition name="addAdh" extends="base.definition">
         <put-attribute name="body"  value="/vues/adherent/addAdherent.jsp" />
@@ -58,6 +67,11 @@
     
 	<definition name="editActiviteAdh" extends="base.definition">
         <put-attribute name="body"  value="/vues/adherent/edit/editActiviteAdherent.jsp" />
+        <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="editArtipoleAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editArtipoleAdherent.jsp" />
         <put-attribute name="pageName"  value="listeAdh" />
     </definition>
 
@@ -81,9 +95,19 @@
         <put-attribute name="pageName"  value="listeAdh" />
     </definition>
 
+	<definition name="editInformatiqueAdh" extends="base.definition">
+        <put-attribute name="body"  value="/vues/adherent/edit/editInformatiqueAdherent.jsp" />
+        <put-attribute name="pageName"  value="adherentInformatique" />
+    </definition>
+
 	<definition name="listIdLibelle" extends="base.definition">
         <put-attribute name="body"  value="/vues/parametrage/listeIdLibelle.jsp" />
         <put-attribute name="pageName"  value="listeAdh" />
+    </definition>
+
+	<definition name="listeCommunes" extends="base.definition">
+        <put-attribute name="body"  value="/vues/parametrage/listeCommunes.jsp" />
+        <put-attribute name="pageName"  value="listeCommunes" />
     </definition>
 
     <definition name="enCours" extends="base.definition">

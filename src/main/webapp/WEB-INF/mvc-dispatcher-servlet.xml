@@ -21,7 +21,6 @@
         <property name="defaultEncoding" value="ISO-8859-1" />
     </bean>
 
-
 	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">  
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />  
     </bean>
@@ -35,8 +34,7 @@
         </property>  
     </bean>
 
-    <bean
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix">
             <value>/vues/</value>
         </property>
@@ -45,26 +43,18 @@
         </property>
     </bean>
     
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		 <!-- Taille maxi des fichiers en upload : 1Mb -->
+		<property name="maxUploadSize" value="1048576" />
+
+	</bean>
+    
+    
     <mvc:annotation-driven />
     <mvc:resources location="/resources/" mapping="/resources/**"  />
     
     <tx:annotation-driven transaction-manager="transactionManager" />
-
-	<!-- Déplacé dans le fichier spring-security -->
-	<!-- Utilisation d'apache pour la connection à la BDD -->
-<!-- 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
-<!--         <property name="jndiName" value="java:comp/env/jdbc/scabothequeDB" /> -->
-<!--     </bean> -->
-	
-	<!-- 	Connection direct à la BDD -->
-<!-- 	<bean id="dataSource" -->
-<!-- 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
-
-<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> -->
-<!-- 		<property name="url" value="jdbc:mysql://10.211.40.238:3306/scabotheque" /> -->
-<!-- 		<property name="username" value="scabotheque" /> -->
-<!-- 		<property name="password" value="scabotheque" /> -->
-<!-- 	</bean>     -->
+    
     
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
@@ -73,5 +63,4 @@
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
-
 </beans>

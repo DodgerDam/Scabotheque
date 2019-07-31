@@ -1,13 +1,12 @@
 package fr.scabois.scabotheque.services;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
-import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -18,9 +17,10 @@ import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 import fr.scabois.scabotheque.dao.IAdherentDAO;
+import fr.scabois.scabotheque.enums.PageType;
 
 @Service
 public class ServiceAdherent implements IServiceAdherent {
@@ -34,14 +34,24 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
-    public void createAdherent(Adherent datatAdherent) {
-	dao.createAdherent(datatAdherent);
+    public int createAdherent(Adherent datatAdherent) {
+	return dao.createAdherent(datatAdherent);
     }
 
     @Override
     public void createAgence(String libelle) {
 	dao.createAgence(libelle);
 
+    }
+
+    @Override
+    public void createContactAdherent(AdherentContactRole contact) {
+	dao.createContactAdherent(contact);
+    }
+
+    @Override
+    public void createContactFonction(String libelle) {
+	dao.createContactFonction(libelle);
     }
 
     @Override
@@ -60,11 +70,6 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
-    public void createTypeContact(String libelle) {
-	dao.createTypeContact(libelle);
-    }
-
-    @Override
     public List<Activite> LoadActivites() {
 	return dao.loadActivites();
     }
@@ -80,11 +85,20 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
-    public Map<TypeContact, AdherentContact> LoadAdherentContact(int adhId) {
-	return dao.LoadAdherentContact(adhId);
+    public String LoadAdherentCommentaire(int idAdh, PageType pageType) {
+	return dao.loadAdherentCommentaire(idAdh, pageType);
     }
 
-    // @Transactional(readOnly=true)
+//    @Override
+//    public Map<TypeContact, List<AdherentContact>> LoadAdherentContact(int adhId) {
+//	return dao.loadAdherentContact(adhId);
+//    }
+
+    @Override
+    public List<AdherentContactRole> LoadAdherentContact(int adhId) {
+	return dao.loadAdherentContact(adhId);
+    }
+
     @Override
     public List<Adherent> LoadAdherents() {
 	return dao.loadAdherents();
@@ -108,6 +122,11 @@ public class ServiceAdherent implements IServiceAdherent {
     @Override
     public List<Commune> LoadCommunes() {
 	return dao.loadCommunes();
+    }
+
+    @Override
+    public List<ContactFonction> LoadContactFonctions() {
+	return dao.loadContactFonction();
     }
 
     @Override
@@ -141,74 +160,89 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
-    public List<TypeContact> LoadTypeContact() {
-	return dao.loadTypeContact();
-    }
-
-    @Override
     public void saveAdherent(Adherent pAdherent) {
 	dao.editAdherent(pAdherent);
     }
 
     @Override
-    public void saveAdherentContact(List<AdherentContact> contacts) {
+    public void saveAdherentCommentaire(int adhId, PageType type, String commentaire) {
+	dao.saveAdherentCommentaire(adhId, type, commentaire);
+    }
+
+    @Override
+    public void saveAdherentContacts(List<AdherentContactRole> contacts) {
 	dao.saveAdherentContacts(contacts);
     }
 
     @Override
-    public void saveAgence(List<Agence> agences) {
+    public void saveAgences(List<Agence> agences) {
 	dao.saveAgences(agences);
 
     }
 
     @Override
-    public void savePole(List<Pole> poles) {
+    public void saveContactFonctions(List<ContactFonction> contactFonctions) {
+	dao.saveContactsFonctions(contactFonctions);
+    }
+
+    @Override
+    public void savePoles(List<Pole> poles) {
 	dao.savePoles(poles);
     }
 
     @Override
-    public void saveRole(List<Role> roles) {
+    public void saveRoles(List<Role> roles) {
 	dao.saveRoles(roles);
     }
 
     @Override
-    public void saveSecteur(List<Secteur> secteurs) {
-	dao.saveSecteur(secteurs);
+    public void saveSecteurs(List<Secteur> secteurs) {
+	dao.saveSecteurs(secteurs);
     }
 
     @Override
-    public void saveTypeContact(List<TypeContact> typeContacts) {
-	dao.saveTypeContacts(typeContacts);
+    public void setAdherentImage(int adhId, byte[] photo) {
+	dao.setAdherentImage(adhId, photo);
     }
 
     @Override
-    public void supprimerActivite(Integer id) {
+    public void setContactImage(int contactId, byte[] bytes) {
+	dao.setContactImage(contactId, bytes);
+    }
+
+    @Override
+    public void supprimeActivite(Integer id) {
 	dao.supprimeActivite(id);
     }
 
     @Override
-    public void supprimerAgence(Integer id) {
+    public void supprimeAdherentContact(Integer id) {
+	dao.supprimeAdherentContact(id);
+    }
+
+    @Override
+    public void supprimeAgence(Integer id) {
 	dao.supprimeAgence(id);
     }
 
     @Override
-    public void supprimerPole(Integer id) {
+    public void supprimeContactFonction(Integer id) {
+	dao.supprimeContactFonction(id);
+    }
+
+    @Override
+    public void supprimePole(Integer id) {
 	dao.supprimePole(id);
     }
 
     @Override
-    public void supprimerRole(Integer id) {
+    public void supprimeRole(Integer id) {
 	dao.supprimeRole(id);
     }
 
     @Override
-    public void supprimerSecteur(Integer id) {
+    public void supprimeSecteur(Integer id) {
 	dao.supprimeSecteur(id);
-    }
-
-    @Override
-    public void supprimerTypeContact(Integer id) {
-	dao.supprimeTypeContact(id);
     }
 
 }

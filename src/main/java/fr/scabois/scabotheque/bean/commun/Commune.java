@@ -13,6 +13,7 @@ public class Commune {
 
     @Column(name = "code_postal")
     private String codePostal;
+    private String departement;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,6 +21,10 @@ public class Commune {
 
     public String getCodePostal() {
 	return codePostal;
+    }
+
+    public String getDepartement() {
+	return departement;
     }
 
     public Integer getId() {
@@ -34,6 +39,10 @@ public class Commune {
 	codePostal = pCodePostal;
     }
 
+    public void setDepartement(String departement) {
+	this.departement = departement;
+    }
+
     public void setId(final Integer pId) {
 	id = pId;
     }
@@ -41,5 +50,4 @@ public class Commune {
     public void setLibelle(final String pLibelle) {
 	libelle = pLibelle;
     }
-
 }

@@ -63,14 +63,9 @@ public class AddAdherentController {
     @RequestMapping(value = "/addAdherent**", method = RequestMethod.GET)
     public String afficher(final ModelMap pModel) {
 
-	// SecurityContextHolder.getContext().getAuthentication().getName();
-
 	addSelectLists(pModel);
 
 	if (pModel.get("adhToAdd") == null) {
-//	if (adhEditable == null) {
-
-//	    final Adherent adh = service.LoadAdherent(idAdh);
 	    final EditAdherentForm editAdhForm = new EditAdherentForm();
 
 	    // Rend l'adherent éditable (avec des validations test)
@@ -92,6 +87,7 @@ public class AddAdherentController {
 
 	adh.setId(editAdh.getId());
 	adh.setCode(editAdh.getCode());
+	adh.setCodeERP(editAdh.getCodeERP());
 	adh.setLibelle(editAdh.getLibelle());
 	adh.setDenomination(editAdh.getDenomination());
 	adh.setFormeJuridique(editAdh.getFormeJuridique());
@@ -151,8 +147,8 @@ public class AddAdherentController {
 	}
 
 	if (!pBindingResult.hasErrors()) {
-	    service.createAdherent(adh);
-	    return "redirect:/listeAdherents";
+	    int id = service.createAdherent(adh);
+	    return "redirect:/edit/editAdherentContact?idAdh=" + id;
 	}
 
 	// voir retour direct à la liste

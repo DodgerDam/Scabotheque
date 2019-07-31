@@ -2,9 +2,12 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:sec="http://www.springframework.org/schema/security"	
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/security 
+		http://www.springframework.org/schema/security/spring-security.xsd">
 
 <!-- 	<context:component-scan base-package="fr.scabois.scabotheque" /> -->
 	
@@ -21,8 +24,8 @@
 
 		<sec:intercept-url pattern="/adherentDetail" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
 <!-- 	 	<sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_pole', 'ROLE_ADMIN')" /> -->
-		<sec:intercept-url pattern="/parametrage" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
-		<sec:intercept-url pattern="/edit/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+		<sec:intercept-url pattern="/parametrage**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
+		<sec:intercept-url pattern="/edit/**" access="hasRole('ROLE_ADMIN')" />
 
 		<sec:intercept-url pattern="/login**" access="permitAll"/>
 		<sec:intercept-url pattern="/listeAdherents**" access="permitAll"/>
@@ -33,12 +36,8 @@
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
-<!-- 		<sec:logout logout-success-url="/listeAdherents"/> -->
-<!-- 		<sec:logout logout-success-url="/login?logout"  /> -->
-		
 		<sec:access-denied-handler error-page="/accessDenied"/>
 		
-		<!-- enable csrf protection -->
 		<sec:csrf/>
 	</sec:http>
 

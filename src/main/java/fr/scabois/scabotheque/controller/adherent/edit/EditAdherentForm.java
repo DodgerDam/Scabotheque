@@ -7,11 +7,21 @@ public class EditAdherentForm {
     @Valid
     private EditAdherent adherent;
 
-    public void setAdherent(final EditAdherent pAdherent) {
-        adherent = pAdherent;
-    }
+    private String commentaire;
 
     public EditAdherent getAdherent() {
-        return adherent;
+	return adherent;
+    }
+
+    public String getCommentaire() {
+	return commentaire;
+    }
+
+    public void setAdherent(final EditAdherent pAdherent) {
+	adherent = pAdherent;
+    }
+
+    public void setCommentaire(String commentaire) {
+	this.commentaire = commentaire;
     }
 }

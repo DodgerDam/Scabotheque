@@ -1,9 +1,6 @@
 package fr.scabois.scabotheque.dao;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -14,7 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
-import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.AdherentCommentaire;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -25,8 +23,9 @@ import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
+import fr.scabois.scabotheque.enums.PageType;
 
 @Repository
 public class AdherentDAO implements IAdherentDAO {
@@ -45,7 +44,7 @@ public class AdherentDAO implements IAdherentDAO {
 
     @Override
     @Transactional
-    public void createAdherent(Adherent dataAdherent) {
+    public int createAdherent(Adherent dataAdherent) {
 
 	// chargement de l'adherent a modifier
 	Adherent newAdh = new Adherent();
@@ -55,12 +54,43 @@ public class AdherentDAO implements IAdherentDAO {
 
 	// enregistrement de l'adherent
 	entityManager.persist(newAdh);
+	entityManager.flush();
+
+	return newAdh.getId();
     }
 
     @Override
     @Transactional
     public void createAgence(String libelle) {
 	Agence newData = new Agence();
+	newData.setLibelle(libelle);
+
+	entityManager.persist(newData);
+    }
+
+    @Override
+    @Transactional
+    public void createContactAdherent(AdherentContactRole contact) {
+	AdherentContactRole newData = new AdherentContactRole();
+	newData.setAdherent(contact.getAdherent());
+	newData.setCivilite(contact.getCivilite());
+	newData.setFixe(contact.getFixe());
+	newData.setMail(contact.getMail());
+	newData.setMobile(contact.getMobile());
+	newData.setNaissance(contact.getNaissance());
+	newData.setNom(contact.getNom());
+	newData.setPhoto(contact.getPhoto());
+	newData.setPrenom(contact.getPrenom());
+	newData.setFonction(contact.getFonction());
+
+	entityManager.persist(newData);
+
+    }
+
+    @Override
+    @Transactional
+    public void createContactFonction(String libelle) {
+	ContactFonction newData = new ContactFonction();
 	newData.setLibelle(libelle);
 
 	entityManager.persist(newData);
@@ -88,15 +118,6 @@ public class AdherentDAO implements IAdherentDAO {
     @Transactional
     public void createSecteur(String libelle) {
 	Secteur newData = new Secteur();
-	newData.setLibelle(libelle);
-
-	entityManager.persist(newData);
-    }
-
-    @Override
-    @Transactional
-    public void createTypeContact(String libelle) {
-	TypeContact newData = new TypeContact();
 	newData.setLibelle(libelle);
 
 	entityManager.persist(newData);
@@ -136,25 +157,60 @@ public class AdherentDAO implements IAdherentDAO {
 	}
     }
 
+    @Override
+    public String loadAdherentCommentaire(int idAdh, PageType type) {
+	try {
+	    AdherentCommentaire cmm = loadAdherentPageCommentaire(idAdh, type);
+
+	    return cmm == null ? "" : cmm.getCommentaireString();
+	} catch (NoResultException e) {
+	    return "";
+	}
+    }
+
+    /**
+     * Création d'une liste avec tout les type de contacte
+     */
+//    @Override
+//    public Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId) {
+//
+//	Map<TypeContact, List<AdherentContact>> map = new HashMap<>();
+//
+//	List<TypeContact> typeContact = entityManager
+//		.createQuery("from TypeContact order by libelle", TypeContact.class).getResultList();
+//	final List<AdherentContact> contactsAdh = entityManager
+//		.createQuery("from AdherentContact ac where adherent.id = :idAdh ", AdherentContact.class)
+//		.setParameter("idAdh", adhId).getResultList();
+//
+//	typeContact.stream().forEach(t -> map.put(t,
+//		contactsAdh.stream().filter(f -> f.getType().getId() == t.getId()).collect(Collectors.toList())));
+//
+//	return new TreeMap<>(map);
+//    }
+
     /**
      * Création d'une liste avec tout les type de contacte
      */
     @Override
-    public Map<TypeContact, AdherentContact> LoadAdherentContact(int adhId) {
-//	List<AdherentContact> contactAdh = new ArrayList<AdherentContact>();
+    public List<AdherentContactRole> loadAdherentContact(int adhId) {
 
-	Map<TypeContact, AdherentContact> map = new HashMap<>();
+	List<AdherentContactRole> contacts = entityManager
+		.createQuery("from AdherentContactRole where adherent.id = :adhId", AdherentContactRole.class)
+		.setParameter("adhId", adhId).getResultList();
 
-	List<TypeContact> typeContact = entityManager
-		.createQuery("from TypeContact order by libelle", TypeContact.class).getResultList();
-	final List<AdherentContact> contactsAdh = entityManager
-		.createQuery("from AdherentContact ac where adherent.id = :idAdh ", AdherentContact.class)
-		.setParameter("idAdh", adhId).getResultList();
+	return contacts;
+    }
 
-	typeContact.stream().forEach(t -> map.put(t,
-		contactsAdh.stream().filter(f -> f.getType().getId() == t.getId()).findFirst().orElse(null)));
+    private AdherentCommentaire loadAdherentPageCommentaire(int idAdh, PageType type) {
+	try {
+	    return entityManager
+		    .createQuery("from AdherentCommentaire com where adherentId = :adhId and type = :type",
+			    AdherentCommentaire.class)
+		    .setParameter("adhId", idAdh).setParameter("type", type).getSingleResult();
 
-	return new TreeMap<>(map);
+	} catch (NoResultException e) {
+	    return null;
+	}
     }
 
     @Override
@@ -176,7 +232,7 @@ public class AdherentDAO implements IAdherentDAO {
 	    boolean isPole = criteria.getPoleId() == 0 ? true : adh.getPole().getId().equals(criteria.getPoleId());
 	    boolean isSecteur = criteria.getSecteurId() == 0 ? true
 		    : adh.getSecteur().getId().equals(criteria.getSecteurId());
-	    boolean isActif = criteria.getIsActif() ? true : adh.getEtat().getId() == 1;
+	    boolean isActif = criteria.getShowAll() ? true : adh.getEtat().getId() == 1;
 
 	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif;
 	}).collect(Collectors.toList());
@@ -196,6 +252,11 @@ public class AdherentDAO implements IAdherentDAO {
     @Override
     public List<Commune> loadCommunes() {
 	return entityManager.createQuery("from Commune", Commune.class).getResultList();
+    }
+
+    @Override
+    public List<ContactFonction> loadContactFonction() {
+	return entityManager.createQuery("from ContactFonction", ContactFonction.class).getResultList();
     }
 
     @Override
@@ -228,19 +289,32 @@ public class AdherentDAO implements IAdherentDAO {
 	return entityManager.createQuery("from Tournee", Tournee.class).getResultList();
     }
 
+    @Transactional
     @Override
-    public List<TypeContact> loadTypeContact() {
-	return entityManager.createQuery("from TypeContact", TypeContact.class).getResultList();
+    public void saveAdherentCommentaire(int adhId, PageType type, String commentaire) {
+
+	AdherentCommentaire adhCommentaire = loadAdherentPageCommentaire(adhId, type);
+	if (adhCommentaire == null) {
+	    adhCommentaire = new AdherentCommentaire();
+	    adhCommentaire.setAdherentId(adhId);
+	    adhCommentaire.setType(type);
+	    adhCommentaire.setCommentaireString(commentaire);
+	} else {
+	    adhCommentaire.setCommentaireString(commentaire);
+	}
+
+	entityManager.persist(adhCommentaire);
+
     }
 
     @Override
     @Transactional
-    public void saveAdherentContacts(List<AdherentContact> contacts) {
+    public void saveAdherentContacts(List<AdherentContactRole> contacts) {
 
 	// Pour tout les contact de la liste
 	contacts.stream().forEach(c -> {
-	    AdherentContact adhContact = c.getId() == null ? new AdherentContact()
-		    : entityManager.find(AdherentContact.class, c.getId());
+	    AdherentContactRole adhContact = c.getId() == null ? new AdherentContactRole()
+		    : entityManager.find(AdherentContactRole.class, c.getId());
 	    updateAdherentContactData(adhContact, c);
 	    entityManager.persist(adhContact);
 	});
@@ -255,6 +329,18 @@ public class AdherentDAO implements IAdherentDAO {
 	    Agence agence = a.getId() == null ? new Agence() : entityManager.find(Agence.class, a.getId());
 	    agence.setLibelle(a.getLibelle());
 	    entityManager.persist(agence);
+	});
+    }
+
+    @Override
+    @Transactional
+    public void saveContactsFonctions(List<ContactFonction> contactFonctions) {
+	// Pour tout les contact de la liste
+	contactFonctions.stream().forEach(a -> {
+	    ContactFonction contactFonction = a.getId() == null ? new ContactFonction()
+		    : entityManager.find(ContactFonction.class, a.getId());
+	    contactFonction.setLibelle(a.getLibelle());
+	    entityManager.persist(contactFonction);
 	});
     }
 
@@ -281,7 +367,8 @@ public class AdherentDAO implements IAdherentDAO {
     }
 
     @Override
-    public void saveSecteur(List<Secteur> secteurs) {
+    @Transactional
+    public void saveSecteurs(List<Secteur> secteurs) {
 	// Pour tout les contact de la liste
 	secteurs.stream().forEach(a -> {
 	    Secteur secteur = a.getId() == null ? new Secteur() : entityManager.find(Secteur.class, a.getId());
@@ -292,14 +379,26 @@ public class AdherentDAO implements IAdherentDAO {
 
     @Override
     @Transactional
-    public void saveTypeContacts(List<TypeContact> typeContacts) {
-	// Pour tout les contact de la liste
-	typeContacts.stream().forEach(a -> {
-	    TypeContact typeContact = a.getId() == null ? new TypeContact()
-		    : entityManager.find(TypeContact.class, a.getId());
-	    typeContact.setLibelle(a.getLibelle());
-	    entityManager.persist(typeContact);
-	});
+    public void setAdherentImage(int adhId, byte[] photo) {
+	Adherent adh = loadAdherent(adhId);
+	adh.setPhoto(photo);
+
+	entityManager.persist(adh);
+
+    }
+
+    @Override
+    @Transactional
+    public void setContactImage(int contactId, byte[] photo) {
+
+	try {
+	    AdherentContactRole contact = entityManager.find(AdherentContactRole.class, contactId);
+	    contact.setPhoto(photo);
+	    entityManager.persist(contact);
+
+	} catch (NoResultException e) {
+	}
+
     }
 
     @Override
@@ -311,8 +410,22 @@ public class AdherentDAO implements IAdherentDAO {
 
     @Override
     @Transactional
+    public void supprimeAdherentContact(Integer id) {
+	AdherentContactRole del = entityManager.find(AdherentContactRole.class, id);
+	entityManager.remove(del);
+    }
+
+    @Override
+    @Transactional
     public void supprimeAgence(Integer id) {
 	Agence del = entityManager.find(Agence.class, id);
+	entityManager.remove(del);
+    }
+
+    @Override
+    @Transactional
+    public void supprimeContactFonction(Integer id) {
+	ContactFonction del = entityManager.find(ContactFonction.class, id);
 	entityManager.remove(del);
     }
 
@@ -337,25 +450,23 @@ public class AdherentDAO implements IAdherentDAO {
 	entityManager.remove(del);
     }
 
-    @Override
-    @Transactional
-    public void supprimeTypeContact(Integer id) {
-	TypeContact del = entityManager.find(TypeContact.class, id);
-	entityManager.remove(del);
-    }
-
-    private AdherentContact updateAdherentContactData(AdherentContact dbbContact, AdherentContact adhContact) {
+    private AdherentContactRole updateAdherentContactData(AdherentContactRole dbbContact,
+	    AdherentContactRole adhContact) {
 
 	dbbContact.setAdherent(adhContact.getAdherent());
 	dbbContact.setCivilite(adhContact.getCivilite());
 	dbbContact.setFixe(adhContact.getFixe());
+	dbbContact.setFonction(adhContact.getFonction());
+	dbbContact.setIsAdministratif(adhContact.getIsAdministratif());
+	dbbContact.setIsCommerce(adhContact.getIsCommerce());
+	dbbContact.setIsCompta(adhContact.getIsCompta());
+	dbbContact.setIsDirigeant(adhContact.getIsDirigeant());
 	dbbContact.setMail(adhContact.getMail());
 	dbbContact.setMobile(adhContact.getMobile());
 	dbbContact.setNaissance(adhContact.getNaissance());
 	dbbContact.setNom(adhContact.getNom());
 	dbbContact.setPhoto(adhContact.getPhoto());
 	dbbContact.setPrenom(adhContact.getPrenom());
-	dbbContact.setType(adhContact.getType());
 
 	return dbbContact;
 

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
-import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 import fr.scabois.scabotheque.utils.AppProperties;
@@ -39,7 +39,7 @@ public class ExcelControler {
     @RequestMapping("/downloadFile")
     public void downloadFile(@RequestParam(value = "findText") final String findText,
 	    @RequestParam(value = "poleId") final int poleId, @RequestParam(value = "secteurId") final int secteurId,
-	    @RequestParam(value = "isActif") final Boolean isActif, HttpServletRequest request,
+	    @RequestParam(value = "showAll") final Boolean showAll, HttpServletRequest request,
 	    HttpServletResponse response) {
 
 	try {
@@ -50,7 +50,7 @@ public class ExcelControler {
 	    criteria.setText(findText);
 	    criteria.setPoleId(poleId);
 	    criteria.setSecteurId(secteurId);
-	    criteria.setIsActif(isActif);
+	    criteria.setShowAll(showAll);
 
 	    List<Adherent> listAdh = service.LoadAdherents(criteria);
 
@@ -62,7 +62,7 @@ public class ExcelControler {
 
 	    final AtomicInteger cpt = new AtomicInteger();
 	    listAdh.stream().forEach(a -> {
-		AdherentContact contact = a.getContacts().stream().filter(c -> c.getType().getId().equals(1))
+		AdherentContactRole contact = a.getContacts().stream().filter(c -> c.getFonction().getId().equals(1))
 			.findFirst().get();
 
 		XSSFRow row = sheet.createRow(cpt.incrementAndGet());

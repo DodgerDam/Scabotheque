@@ -48,7 +48,7 @@ public class Adherent {
     private String contactComptable;
 
     @OneToMany(mappedBy = "adherent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<AdherentContact> contacts = new ArrayList<>();
+    private List<AdherentContactRole> contacts = new ArrayList<>();
 
     @Column(name = "cloture_exercice")
     private Date dateClotureExe;
@@ -95,6 +95,8 @@ public class Adherent {
 
     @Column(name = "num_rep_metier")
     private String numRepMetier;
+    private byte[] photo;
+
     @ManyToOne
     private Pole pole;
 
@@ -150,7 +152,7 @@ public class Adherent {
 	return contactComptable;
     }
 
-    public List<AdherentContact> getContacts() {
+    public List<AdherentContactRole> getContacts() {
 	return contacts;
     }
 
@@ -212,6 +214,14 @@ public class Adherent {
 
     public String getNumRepMetier() {
 	return numRepMetier;
+    }
+
+    public byte[] getPhoto() {
+	return photo;
+    }
+
+    public String getPhotoImg() {
+	return new String(photo);
     }
 
     public Pole getPole() {
@@ -278,7 +288,7 @@ public class Adherent {
 	this.contactComptable = contactComptable;
     }
 
-    public void setContacts(List<AdherentContact> contacts) {
+    public void setContacts(List<AdherentContactRole> contacts) {
 	this.contacts.clear();
 	this.contacts.addAll(contacts);
     }
@@ -341,6 +351,10 @@ public class Adherent {
 
     public void setOutilDechargement(boolean outilDechargement) {
 	this.isOutilDechargement = outilDechargement;
+    }
+
+    public void setPhoto(byte[] photo) {
+	this.photo = photo;
     }
 
     public void setPole(Pole pole) {

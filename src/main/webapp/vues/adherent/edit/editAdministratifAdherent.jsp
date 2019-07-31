@@ -3,30 +3,31 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-<!-- <script src="resources/js/selectCommune.js"></script> -->
-<!-- <script src="resources/js/jquery.js"></script> -->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  
-<form:form id="editAdherent" method="post" modelAttribute="adhToEdit" action="editAdministratifAdh">
-	<form:input type="hidden" path="adherent.id"/>
-
+<div  class="editAdherentEntete" >
 	<div class="entete">
 		<div class="photo">
-			<img src="<c:url value="/resources/images/noAdh.png" />" />
+			<c:choose >
+				<c:when test = "${adhToEdit.adherent.photo == ''}"> 
+					<img src="<c:url value="/resources/images/noAdh.png" />" />
+				</c:when>
+				<c:otherwise> 						
+					<img src="${adhToEdit.adherent.photo}">
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<div>
-			<h2>${adhToEdit.adherent.denomination}</h2>
+			<span class="scabotheque-h3">${adhToEdit.adherent.denomination}</span>
 			<div>
-				<span class="label"><spring:message code="label.codeAdh"/></span>
+				<span class="adherentLabel"><spring:message code="label.codeAdh"/></span>
 				<span class="data" > ${adhToEdit.adherent.code} </span>
 			</div>
 		</div>
 	</div>
+</div>  
+  
+<form:form class="editAdherent" method="post" modelAttribute="adhToEdit" action="editAdministratifAdh">
+	<form:input type="hidden" path="adherent.id"/>
 
 <!-- Permet de ne pas perdre les données autre que celles modifié -->
 	<form:input type="hidden" name="adherent.code" path="adherent.code"/>
@@ -61,7 +62,7 @@
 <%-- 	<form:input type="hidden" path="adherent.etat.id"/> --%>
 	
 	<fieldset>
-	   	<legend><spring:message code="label.administratif"/></legend>
+	   	<legend class="legend"><spring:message code="label.administratif"/></legend>
 
 		<div class="showDetail">
 			<form:label path="adherent.dateEntree"><spring:message code="label.dateEntree"/></form:label>
@@ -123,7 +124,7 @@
 			<form:input id="CommuneRcs" type="hidden" path="adherent.rcsCommune.id"/>
 			<form:input type="hidden" path="adherent.rcsCommune.libelle"/>
 			<form:input type="hidden" path="adherent.rcsCommune.codePostal"/>
-			<span><a href="#" id="editRcsCommune"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			<span><a href="#" id="editRcsCommune"><svg><use xlink:href="../resources/images/icones.svg#edit"></use></svg></a></span>
 		</div>
 		
 		<div class="showDetail">
@@ -133,12 +134,6 @@
 			<form:errors class="errors" path="adherent.dateClotureExe" />
 			</div>
 		</div>
-		
-<!-- 		<div class="showDetail"> -->
-<%-- 			<form:label path="adherent.contactComptable"><spring:message code="label.contactComptable"/></form:label> --%>
-<%-- 			<form:input class="valeur" name="adherent.contactComptable" path="adherent.contactComptable"/> --%>
-<%-- 			<b><i><form:errors path="adherent.contactComptable" /></i></b> --%>
-<!-- 		</div> -->
 		
 		<div class="showDetail">
 			<form:label path="adherent.isFormationCommerce" ><spring:message code="label.formationCommerce"/></form:label>
@@ -154,17 +149,21 @@
 
 		
 	</fieldset>
-
-	<div>
-		<button id="save" type="submit">Enregistrer</button>
-		<c:url value="/adherentDetail" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
-		<button id="cancel" type="reset" onClick="window.location='${url}'">Annuler</button>
+	
+	<fieldset>
+	   	<legend class="legend"><spring:message code="label.commentaire"/></legend>
+		<form:textarea id="summernote" name="editordata" path="commentaire"/>
+	</fieldset>
+	
+	<div class="textAlignRight">
+		<button class="action-button" type="submit">Enregistrer</button>
+		<c:url value="/adherentAdministratif" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url>
+		<button class="action-button" type="reset" onClick="window.location='${url}'">Annuler</button>
 	</div>
 
 </form:form>
 
 <div  id="dialogCommune" title="Selection de la commune" >
-<%-- 		<form> --%>
 		<span>commune actuel </span>
 		<span id="currentCommune"></span></br>
 		
@@ -172,11 +171,18 @@
 		<span>saisir le code postal</span>
 		<input id="filterCP" type="text" />
 		<select id="communeListe" multiple></select>
-<%-- 		</form> --%>
 </div>
 
 <script>
 $( function() {
+	$(document).ready(function() {
+		  $('#summernote').summernote({
+		 		placeholder: '<spring:message code="label.commentaire"/>',
+		 		tabsize: 2,
+		 		height: 150
+		  });
+		});
+	
 	communeDialog = $('#dialogCommune').dialog({
 		resizable:false,
 	    modal:true,
@@ -205,7 +211,7 @@ $( function() {
 	});
 	
 	$('#filterCP').bind("keyup", function(){
-		populateListe();
+		setTimeout(populateListe,1000);
 	});
 	  
 	
@@ -224,97 +230,9 @@ $( function() {
 			 
 			    });
 	}
-	
-//     var dialog, form,
- 
-//       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-//       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-//       name = $( "#name" ),
-//       email = $( "#email" ),
-//       password = $( "#password" ),
-//       allFields = $( [] ).add( name ).add( email ).add( password ),
-//       tips = $( ".validateTips" );
- 
-//     function updateTips( t ) {
-//       tips
-//         .text( t )
-//         .addClass( "ui-state-highlight" );
-//       setTimeout(function() {
-//         tips.removeClass( "ui-state-highlight", 1500 );
-//       }, 500 );
-//     }
- 
-//     function checkLength( o, n, min, max ) {
-//       if ( o.val().length > max || o.val().length < min ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( "Length of " + n + " must be between " +
-//           min + " and " + max + "." );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function checkRegexp( o, regexp, n ) {
-//       if ( !( regexp.test( o.val() ) ) ) {
-//         o.addClass( "ui-state-error" );
-//         updateTips( n );
-//         return false;
-//       } else {
-//         return true;
-//       }
-//     }
- 
-//     function addUser() {
-//       var valid = true;
-//       allFields.removeClass( "ui-state-error" );
- 
-//       valid = valid && checkLength( name, "username", 3, 16 );
-//       valid = valid && checkLength( email, "email", 6, 80 );
-//       valid = valid && checkLength( password, "password", 5, 16 );
- 
-//       valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-//       valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-//       valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
- 
-//       if ( valid ) {
-//         $( "#users tbody" ).append( "<tr>" +
-//           "<td>" + name.val() + "</td>" +
-//           "<td>" + email.val() + "</td>" +
-//           "<td>" + password.val() + "</td>" +
-//         "</tr>" );
-//         dialog.dialog( "close" );
-//       }
-//       return valid;
-//     }
- 
-//     dialog = $( "#dialog-form" ).dialog({
-//       autoOpen: false,
-//       height: 400,
-//       width: 350,
-//       modal: true,
-//       buttons: {
-//         "Create an account": addUser,
-//         Cancel: function() {
-//           dialog.dialog( "close" );
-//         }
-//       },
-//       close: function() {
-//         form[ 0 ].reset();
-//         allFields.removeClass( "ui-state-error" );
-//       }
-//     });
- 
-//     form = dialog.find( "form" ).on( "submit", function( event ) {
-//       event.preventDefault();
-//       addUser();
-//     });
- 
-//     $( "#create-user" ).button().on( "click", function() {
-//       dialog.dialog( "open" );
-//     });
-  } );
-  </script>
-</head>
-<body>
+});
+
+</script>
+<!-- </head> -->
+<!-- <body> -->
  

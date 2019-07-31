@@ -1,10 +1,9 @@
 package fr.scabois.scabotheque.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
-import fr.scabois.scabotheque.bean.adherent.AdherentContact;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -15,24 +14,27 @@ import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
+import fr.scabois.scabotheque.enums.PageType;
 
 public interface IAdherentDAO {
 
     void createActivite(String libelle);
 
-    void createAdherent(Adherent adherent);
+    int createAdherent(Adherent adherent);
 
     void createAgence(String libelle);
+
+    void createContactAdherent(AdherentContactRole contact);
+
+    void createContactFonction(String libelle);
 
     void createPole(String libelle);
 
     void createRole(String libelle);
 
     void createSecteur(String libelle);
-
-    void createTypeContact(String libelle);
 
     void editAdherent(Adherent pAdherent);
 
@@ -42,7 +44,10 @@ public interface IAdherentDAO {
 
     Adherent loadAdherent(int idAdh);
 
-    Map<TypeContact, AdherentContact> LoadAdherentContact(int adhId);
+    String loadAdherentCommentaire(int idAdh, PageType type);
+
+//    Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId);
+    List<AdherentContactRole> loadAdherentContact(int adhId);
 
     List<Adherent> loadAdherents();
 
@@ -53,6 +58,8 @@ public interface IAdherentDAO {
     List<Ape> loadApes();
 
     List<Commune> loadCommunes();
+
+    List<ContactFonction> loadContactFonction();
 
     List<Etat> loadEtats();
 
@@ -66,35 +73,35 @@ public interface IAdherentDAO {
 
     List<Tournee> loadTournees();
 
-    List<TypeContact> loadTypeContact();
+    void saveAdherentCommentaire(int adhId, PageType type, String commentaire);
 
-    void saveAdherentContacts(List<AdherentContact> contacts);
+    void saveAdherentContacts(List<AdherentContactRole> contacts);
 
     void saveAgences(List<Agence> agences);
+
+    void saveContactsFonctions(List<ContactFonction> contactsFonction);
 
     void savePoles(List<Pole> poles);
 
     void saveRoles(List<Role> roles);
 
-    void saveSecteur(List<Secteur> secteurs);
+    void saveSecteurs(List<Secteur> secteurs);
 
-    void saveTypeContacts(List<TypeContact> typeContacts);
+    void setAdherentImage(int adhId, byte[] photo);
+
+    void setContactImage(int contactId, byte[] bytes);
 
     void supprimeActivite(Integer id);
 
+    void supprimeAdherentContact(Integer id);
+
     void supprimeAgence(Integer id);
+
+    void supprimeContactFonction(Integer id);
 
     void supprimePole(Integer id);
 
     void supprimeRole(Integer id);
 
     void supprimeSecteur(Integer id);
-
-    void supprimeTypeContact(Integer id);
-
-//    void addAdherents(final Adherent adherent);
-//    
-//    void deleteAdherent(final Adherent adherent);
-//    
-//    void editAdherent(final Adherent adherent);
 }

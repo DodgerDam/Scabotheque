@@ -6,28 +6,23 @@
  
 /* Forms --------------------------------------------------------------------------------------- */
 
-button{
-	padding: 10px;
-	margin:5px;
-    color: #ffffff;
-    display: inline-block;
-    min-width: 220px;
-    background-color: #82aa37;
-    border: 0 none;
-    border-radius: 0.4em;
-    -webkit-appearance: none;
-    font-weight: bold;
-    }
-    
-legend {
-    font-weight: bold;
-/*     color: #0568CD; */
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #D5DBDB;
 }
 
-/* form div { */
-/* 	display:flex; */
-/* 	margin: 0.5em; */
-/* } */
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #D5DBDB;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #D5DBDB;
+}
+
+.legend {
+    font-weight: bold;
+    font-size:1.5em;
+    padding-left: 1em;
+}
 
 form .valeur{
 	width:30em;
@@ -39,9 +34,19 @@ form label {
     margin: 3px 0px 0px 0px;
 }
 
+form textArea {
+    float: left;
+/*     width: 25em; */
+    margin: 0.3em 0 0 0;
+    padding: 1em;
+}
+
 form input, form select {
     margin: 3px 3px 0px 0px;
-    border: 1px #999 solid ;    
+    border: 1px #ccc solid ;
+    border-radius: 0.4em;
+    margin: 0.2em;
+    padding: 0.4em;    
 }
 
 /* form .errors{ */
@@ -72,6 +77,23 @@ form input.sansLabel {
     color: #090;
 }
 
+.colonnesDouble{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.colonnesEditContact{
+    display: grid;
+    grid-template-columns: 20em 1fr 1fr 2em;
+    padding: 0.5em;
+    border-bottom: 1px #ccc solid;
+}
+
+.colonnesEditContact .editData{
+    display: grid;
+    padding: 0 1.1em;
+}
+
 /* .info { */
 /*     font-style: italic; */
 /*     color: #E8A22B; */
@@ -79,13 +101,25 @@ form input.sansLabel {
 
 /* Détail adherents et modification -------------------------------------------------------------------------- */
 
-#showAdherent, #editAdherent, #listeIdLibelle, #editAdherentContact{
+.listAdherent-recherche{
 	display:flex;
-	flex-direction:column;
-	font-size:1.3em;
 }
 
-#showAdherent H2{
+.listAdherent-recherche-button{
+	display:flex;
+}
+
+.listAdherent-recherche-criteres{
+	flex:1;	
+}
+
+.showAdherent, .editAdherent, .listeIdLibelle, .addAdherentContact{
+	display:flex;
+	flex-direction:column;
+/* 	font-size:1.3em; */
+}
+
+.showAdherent H2{
     font-size: 2.35294em;
     line-height: 40px;
    	text-align:center;
@@ -94,78 +128,115 @@ form input.sansLabel {
     margin: 0 0 10px;
 }
 
-#listeIdLibelle .showDetail{
-	text-align :center;	
+.colonne-commune{
+	display: grid;
+    grid-template-columns: 1fr 9em 9em;
 }
 
-#editAdherent .editButton, #editAdherentContact .editButton, #listeIdLibelle .editButton{
+.saveButton{
 	text-align :right;	
 	float :right;
 }
 
+.fieldsetCommentaire{
+	padding: 0.5em;
+	margin : 0.5 em;
+}
 
-#editAdherent .entete, #editAdherentContact .entete{
+.editAdherentEntete .entete, .editAdherentContact .entete, .addAdherentContact .entete{
     align-items: center;
 	display: grid;
-    grid-template-columns: 7em 1fr 7em;
+    grid-template-columns: 9em 1fr 9em;
     padding: 0.2em 0.4em;
     text-align : center;
 }
 
-#editAdherent .error, #editAdherentContact .error{
+.editAdherentEntete .entete img, .editAdherent .entete img, .editAdherentContact .entete img{
+	width:9em;
+}
+
+/* .editAdherent .error, .editAdherentContact .error, .addAdherentContact .error{ */
+.error{
 	color: red;
     font-style: italic;
     font-size: 0.9em;
     font-weight: bold;
 }
 
-#showAdherent .entete{
+.showAdherent .entete{
     align-items: center;
 	display: grid;
-    grid-template-columns: 8em 1fr;
-/*     padding: 0.2em 0.4em; */
+    grid-template-columns: 12em 1fr;
+    padding: 1em 0;
 }
 
-#showAdherent .entete .nomAdherent{
+.showAdherent .listContact{
 	display: grid;
-    grid-template-columns: 1fr 1.5em;
+    grid-template-columns: 3em 1fr 1fr 7em 7em;
 }
 
-#showAdherent .entete img, #editAdherent .entete img, #editAdherentContact .entete img{
-	width:7em;
+.showAdherent .data {
+    padding: 0em 0.2em;
+    font-weight: bold;
 }
 
-#showAdherent .listContact{
-display: grid;
-    grid-template-columns: 9em 2em 1fr 1fr 6.8em 6em;
-}
-
-#showAdherent .listContact .data {
-    padding: 0.5em 0.2em;
-}
-
-
-#editAdherent .showDetail {
+/* .editAdherentContact hr, .showAdherent hr{ */
+/* 	margin: 5px 0; */
+/* } */
+.editAdherent .showDetail {
 	display: grid;
     grid-template-columns: 12em 1fr 1fr;
 	padding: 0.2em 0.4em;
+	font-size: 15px;
 }
 
-#editAdherentContact .showDetail {
+.addAdherentContact .showDetail{
 	display: grid;
-    grid-template-columns: 2.6em 1fr 1fr 1fr 4.6em 4.6em;
+    grid-template-columns: 1fr 1fr 2em;
+/* 	padding: 0.2em 0.4em; */
+/* 	font-size: 15px; */
+} 
+
+.addAdherentContact .showDetail{
+	display: grid;
+    grid-template-columns: 10em 1fr 1fr;
 	padding: 0.2em 0.4em;
+	font-size: 15px;
+} 
+
+/* .editAdherentContact .typeDetail, .showAdherent .typeDetail{ */
+/* 	color: #82aa37; */
+/*     line-height: 0.6em; */
+/*     padding-top: 0.8em; */
+/* } */
+
+/* .editAdherentContact .showDetail { */
+/* 	display: grid; */
+/*     grid-template-columns: 4.9em 1fr 1fr 1fr 7.5em 7.5em 2em; */
+/*     font-size: 15px; */
+/* } */
+
+.showAdherent .showContact{
+    padding-bottom: 1em;	
 }
 
-#editAdherent label, #editAdherentContact label, #editAdherentContact input , #editAdherentContact select {
+.showAdherent .showCommentaire{
+    margin-bottom: 3.5em;	
+}
+
+.editAdherent label, .editAdherentContact label, .editAdherentContact input , .editAdherentContact select {
 	width:auto;
 }
 
-#showAdherent .showDetail{
+.addAdherentContact .showDetail{
+	
+}
+	
+.showAdherent .showDetail{
 	align-items: center;
 	display: grid;
     grid-template-columns: 12em 1fr;
-	padding: 0.2em 0.4em;
+	padding: 0.2em 1em;
 }
 
 /* #showAdherent fieldset , #editAdherent fieldset, #editAdherentContact fieldset{ */
@@ -175,23 +246,28 @@ fieldset {
     border-radius: 0.4em;
 }
 
-#showAdherent svg, #editAdherent svg, #editAdherentContact svg{
-	heigth:1.5em;
-	width:1.5em;
+/* .showAdherent svg, .editAdherent svg, .editAdherentContact svg, .listeIdLibelle svg{ */
+/* 	height:1.5em; */
+/* 	width:1.5em; */
+/* } */
+
+.showAdherent .delete, .editAdherent .delete, .editAdherentContact .delete, .listeIdLibelle .delete{
+    width: 1.5em;
+/*     height: 40px; */
 }
 
-#login {
+.login {
 	font-size: 1.3em;
 	width: 400px;
 	padding: 20px;
 	margin: 100px auto;
 }
 
-#login div {
+.login div {
 	display: flex;
 }
 
-#login input {
+.login input {
     margin: 0.5em;
     border: 2px #999 solid;
 	flex:1;
@@ -201,7 +277,7 @@ fieldset {
    	padding: 13px 15px;
 }
 	
-#login .error {
+.login .error {
 	padding: 15px;
 	margin-bottom: 20px;
 	border: 1px solid transparent;
@@ -211,7 +287,7 @@ fieldset {
 	border-color: #ebccd1;
 }
 
-#login .msg {
+.login .msg {
 	padding: 15px;
 	margin-bottom: 20px;
 	border: 1px solid transparent;
@@ -222,30 +298,57 @@ fieldset {
 }
 
 /* Liste des adherents -------------------------------------------------------------------------- */
-#listeAdherents {
+.listeAdherents {
 	display :flex;
 	flex-direction:column;
 	width: 100%;
 }
 
-#listeAdherents .list {
+.adherents-item {
 	display:flex;
 	}
 
-#listeAdherents .photo {
-	float:left;
-	margin:auto;
-	text-align:center;
-	width:7em;
-/* 	border: 1px solid gray; */
+.adherents-item .data {
+    font-size: 0.95em;
+    line-height: 1em;
+    padding: 0 0.2em;
+    font-weight: bold;
 }
 
-#listeAdherents .photo img{
-		width:5em;
-		height:5em;
-	}
+.listeAdherents div.photo{
+	float:left;
+    margin: auto;
+	text-align:center;
+	width:8em;
+}
 
-#listeAdherents .detail {
+.photoContact{
+	float:left;
+    margin: auto;
+	text-align:center;
+	display: grid;
+}
+
+.photoContact img{
+    margin: auto;
+}
+
+.showIcone{
+	max-width: 15px; 
+	vertical-align: middle;
+}
+
+.showAdherent div.photo{
+	float:left;
+/* 	margin-top:2.4em; */
+	text-align:center;
+}
+.listeAdherents div.photo img, .showAdherent div.photo img{
+    max-width: 8em;
+    max-height: 8em;
+}
+
+.listeAdherents .detail {
 	background-color: #ffffff;
 	border: 1px solid #d4d4d4;
 	border-radius: 0.4em;
@@ -254,61 +357,57 @@ fieldset {
 	padding: 0.4em;
 }
 
-#listeAdherents .detail a{
+.listeAdherents .detail a{
     color: #004462;
 	text-decoration: none; 
   }
 
-#listeAdherents .info{
+.listeAdherents .info{
 	display :flex;
 	}  
 
-#listeAdherents .code{
+.listeAdherents .code{
 	flex:1;
     display: grid;
-    grid-template-columns: 5em 1fr;
+    grid-template-columns: 7em 1fr;
 	margin:auto;
 	}  
 
-#listeAdherents .statut{
+.listeAdherents .statut{
 	flex:1;
     display: grid;
     grid-template-columns: 4em 1fr;
 	margin:auto;
 	}  
 
-#listeAdherents .raccourcis{
+.listeAdherents .raccourcis{
 	-flex:1;
 	margin:auto;
 	text-align:right;
 }  
 
-#listeAdherents .etatAdh{
+.listeAdherents .etatAdh{
     display: grid;
     grid-template-columns: 4em 1fr 2em ;
 }  
 
-#listeAdherents .detail a:hover {
+.listeAdherents .detail a:hover {
     text-decoration: underline; }
 }
-#listeAdherents td, #customers th {
+.listeAdherents td, #customers th {
 /*   border: 1px solid #ddd; */
   padding: 5px;
 }
 
-#listeAdherents .link{
+.listeAdherents .link{
 	width:25px;
 }
 
-#listeAdherents .detail img{
+.listeAdherents .detail img{
 	height:20px;
 	align:center;
 	width:20px;
 }
-
-
-
-
 
 /* #adherents tr:nth-child(even){background-color: #e8e8e8;} */
 

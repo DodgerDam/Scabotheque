@@ -20,7 +20,7 @@ import fr.scabois.scabotheque.bean.adherent.Role;
 import fr.scabois.scabotheque.bean.adherent.Secteur;
 import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.Agence;
-import fr.scabois.scabotheque.bean.commun.TypeContact;
+import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.enums.PageType;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 import fr.scabois.scabotheque.utils.IdLibelle;
@@ -30,15 +30,15 @@ public class TablesBasesController {
 
     private static final String ACTIVITE_CONST = "Activite";
     private static final String AGENCE_CONST = "Agence";
+    private static final String CONTACT_FONCTION_CONST = "ContactFonction";
     private static final String POLE_CONST = "Pole";
     private static final String ROLE_CONST = "Role";
     private static final String SECTEUR_CONST = "Secteur";
-    private static final String TYPE_CONTACT_CONST = "TypeContact";
 
     @Autowired
     private IServiceAdherent service;
 
-    @RequestMapping(value = { "/parametrage**" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/parametrage" }, method = RequestMethod.GET)
     public String afficher(@RequestParam(value = "type") final String typeList, final ModelMap pModel) {
 
 	if (pModel.get("editList") == null) {
@@ -62,8 +62,8 @@ public class TablesBasesController {
 	    case SECTEUR_CONST:
 		listIdLibelle.addAll(service.LoadSecteurs());
 		break;
-	    case TYPE_CONTACT_CONST:
-		listIdLibelle.addAll(service.LoadTypeContact());
+	    case CONTACT_FONCTION_CONST:
+		listIdLibelle.addAll(service.LoadContactFonctions());
 		break;
 	    }
 
@@ -106,6 +106,16 @@ public class TablesBasesController {
 	return afficher(AGENCE_CONST, pModel);
     }
 
+    @RequestMapping(value = { "/ajoutContactFonction" }, method = RequestMethod.POST)
+    public String ajoutContactFonction(@Valid @ModelAttribute(value = "creation") final CreationForm creation,
+	    final BindingResult pBindingResult, final ModelMap pModel) {
+	if (!pBindingResult.hasErrors()) {
+	    service.createContactFonction(creation.getLibelle());
+	}
+
+	return afficher(CONTACT_FONCTION_CONST, pModel);
+    }
+
     @RequestMapping(value = { "/ajoutPole" }, method = RequestMethod.POST)
     public String ajoutPole(@Valid @ModelAttribute(value = "creation") final CreationForm creation,
 	    final BindingResult pBindingResult, final ModelMap pModel) {
@@ -136,16 +146,6 @@ public class TablesBasesController {
 	return afficher(SECTEUR_CONST, pModel);
     }
 
-    @RequestMapping(value = { "/ajoutTypeContact" }, method = RequestMethod.POST)
-    public String ajoutTypeContact(@Valid @ModelAttribute(value = "creation") final CreationForm creation,
-	    final BindingResult pBindingResult, final ModelMap pModel) {
-	if (!pBindingResult.hasErrors()) {
-	    service.createTypeContact(creation.getLibelle());
-	}
-
-	return afficher(TYPE_CONTACT_CONST, pModel);
-    }
-
     @RequestMapping(value = { "/editActivite" }, method = RequestMethod.POST)
     public String modifierActivite(@Valid @ModelAttribute(value = "editList") final EditIdLibListForm editForm,
 	    final BindingResult pBindingResult, final ModelMap pModel) {
@@ -165,11 +165,24 @@ public class TablesBasesController {
 
 	if (!pBindingResult.hasErrors()) {
 	    IdLibelle<Agence> computeList = new IdLibelle<>(Agence.class);
-	    service.saveAgence(computeList.setEditList(editForm.getList()));
+	    service.saveAgences(computeList.setEditList(editForm.getList()));
 	    return "redirect:/parametrage?type=Agence";
 	}
 
 	return afficher(AGENCE_CONST, pModel);
+    }
+
+    @RequestMapping(value = { "/editTypeContact" }, method = RequestMethod.POST)
+    public String modifierContact(@Valid @ModelAttribute(value = "editList") final EditIdLibListForm editForm,
+	    final BindingResult pBindingResult, final ModelMap pModel) {
+
+	if (!pBindingResult.hasErrors()) {
+	    IdLibelle<ContactFonction> computeList = new IdLibelle<>(ContactFonction.class);
+	    service.saveContactFonctions(computeList.setEditList(editForm.getList()));
+	    return "redirect:/parametrage?type=TypeContact";
+	}
+
+	return afficher(CONTACT_FONCTION_CONST, pModel);
     }
 
     @RequestMapping(value = { "/editPole" }, method = RequestMethod.POST)
@@ -178,7 +191,7 @@ public class TablesBasesController {
 
 	if (!pBindingResult.hasErrors()) {
 	    IdLibelle<Pole> computeList = new IdLibelle<>(Pole.class);
-	    service.savePole(computeList.setEditList(editForm.getList()));
+	    service.savePoles(computeList.setEditList(editForm.getList()));
 	    return "redirect:/parametrage?type=Pole";
 	}
 
@@ -191,7 +204,7 @@ public class TablesBasesController {
 
 	if (!pBindingResult.hasErrors()) {
 	    IdLibelle<Role> computeList = new IdLibelle<>(Role.class);
-	    service.saveRole(computeList.setEditList(editForm.getList()));
+	    service.saveRoles(computeList.setEditList(editForm.getList()));
 	    return "redirect:/parametrage?type=Role";
 	}
 
@@ -204,65 +217,52 @@ public class TablesBasesController {
 
 	if (!pBindingResult.hasErrors()) {
 	    IdLibelle<Secteur> computeList = new IdLibelle<>(Secteur.class);
-	    service.saveSecteur(computeList.setEditList(editForm.getList()));
+	    service.saveSecteurs(computeList.setEditList(editForm.getList()));
 	    return "redirect:/parametrage?type=Secteur";
 	}
 
 	return afficher(SECTEUR_CONST, pModel);
     }
 
-    @RequestMapping(value = { "/editTypeContact" }, method = RequestMethod.POST)
-    public String modifierTypeContact(@Valid @ModelAttribute(value = "editList") final EditIdLibListForm editForm,
-	    final BindingResult pBindingResult, final ModelMap pModel) {
-
-	if (!pBindingResult.hasErrors()) {
-	    IdLibelle<TypeContact> computeList = new IdLibelle<>(TypeContact.class);
-	    service.saveTypeContact(computeList.setEditList(editForm.getList()));
-	    return "redirect:/parametrage?type=TypeContact";
-	}
-
-	return afficher(TYPE_CONTACT_CONST, pModel);
-    }
-
     @RequestMapping(value = "/supprimeActivite", method = RequestMethod.GET)
     public String supprimeActivite(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	service.supprimerActivite(id);
+	service.supprimeActivite(id);
 	return afficher(ACTIVITE_CONST, pModel);
     }
 
     @RequestMapping(value = "/supprimeAgence", method = RequestMethod.GET)
     public String supprimeAgence(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	service.supprimerAgence(id);
+	service.supprimeAgence(id);
 	return afficher(AGENCE_CONST, pModel);
+    }
+
+    @RequestMapping(value = "/supprimeContactFonction", method = RequestMethod.GET)
+    public String supprimeContactFonction(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
+	try {
+	    service.supprimeContactFonction(id);
+	    return afficher(CONTACT_FONCTION_CONST, pModel);
+	} catch (Exception e) {
+	    pModel.addAttribute("erreur", "Impossible de terminer la demande <br>" + e.getMessage());
+	    return afficher(CONTACT_FONCTION_CONST, pModel);
+	}
     }
 
     @RequestMapping(value = "/supprimePole", method = RequestMethod.GET)
     public String supprimePole(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	service.supprimerPole(id);
+	service.supprimePole(id);
 	return afficher(POLE_CONST, pModel);
     }
 
     @RequestMapping(value = "/supprimeRole", method = RequestMethod.GET)
     public String supprimeRole(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	service.supprimerRole(id);
+	service.supprimeRole(id);
 	return afficher(ROLE_CONST, pModel);
     }
 
     @RequestMapping(value = "/supprimeSecteur", method = RequestMethod.GET)
     public String supprimeSecteur(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	service.supprimerSecteur(id);
+	service.supprimeSecteur(id);
 	return afficher(SECTEUR_CONST, pModel);
-    }
-
-    @RequestMapping(value = "/supprimeTypeContact", method = RequestMethod.GET)
-    public String supprimeTypeContact(@RequestParam(value = "id") final Integer id, final ModelMap pModel) {
-	try {
-	    service.supprimerTypeContact(id);
-	    return afficher(TYPE_CONTACT_CONST, pModel);
-	} catch (Exception e) {
-	    pModel.addAttribute("erreur", "Impossible de terminer la demande <br>" + e.getMessage());
-	    return afficher(TYPE_CONTACT_CONST, pModel);
-	}
     }
 
 }

@@ -5,7 +5,7 @@
 
 <%@page session="true"%>
  
-<div id=header>
+<div class="scabotheque-header">
 	<div  class="logo">
 		<img src="<c:url value="/resources/images/Scabotheques.png" />"  alt="Scabotheque" />
 	</div>
@@ -13,18 +13,17 @@
 	<div class="identification">
 		<c:choose>
 			<c:when test="${pageContext.request.remoteUser != null}">
-				<h2>Vous êtes conencté en ${pageContext.request.remoteUser}</h2>
+				Vous êtes conencté en ${pageContext.request.remoteUser}
+				<br>
 	      		<a href="<c:url value="/login?logout" />">Déconnexion</a>
 			</c:when>
 			<c:otherwise>
-				<h2>Vous n'êtes pas connecté</h2>
+				Vous n'êtes pas connecté
 			</c:otherwise>
 		</c:choose>
 	</div>
-	<div>
+	<div class="version">
 		Version : ${project.version}
 	</div>
-
-	
 </div>
 	
