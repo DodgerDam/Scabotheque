@@ -4,6 +4,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 
 <div class="showAdherent">
 	<div class="entete">
@@ -29,61 +31,63 @@
 	</div>
 	<fieldset>
     	<legend class="legend"><spring:message code="label.administratif"/></legend>
-		<div class="editIcone">
-			<c:url value="/edit/editAdministratifAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-			<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-		</div>	
-		<div  class="showDetail">
+    	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_FINANCE_EDIT')">    	
+			<div class="editIcone">
+				<c:url value="/edit/editAdministratifAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+				<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			</div>
+		</sec:authorize>	
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.dateEntree"/></span>
 			<span class="data"><fmt:formatDate pattern="MM/dd/yyyy" value="${adherent.dateEntree}" /></span>
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.role"/></span>
 			<span class="data">${adherent.role.libelle}</span>
 		</div>
 		
-		<div  class="showDetail"> 
+		<div  class="showDetailAdherent"> 
 			<span class="adherentLabel"><spring:message code="label.formeJuridique"/></span>
 			<span class="data">${adherent.formeJuridique.libelle}</span>
 		</div>
 	
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.siren"/></span>
 			<span class="data">${adherent.siren}</span>
 		</div>
 		
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.siret"/></span>
 			<span class="data">${adherent.siret}</span>
 		</div>
 		
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.ape"/></span>
 			<span class="data">${adherent.ape.libelle}</span>
 		</div>
 		
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.numRepMetier"/></span>
 			<span class="data">${adherent.numRepMetier}</span>
 		</div>
 		
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 	        <span class="adherentLabel"><spring:message code="label.rcsRm"/></span>
 			<span class="data">${adherent.rcsRm}</span>
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.rcsCommune"/></span>
 			<span class="data">${adherent.rcsCommune.libelle}</span>
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.dateClotureExe"/></span>
 			<span class="data"><fmt:formatDate pattern="MM/dd/yyyy" value="${adherent.dateClotureExe}" /></span>
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.formationCommerce"/></span>
 			<span class="data"><c:choose>
 					<c:when test="${adherent.isFormationCommerce}"><spring:message code="yes"/></c:when> 
@@ -92,7 +96,7 @@
 			</span>
 		</div>
 		
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.etat"/></span>
 			<span class="data">${adherent.etat.libelle}</span>
 		</div>

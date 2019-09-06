@@ -25,115 +25,50 @@
 		</div>
 	</div>
 </div>   
-
-
-<%-- <form:form class="editAdherent" method="post" modelAttribute="adhToEdit" action="editActiviteAdh"> --%>
-<%-- 	<form:input type="hidden" path="adherent.id"/> --%>
-
-<!-- Permet de ne pas perdre les données autre que celles modifié -->
-<%-- 	<form:input type="hidden" name="adherent.code" path="adherent.code"/> --%>
-<%-- 	<form:input type="hidden" name="adherent.code" path="adherent.codeERP"/> --%>
-<%-- 	<form:input type="hidden" name="adherent.libelle" path="adherent.libelle"/> --%>
-<%-- 	<form:input type="hidden" name="adherent.denomination" path="adherent.denomination"/> --%>
-<%-- 	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/> --%>
-<%-- 	<form:input type="hidden" name="adherent.adresseComplement" path="adherent.adresseComplement"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.commune.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.pole.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isArtipole"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isCharteArtipole"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isFlocageArtipole"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isWebArtipole"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isFacebookArtipole"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.agence.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.secteur.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.tournee.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isOutilDechargement"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.dateEntree"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.role.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.formeJuridique.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.siren"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.siret"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.ape.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.numRepMetier"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.rcsRm"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.rcsCommune.id"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.dateClotureExe"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.contactComptable"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.isFormationCommerce"/> --%>
-<%-- 	<form:input type="hidden" path="adherent.etat.id"/> --%>
 	
-<div class="editAdherent">
+<form:form class="editAdherent" method="post" modelAttribute="editForm" action="editActivitesAdh">
 	<fieldset>
 	   	<legend class="legend"><spring:message code="label.activite"/></legend>
 		
-		<c:forEach items="${activitees}" var="activitee" varStatus="status">
-			<div class="showDetail" style="display: grid; grid-template-columns: 12em 15em 1fr;">
-				<span>${activitee.libelle}</span>
-				<div class="showDetail">
-					<input type="text" placeholder="%tage"/>%
+		<c:forEach items="${editForm.activitesAdh}" var="activite" varStatus="status">
+			<form:input type="hidden" path="activitesAdh[${status.index}].id"/>
+			<form:input type="hidden" path="activitesAdh[${status.index}].adherentId"/>
+			<form:input type="hidden" path="activitesAdh[${status.index}].activiteId"/>
+			<form:input type="hidden" path="activitesAdh[${status.index}].activiteLibelle"/>
+			<div class="showDetailCommentaire" >
+				<span style="margin: auto 0;">${activite.activiteLibelle}</span>
+				<div>
+					<form:input type="text" placeholder="Pourcentage" path="activitesAdh[${status.index}].pourcentage"/>
+					<span style="margin: auto 0;">%</span><br>
+					<form:errors class="error" path="activitesAdh[${status.index}].pourcentage" />
 				</div>
-				<div class="showDetail">
-					<input type="text" placeholder="commentaire"/>
+				<div style="display:flex;">
+					<form:input style="flex:1;" type="text" placeholder="commentaire" path="activitesAdh[${status.index}].commentaire"/>
 				</div>
 			</div>
 		</c:forEach>
 	</fieldset>
-</div>
-<!-- 		<div class="showDetail"> -->
-<%-- 			<form:label path="adherent.pole" ><spring:message code="label.pole"/></form:label> --%>
-<%-- 			<form:select class="valeur" name="adherent.pole" path="adherent.pole.id"> --%>
-<%-- 				<form:options items="${poleList}" itemValue="id" itemLabel="libelle" /> --%>
-<%-- 			</form:select> --%>
-<%-- 			<b><i><form:errors path="adherent.pole" /></i></b> --%>
-<!-- 		</div> -->
 
-<!-- 		<div  class="showDetail"> -->
-<%-- 			<form:label path="adherent.isArtipole" ><spring:message code="label.adhArtipole"/></form:label> --%>
-<%-- 			<form:checkbox path="adherent.isArtipole"/> --%>
-<!-- 		</div> -->
-
-<!-- 		<div  class="showDetail"> -->
-<%-- 			<form:label path="adherent.isArtipole" ><spring:message code="label.charteArtipole"/></form:label> --%>
-<%-- 			<form:checkbox path="adherent.isCharteArtipole"/> --%>
-<!-- 		</div> -->
-
-<!-- 		<div class="showDetail"> -->
-<%-- 			<form:label path="adherent.isArtipole" ><spring:message code="label.flocageArtipole"/></form:label> --%>
-<%-- 			<form:checkbox path="adherent.isFlocageArtipole"/> --%>
-<!-- 		</div> -->
-
-<!-- 		<div class="showDetail"> -->
-<%-- 			<form:label path="adherent.isArtipole" ><spring:message code="label.siteArtipole"/></form:label> --%>
-<%-- 			<form:checkbox path="adherent.isWebArtipole"/> --%>
-<!-- 		</div> -->
-
-<!-- 		<div class="showDetail"> -->
-<%-- 			<form:label path="adherent.isArtipole" ><spring:message code="label.facebookArtipole"/></form:label> --%>
-<%-- 			<form:checkbox path="adherent.isFacebookArtipole"/> --%>
-<!-- 		</div> -->
-	
+	<fieldset class="fieldsetCommentaire">
+	   	<legend class="legend"><spring:message code="label.commentaire"/></legend>
+		<form:textarea id="summernote" name="editordata" path="commentaire"/>
 	</fieldset>
-
-<!-- 	<fieldset> -->
-<%-- 	   	<legend class="legend"><spring:message code="label.commentaire"/></legend> --%>
-<%-- 		<form:textarea id="summernote" name="editordata" path="commentaire"/> --%>
-<!-- 	</fieldset> -->
 	
-<!-- 	<div class="textAlignRight"> -->
-<!-- 		<button class="action-button" type="submit">Enregistrer</button> -->
-<%-- 		<c:url value="/adherentActivite" var="url"><c:param name="idAdh" value="${adhToEdit.adherent.id}"/></c:url> --%>
-<%-- 		<button class="action-button" type="reset" onClick="window.location='${url}'">Annuler</button> --%>
-<!-- 	</div> -->
+	<div class="textAlignRight">
+		<button class="action-button" type="submit">Enregistrer</button>
+		<c:url value="/adherentActivite" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+		<button class="action-button" type="reset" onClick="window.location='${url}'">Annuler</button>
+	</div>
 
-<%-- </form:form> --%>
+</form:form>
 
 <script>
 $(function() {
 	$(document).ready(function() {
 		  $('#summernote').summernote({
 		 		placeholder: '<spring:message code="label.commentaire"/>',
-		 		tabsize: 2,
-		 		height: 150
+		 		tabsize: 3,
+		 		height: 100
 		  });
 		});
   });

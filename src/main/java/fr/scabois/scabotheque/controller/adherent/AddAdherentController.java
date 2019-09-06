@@ -116,6 +116,7 @@ public class AddAdherentController {
 	adh.setOutilDechargement(editAdh.getIsOutilDechargement());
 	adh.setContactComptable(editAdh.getContactComptable());
 	adh.setEtat(editAdh.getEtat());
+	adh.setPhoto(editAdh.getPhoto() == null ? "".getBytes() : editAdh.getPhoto().getBytes());
 
 	return adh;
     }

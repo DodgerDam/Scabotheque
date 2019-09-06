@@ -4,9 +4,11 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
 
 <div class="showAdherent">
-	  <div class="entete">
+	<div class="entete">
 		<div class="photo">
 			<c:choose >
 				<c:when test = "${adherent.photoImg == ''}"> 
@@ -26,20 +28,22 @@
 				</div>
 	    	</div>
 		</div>
-	</div>	 
+	</div>
+
 	<fieldset>
     	<legend class="legend"><spring:message code="label.activite"/></legend>
-		<div class="editIcone">
-    		<c:url value="/edit/editActiviteAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-    		<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-		</div>	
-		    	
-		<div class="showDetail">
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_ACTIVITE_EDIT')">
+			<div class="editIcone">
+	    		<c:url value="/edit/editActiviteAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+	    		<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			</div>	
+		</sec:authorize>    	
+		<div class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.pole"/></span>
 			<span class="data" >${adherent.pole.libelle}</span>
 		</div>
 	
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
 			<span class="data">
 				<c:choose>
@@ -48,44 +52,16 @@
 				</c:choose>
 			</span>
 		</div>
-	
-		<div class="showDetail">
-			<span class="adherentLabel"><spring:message code="label.charteArtipole"/></span>
-			<span class="data">
-				<c:choose>
-					<c:when test="${adherent.isCharteArtipole}"><spring:message code="yes"/></c:when> 
-					<c:otherwise><spring:message code="no"/></c:otherwise> 
-				</c:choose>
-			</span>
-		</div>
-	
-		<div class="showDetail">
-			<span class="adherentLabel"><spring:message code="label.flocageArtipole"/></span>
-			<span class="data"><c:choose>
-					<c:when test="${adherent.isFlocageArtipole}"><spring:message code="yes"/></c:when> 
-					<c:otherwise><spring:message code="no"/></c:otherwise> 
-				</c:choose>
-			</span>
-		</div>
-		
-		<div class="showDetail">
-			<span class="adherentLabel"><spring:message code="label.siteArtipole"/></span>
-			<span class="data"><c:choose>
-					<c:when test="${adherent.isFacebookArtipole}"><spring:message code="yes"/></c:when> 
-					<c:otherwise><spring:message code="no"/></c:otherwise> 
-				</c:choose>
-			</span>
-		</div>
 
-		<div class="showDetail">
-			<span class="adherentLabel"><spring:message code="label.facebookArtipole"/></span>
-			<span class="data"><c:choose>
-					<c:when test="${adherent.isFacebookArtipole}"><spring:message code="yes"/></c:when> 
-					<c:otherwise><spring:message code="no"/></c:otherwise> 
-				</c:choose>
-			</span>
-		</div>
-	
+<!-- 		<div class="colonnesTriple" style ="padding:10px;"> -->
+		<c:forEach items="${activites}" var="activite">
+			<div  class="showDetailCommentaire"> 
+				<span class="adherentLabel">${activite.activite.libelle}</span>
+				<span class="data">${activite.pourcentage} %</span>
+				<span class="data">${activite.commentaire}</span>
+			</div>
+		</c:forEach>		
+<!-- 		</div>	 -->
 	</fieldset>
 	
 	<fieldset class="showCommentaire">

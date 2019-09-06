@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
@@ -185,6 +187,37 @@ public class EditAdhController {
 
 	Adherent adh = service.LoadAdherent(idAdh);
 	List<Activite> activitees = service.LoadActivites();
+	List<AdherentActivite> activiteesAdh = service.LoadActivitesAdherent(idAdh);
+	EditAdherentActivitesForm editForm = new EditAdherentActivitesForm();
+	List<EditAdherentActivite> editList = new ArrayList<>();
+
+	editForm.setCommentaire(service.LoadAdherentCommentaire(idAdh, PageType.ADHERENT_ACTIVITE));
+
+	// mise en forme des activitées Adherent en ajoutant les activitées non
+	// renseignés
+	if (pModel.get("editForm") == null) {
+	    activitees.stream().forEach(a -> {
+		EditAdherentActivite editActiviteAdh = new EditAdherentActivite();
+
+		editActiviteAdh.setActiviteId(a.getId());
+		editActiviteAdh.setActiviteLibelle(a.getLibelle());
+		editActiviteAdh.setAdherentId(adh.getId());
+		Optional<AdherentActivite> adhActivite = activiteesAdh.stream()
+			.filter(aa -> aa.getActivite().getId().equals(a.getId())).findFirst();
+
+		if (adhActivite.isPresent()) {
+		    editActiviteAdh.setCommentaire(adhActivite.get().getCommentaire());
+		    editActiviteAdh.setPourcentage(adhActivite.get().getPourcentage());
+		    editActiviteAdh.setId(adhActivite.get().getId());
+		}
+		editList.add(editActiviteAdh);
+	    });
+	    pModel.addAttribute("editForm", editForm);
+	} else {
+	    pModel.addAttribute("editForm", pModel.get("editForm"));
+	}
+	editForm.setActivitesAdh(editList);
+
 	pModel.addAttribute("adherent", adh);
 	pModel.addAttribute("activitees", activitees);
 
@@ -298,18 +331,17 @@ public class EditAdhController {
 	contact.setNom(adhContactEditable.getNom());
 	contact.setNaissance(adhContactEditable.getNaissance());
 	try {
-	    if (adhContactEditable.getFile().getOriginalFilename() != "") {
-		String extension = adhContactEditable.getFile().getOriginalFilename()
-			.substring(adhContactEditable.getFile().getOriginalFilename().length() - 3);
-		fileName = "data:image/" + extension + ";base64,"
-			+ Base64.encodeBase64String(adhContactEditable.getFile().getBytes());
+	    if (adhContactEditable.getFile() != null) {
+		if (adhContactEditable.getFile().getOriginalFilename() != "") {
+		    String extension = adhContactEditable.getFile().getOriginalFilename()
+			    .substring(adhContactEditable.getFile().getOriginalFilename().length() - 3);
+		    fileName = "data:image/" + extension + ";base64,"
+			    + Base64.encodeBase64String(adhContactEditable.getFile().getBytes());
+		}
 	    }
 	} catch (IOException e) {
 	}
-
 	contact.setPhoto(fileName.getBytes());
-
-//	contact.setPhoto(adhContactEditable.getPhotoImg().getBytes());
 	contact.setPrenom(adhContactEditable.getPrenom());
 
 	return contact;
@@ -345,9 +377,38 @@ public class EditAdhController {
 	}
     }
 
-    @RequestMapping(value = { "/edit/editActiviteAdh", "/edit/editAdministratifAdh", "/edit/editExploitationAdh",
-	    "/edit/editInformatiqueAdh", "/edit/editArtipoleAdh",
-	    "/edit/editIdentiteAdh" }, method = RequestMethod.POST)
+    @RequestMapping(value = "/edit/editActivitesAdh", method = RequestMethod.POST)
+    public String modifieActiviteAdh(
+	    @Valid @ModelAttribute(value = "editForm") final EditAdherentActivitesForm editForm,
+	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
+
+	int adhId = editForm.getActivitesAdh().get(0).getAdherentId();
+
+	if (!pBindingResult.hasErrors()) {
+	    service.saveAdherentCommentaire(adhId, PageType.ADHERENT_ACTIVITE, editForm.getCommentaire());
+
+	    List<AdherentActivite> activitesAdh = new ArrayList<>();
+	    editForm.getActivitesAdh().stream().forEach(a -> {
+		if (a.getPourcentage() != null) {
+		    AdherentActivite aa = new AdherentActivite();
+		    aa.setActivite(service.LoadActivite(a.getActiviteId()));
+		    aa.setAdherent(service.LoadAdherent(a.getAdherentId()));
+		    aa.setCommentaire(a.getCommentaire());
+		    aa.setPourcentage(a.getPourcentage());
+
+		    activitesAdh.add(aa);
+		}
+	    });
+
+	    service.saveActivitesAdherent(adhId, activitesAdh);
+	    return redirectOkPage(PageType.ADHERENT_ACTIVITE, 1);
+	}
+
+	return editAdherentActivite(adhId, pModel, request);
+    }
+
+    @RequestMapping(value = { "/edit/editAdministratifAdh", "/edit/editExploitationAdh", "/edit/editInformatiqueAdh",
+	    "/edit/editArtipoleAdh", "/edit/editIdentiteAdh" }, method = RequestMethod.POST)
     public String modifieAdh(@Valid @ModelAttribute(value = "adhToEdit") final EditAdherentForm editForm,
 	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
 

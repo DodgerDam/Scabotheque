@@ -16,7 +16,7 @@ import fr.scabois.scabotheque.bean.HasId;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
 
 @Entity
-@Table(name = "adherent_contact_role")
+@Table(name = "adherent_contact")
 public class AdherentContactRole implements HasId {
 
     @ManyToOne(fetch = FetchType.LAZY)

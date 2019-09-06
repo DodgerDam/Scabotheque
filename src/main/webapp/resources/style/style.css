@@ -28,11 +28,11 @@ form .valeur{
 	width:30em;
 }
 
-form label {
-    float: left;
-    width: 25em;
-    margin: 3px 0px 0px 0px;
-}
+/* form label { */
+/*     float: left; */
+/*     width: 25em; */
+/*     margin: 3px 0px 0px 0px; */
+/* } */
 
 form textArea {
     float: left;
@@ -63,6 +63,10 @@ form input.sansLabel {
     margin-left: 200px;
 }
 
+.displayInline{
+	display: inline-flex;
+}
+
 /* Styles et couleurs -------------------------------------------------------------------------- */
 .requis {
     color: #c00;
@@ -82,6 +86,11 @@ form input.sansLabel {
     grid-template-columns: 1fr 1fr;
 }
 
+.colonnesTriple{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 .colonnesEditContact{
     display: grid;
     grid-template-columns: 20em 1fr 1fr 2em;
@@ -90,6 +99,11 @@ form input.sansLabel {
 }
 
 .colonnesEditContact .editData{
+    display: grid;
+    padding: 0 1.1em;
+}
+
+.editDataList{
     display: grid;
     padding: 0 1.1em;
 }
@@ -183,26 +197,33 @@ form input.sansLabel {
 /* .editAdherentContact hr, .showAdherent hr{ */
 /* 	margin: 5px 0; */
 /* } */
-.editAdherent .showDetail {
-	display: grid;
-    grid-template-columns: 12em 1fr 1fr;
-	padding: 0.2em 0.4em;
-	font-size: 15px;
-}
-
-.addAdherentContact .showDetail{
-	display: grid;
-    grid-template-columns: 1fr 1fr 2em;
+/* .editAdherent .showDetail { */
+/* 	display: grid; */
+/*     grid-template-columns: 12em 1fr 1fr; */
 /* 	padding: 0.2em 0.4em; */
 /* 	font-size: 15px; */
-} 
+/* } */
 
-.addAdherentContact .showDetail{
+.showDetailCommentaire{
 	display: grid;
-    grid-template-columns: 10em 1fr 1fr;
-	padding: 0.2em 0.4em;
-	font-size: 15px;
-} 
+    grid-template-columns: 12em 13em 1fr;
+	padding: 0.2em 1em;
+	font-size: 15px;	
+}
+
+/* .addAdherentContact .showDetail{ */
+/* 	display: grid; */
+/*     grid-template-columns: 1fr 1fr 2em; */
+/* /* 	padding: 0.2em 0.4em; */ */
+/* /* 	font-size: 15px; */ */
+/* }  */
+
+/* .addAdherentContact .showDetail{ */
+/* 	display: grid; */
+/*     grid-template-columns: 10em 1fr 1fr; */
+/* 	padding: 0.2em 0.4em; */
+/* 	font-size: 15px; */
+/* }  */
 
 /* .editAdherentContact .typeDetail, .showAdherent .typeDetail{ */
 /* 	color: #82aa37; */
@@ -225,20 +246,31 @@ form input.sansLabel {
 }
 
 .editAdherent label, .editAdherentContact label, .editAdherentContact input , .editAdherentContact select {
-	width:auto;
+	float:none;
+	width:16em;
 }
 
-.addAdherentContact .showDetail{
-	
-}
-	
-.showAdherent .showDetail{
+.showDetailAdherent{
 	align-items: center;
 	display: grid;
     grid-template-columns: 12em 1fr;
 	padding: 0.2em 1em;
 }
 
+.showDetailEditContact{
+	align-items: center;
+	display: grid;
+    grid-template-columns: 12em 1fr 1fr;
+	padding: 0.2em 1em;
+}
+
+.showDetailAdherentCommune{
+	align-items: center;
+	display: grid;
+    grid-template-columns: 12em 1fr 3em 1fr;
+	padding: 0.2em 1em;
+	
+}
 /* #showAdherent fieldset , #editAdherent fieldset, #editAdherentContact fieldset{ */
 fieldset {
 	background-color: #ffffff;
@@ -343,6 +375,16 @@ fieldset {
 /* 	margin-top:2.4em; */
 	text-align:center;
 }
+
+.listeUtilisateur .detail {
+	background-color: #ffffff;
+	border: 1px solid #d4d4d4;
+	border-radius: 0.4em;
+	flex:1;
+	margin:0.2em;
+	padding: 0.4em;
+}
+
 .listeAdherents div.photo img, .showAdherent div.photo img{
     max-width: 8em;
     max-height: 8em;
@@ -383,6 +425,14 @@ fieldset {
 .listeAdherents .raccourcis{
 	-flex:1;
 	margin:auto;
+	text-align:right;
+}  
+
+.alignLeft{
+	text-align:left;
+}  
+
+.alignRight{
 	text-align:right;
 }  
 

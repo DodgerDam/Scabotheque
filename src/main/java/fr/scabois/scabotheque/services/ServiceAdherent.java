@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
@@ -18,6 +19,8 @@ import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
+import fr.scabois.scabotheque.bean.security.User;
+import fr.scabois.scabotheque.bean.security.UserRole;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 import fr.scabois.scabotheque.dao.IAdherentDAO;
 import fr.scabois.scabotheque.enums.PageType;
@@ -70,13 +73,28 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
+    public void createUtilisateur(String userName, String password) {
+	dao.createUtilisateur(userName, password);
+    }
+
+    @Override
+    public Activite LoadActivite(int activiteId) {
+	return dao.loadActivite(activiteId);
+    }
+
+    @Override
     public List<Activite> LoadActivites() {
 	return dao.loadActivites();
     }
 
+//    @Override
+//    public Map<TypeContact, List<AdherentContact>> LoadAdherentContact(int adhId) {
+//	return dao.loadAdherentContact(adhId);
+//    }
+
     @Override
-    public List<Activite> LoadActivitesAdherents() {
-	return dao.loadActivitesAdherents();
+    public List<AdherentActivite> LoadActivitesAdherent(int idAdh) {
+	return dao.loadActivitesAdherent(idAdh);
     }
 
     @Override
@@ -88,11 +106,6 @@ public class ServiceAdherent implements IServiceAdherent {
     public String LoadAdherentCommentaire(int idAdh, PageType pageType) {
 	return dao.loadAdherentCommentaire(idAdh, pageType);
     }
-
-//    @Override
-//    public Map<TypeContact, List<AdherentContact>> LoadAdherentContact(int adhId) {
-//	return dao.loadAdherentContact(adhId);
-//    }
 
     @Override
     public List<AdherentContactRole> LoadAdherentContact(int adhId) {
@@ -160,6 +173,21 @@ public class ServiceAdherent implements IServiceAdherent {
     }
 
     @Override
+    public User LoadUtilisateur(int userId) {
+	return dao.loadUtilisateur(userId);
+    }
+
+    @Override
+    public List<User> LoadUtilisateurs() {
+	return dao.LoadUtilisateurs();
+    }
+
+    @Override
+    public void saveActivitesAdherent(int adhId, List<AdherentActivite> activitesAdh) {
+	dao.saveActivitesAdherent(adhId, activitesAdh);
+    }
+
+    @Override
     public void saveAdherent(Adherent pAdherent) {
 	dao.editAdherent(pAdherent);
     }
@@ -198,6 +226,16 @@ public class ServiceAdherent implements IServiceAdherent {
     @Override
     public void saveSecteurs(List<Secteur> secteurs) {
 	dao.saveSecteurs(secteurs);
+    }
+
+    @Override
+    public void saveUtilisateur(List<User> users) {
+	dao.saveUtilisateur(users);
+    }
+
+    @Override
+    public void saveUtilisateurRoles(int usrId, List<UserRole> newUserRoles) {
+	dao.saveUtilisateurRoles(usrId, newUserRoles);
     }
 
     @Override

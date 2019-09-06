@@ -5,6 +5,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <div class="showAdherent">
 	<div class="entete">
@@ -31,22 +32,28 @@
 	
 	<fieldset>
     	<legend class="legend"><spring:message code="label.identite"/></legend>
-    	<div class="editIcone">
-    		<c:url value="/edit/editIdentiteAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-			<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-		</div>	
+    	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_ADHERENT_EDIT')">    	
+	    	<div class="editIcone">
+	    		<c:url value="/edit/editIdentiteAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+				<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			</div>	
+		</sec:authorize>
 		
 		<div class="colonnesDouble">
 			<div>
-				<div class="showDetail">
+				<div class="showDetailAdherent">
 					<span class="adherentLabel"> Code adherent</span>
 					<span class="data" > ${adherent.code} </span>
 				</div>
-				<div  class="showDetail">
-					<span class="adherentLabel"><spring:message code="label.libelle"/></span>
+				<div  class="showDetailAdherent">
+					<span class="adherentLabel"><spring:message code="label.nomRecherche"/></span>
 					<span class="data">${adherent.libelle}</span>
 				</div>
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
+					<span class="adherentLabel"><spring:message code="label.denomination"/></span>
+					<span class="data">${adherent.denomination}</span>
+				</div>
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -55,27 +62,27 @@
 						</c:choose>
 					</span>
 				</div>
-				<div  class="showDetail"> 
+				<div  class="showDetailAdherent"> 
 					<span class="adherentLabel"><spring:message code="label.agenceRattachement"/></span>
 					<span class="data">${adherent.agence.libelle}</span>
 				</div>
 			
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.secteur"/></span>
 					<span class="data">${adherent.secteur.libelle}</span>
 				</div>	
 			</div>
 			<div>
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adresse"/></span>
 					<span class="data">${adherent.adresse}</span>
 				</div>
 			
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adresseComplement"/></span>
 					<span class="data">${adherent.adresseComplement}</span>
 				</div>
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.commune"/></span>
 					<span class="data"><spring:message code="message.commune" arguments="${adherent.commune.codePostal}, ${adherent.commune.libelle}"/></span>
 				</div>
@@ -85,11 +92,13 @@
 
 	<fieldset class="showContact">
     	<legend  class="legend"><spring:message code="label.contacts"/></legend>
-    	<div class="editIcone">
-    		<c:url value="/edit/editAdherentContact" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-			<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-    	</div>
-    	
+    	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_ADHERENT_EDIT')">    	
+	    	<div class="editIcone">
+	    		<c:url value="/edit/editAdherentContact" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+				<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+	    	</div>
+    	</sec:authorize>
+    		
     	<div class="colonnesDouble" style ="padding:10px;">
 			<c:forEach items="${contacts}" var="contact">
 				<div style="display: grid; grid-template-columns: 10em 15em 1fr; margin:0.5em; border: 1px #ccc solid; padding: 0.5em; border-radius: 0.4em;">

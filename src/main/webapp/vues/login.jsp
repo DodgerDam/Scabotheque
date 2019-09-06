@@ -17,8 +17,9 @@
 			<div class="msg">${msg}</div>
 		</c:if>
 
-		<form class="textAlignRight" name='f' action="login" method='POST'>
-			<div><input type='text' name='username'  autofocus='true' placeholder='Utilisateur'/></div>
+<!-- 		<form class="textAlignRight" name='f' action="login" method='POST'> -->
+		<form class="textAlignRight" name='f' action="loginProcess" method='POST'>
+			<div><input type='text' name='username'  autofocus='true' placeholder='Utilisateur (adresse e-mail)'/></div>
 			<div><input type='password' name='password' placeholder='Mot de passe'/></div>
 			<div><button class="action-button" type="submit">Se connecter</button></div>
 			<div><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></div>

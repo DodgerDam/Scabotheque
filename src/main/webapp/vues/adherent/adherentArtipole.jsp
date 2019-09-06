@@ -4,6 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <div class="showAdherent">
    	<div class="entete">
@@ -29,15 +30,17 @@
 	</div>
 	<fieldset>
     	<legend class="legend"><spring:message code="label.artipole"/></legend>
-    	<div class="editIcone">
-    		<c:url value="/edit/editArtipoleAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-			<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-		</div>	
+    	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_ARTIPOLE_EDIT')">    	
+	    	<div class="editIcone">
+	    		<c:url value="/edit/editArtipoleAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+				<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			</div>
+		</sec:authorize>	
 		
 		<div class="colonnesDouble">
 			<div>
 				Les qualifications
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -47,7 +50,7 @@
 					</span>
 				</div>
 			
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.charteArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -58,7 +61,7 @@
 				</div>
 			</div>
 			<div>
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -68,7 +71,7 @@
 					</span>
 				</div>
 			
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.charteArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -78,7 +81,7 @@
 					</span>
 				</div>
 			
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.flocageArtipole"/></span>
 					<span class="data"><c:choose>
 							<c:when test="${adherent.isFlocageArtipole}"><spring:message code="yes"/></c:when> 
@@ -87,7 +90,7 @@
 					</span>
 				</div>
 				
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.siteArtipole"/></span>
 					<span class="data"><c:choose>
 							<c:when test="${adherent.isWebArtipole}"><spring:message code="yes"/></c:when> 
@@ -96,7 +99,7 @@
 					</span>
 				</div>
 		
-				<div  class="showDetail">
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.facebookArtipole"/></span>
 					<span class="data"><c:choose>
 							<c:when test="${adherent.isFacebookArtipole}"><spring:message code="yes"/></c:when> 

@@ -4,6 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <div class="showAdherent">
 	<div class="entete">
@@ -29,11 +30,13 @@
 	</div>
 	<fieldset>
     	<legend class="legend"><spring:message code="label.informatique"/></legend>
-		<div class="editIcone">
-			<c:url value="/edit/editInformatiqueAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
-			<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
-		</div>	
-		<div  class="showDetail">
+    	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_INFORMATIQUE_EDIT')">    	
+	    	<div class="editIcone">
+				<c:url value="/edit/editInformatiqueAdh" var="url"><c:param name="idAdh" value="${adherent.id}"/></c:url>
+				<span><a href="${url}"><svg><use xlink:href="resources/images/icones.svg#edit"></use></svg></a></span>
+			</div>
+		</sec:authorize>	
+		<div  class="showDetailAdherent">
 			Ici les informations informatique: compte et MDP des differnets SiteWeb par example.
 		</div>
 	</fieldset>

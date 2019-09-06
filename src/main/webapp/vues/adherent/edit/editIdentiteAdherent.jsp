@@ -64,44 +64,44 @@
 	<fieldset>
 	   	<legend class="legend"><spring:message code="label.identite"/></legend>
 	   	
-	   	<div class="showDetail">
+	   	<div class="showDetailAdherent">
 			<form:label path="adherent.code" ><spring:message code="label.codeAdh"/></form:label>
 			<form:label path="adherent.code" >${adhToEdit.adherent.code}</form:label>
 			<form:input type="hidden" name="adherent.code" path="adherent.code"/>
 			<b><i><form:errors class="valeur" path="adherent.code" /></i></b>
 		</div>
 
-	   	<div class="showDetail">
+	   	<div class="showDetailAdherent">
 			<form:label path="adherent.codeERP" ><spring:message code="label.codeERP"/></form:label>
 			<form:input class="valeur" name="adherent.codeERP" path="adherent.codeERP"/>
 			<b><i><form:errors class="valeur" path="adherent.codeERP" /></i></b>
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.libelle" ><spring:message code="label.libelle"/></form:label>
 			<form:input class="valeur" name="adherent.libelle" path="adherent.libelle"/>
 			<b><i><form:errors class="valeur" path="adherent.libelle" /></i></b>
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.denomination" ><spring:message code="label.denomination"/> </form:label>
 			<form:input class="valeur" name="adherent.denomination" path="adherent.denomination"/>
 			<b><i><form:errors class="valeur" path="adherent.denomination" /></i></b>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.adresse" ><spring:message code="label.adresse"/></form:label>
 			<form:input class="valeur" name="adherent.adresse" path="adherent.adresse"/>
 			<b><i><form:errors class="valeur" path="adherent.adresse" /></i></b>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.adresseComplement" ><spring:message code="label.adresseComplement"/></form:label>
 			<form:input class="valeur" name="adherent.adresseComplement" path="adherent.adresseComplement"/>
 			<b><i><form:errors class="valeur" path="adherent.adresseComplement" /></i></b>
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherentCommune">
 			<form:label path="adherent.commune" ><spring:message code="label.commune"/></form:label>
 			<form:label id="communeAdhLibelle" path="adherent.commune" class="valeur" >${adhToEdit.adherent.commune.codePostal} - ${adhToEdit.adherent.commune.libelle}</form:label>
 			<form:input id="communeAdh" type="hidden" path="adherent.commune.id"/>

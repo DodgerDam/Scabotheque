@@ -157,7 +157,7 @@ public class EditAdherent {
     }
 
     public String getPhoto() {
-	return photo;
+	return photo == null ? "" : photo;
     }
 
     public Pole getPole() {

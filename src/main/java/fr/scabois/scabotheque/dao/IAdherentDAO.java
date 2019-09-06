@@ -3,6 +3,7 @@ package fr.scabois.scabotheque.dao;
 import java.util.List;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
@@ -15,6 +16,8 @@ import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
+import fr.scabois.scabotheque.bean.security.User;
+import fr.scabois.scabotheque.bean.security.UserRole;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 import fr.scabois.scabotheque.enums.PageType;
 
@@ -36,17 +39,21 @@ public interface IAdherentDAO {
 
     void createSecteur(String libelle);
 
+    void createUtilisateur(String userName, String password);
+
     void editAdherent(Adherent pAdherent);
+
+    Activite loadActivite(int activiteId);
 
     List<Activite> loadActivites();
 
-    List<Activite> loadActivitesAdherents();
+    List<AdherentActivite> loadActivitesAdherent(int idAdh);
 
     Adherent loadAdherent(int idAdh);
 
     String loadAdherentCommentaire(int idAdh, PageType type);
 
-//    Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId);
+    // Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId);
     List<AdherentContactRole> loadAdherentContact(int adhId);
 
     List<Adherent> loadAdherents();
@@ -73,6 +80,12 @@ public interface IAdherentDAO {
 
     List<Tournee> loadTournees();
 
+    User loadUtilisateur(int userId);
+
+    List<User> LoadUtilisateurs();
+
+    void saveActivitesAdherent(int adhId, List<AdherentActivite> activitesAdh);
+
     void saveAdherentCommentaire(int adhId, PageType type, String commentaire);
 
     void saveAdherentContacts(List<AdherentContactRole> contacts);
@@ -86,6 +99,10 @@ public interface IAdherentDAO {
     void saveRoles(List<Role> roles);
 
     void saveSecteurs(List<Secteur> secteurs);
+
+    void saveUtilisateur(List<User> users);
+
+    void saveUtilisateurRoles(int usrId, List<UserRole> newUserRoles);
 
     void setAdherentImage(int adhId, byte[] photo);
 

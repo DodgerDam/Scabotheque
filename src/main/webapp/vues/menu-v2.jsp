@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -109,61 +110,70 @@
 				</div>
 			</div> 
 		
+			
 			<!-- 	Parametrage des tables de bases -->
-			<c:url value="/parametrage" var="urlParamAgence"><c:param name="type" value="Agence"/></c:url>
-			<c:url value="/parametrage" var="urlParamMetier"><c:param name="type" value="Activite"/></c:url>
-			<c:url value="/parametrage" var="urlParamPole"><c:param name="type" value="Pole"/></c:url>
-			<c:url value="/parametrage" var="urlParamRole"><c:param name="type" value="Role"/></c:url>
-			<c:url value="/parametrage" var="urlParamSecteur"><c:param name="type" value="Secteur"/></c:url>
-			<c:url value="/parametrage/listeCommunes" var="urlParamCommune"/>
-			<c:url value="/parametrage" var="urlParamContactFonction"><c:param name="type" value="ContactFonction"/></c:url>
-			<div class="appMenu-dropdown">
-			    <a class="appMenu 
-			    		<c:if test = "${pageType == 'TABLES_BASE'}">
-							appMenu-active
-						</c:if>"> 
-					<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-					<spring:message code="menu.parametrage"/>
-					<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#arrow-dropdown"/>"></use></svg>
-<!-- 					<i class="fa fa-caret-down"></i> -->
-			    </a>
-			    <div class="appMenu-dropdown-container scroll-stop">
-				    <a class="appMenu first-element"> 
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<c:url value="/parametrage" var="urlParamAgence"><c:param name="type" value="Agence"/></c:url>
+				<c:url value="/parametrage" var="urlParamMetier"><c:param name="type" value="Activite"/></c:url>
+				<c:url value="/parametrage" var="urlParamPole"><c:param name="type" value="Pole"/></c:url>
+				<c:url value="/parametrage" var="urlParamRole"><c:param name="type" value="Role"/></c:url>
+				<c:url value="/parametrage" var="urlParamSecteur"><c:param name="type" value="Secteur"/></c:url>
+				<c:url value="/parametrage" var="urlParamContactFonction"><c:param name="type" value="ContactFonction"/></c:url>
+				<c:url value="/parametrage/listeCommunes" var="urlParamCommune"/>
+				<c:url value="/parametrage/listeUtilisateurs" var="urlParamUtilisateur"/>
+				<div class="appMenu-dropdown">
+				    <a class="appMenu 
+				    		<c:if test = "${pageType == 'TABLES_BASE' || pageType == 'GESTION_USERS'}">
+								appMenu-active
+							</c:if>"> 
 						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
 						<spring:message code="menu.parametrage"/>
 						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#arrow-dropdown"/>"></use></svg>
-<!-- 						<i class="fa fa-caret-down"></i> -->
+	<!-- 					<i class="fa fa-caret-down"></i> -->
 				    </a>
-					<a href="${urlParamAgence}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramAgence"/>
-					</a>
-					<a href="${urlParamMetier}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramActivite"/>
-					</a>
-					<a href="${urlParamPole}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramPole"/>
-					</a>
-					<a href="${urlParamRole}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramRole"/>
-					</a>
-					<a href="${urlParamSecteur}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramSecteur"/>
-					</a>
-					<a href="${urlParamContactFonction}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramContactFonction"/>
-					</a>
-					<a href="${urlParamCommune}">
-						<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-						<spring:message code="menu.paramVille"/>
-					</a>
+				    <div class="appMenu-dropdown-container scroll-stop">
+					    <a class="appMenu first-element"> 
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.parametrage"/>
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#arrow-dropdown"/>"></use></svg>
+	<!-- 						<i class="fa fa-caret-down"></i> -->
+					    </a>
+					    <a href="${urlParamUtilisateur}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramUtilisateur"/>
+						</a>
+						<a href="${urlParamAgence}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramAgence"/>
+						</a>
+						<a href="${urlParamMetier}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramActivite"/>
+						</a>
+						<a href="${urlParamPole}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramPole"/>
+						</a>
+						<a href="${urlParamRole}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramRole"/>
+						</a>
+						<a href="${urlParamSecteur}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramSecteur"/>
+						</a>
+						<a href="${urlParamContactFonction}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramContactFonction"/>
+						</a>
+						<a href="${urlParamCommune}">
+							<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
+							<spring:message code="menu.paramVille"/>
+						</a>
+					</div>
 				</div>
-			</div> 
+			</sec:authorize>
+			 
 <!-- 			<a href="javascript:void(0);" class="menu-icon" onclick="myFunctionMenu()"> -->
 <!-- 				<i class="fa fa-bars"></i> -->
 <!-- 			</a> -->

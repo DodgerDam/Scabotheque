@@ -13,43 +13,43 @@
 	<fieldset>
 	   	<legend><spring:message code="label.identite"/></legend>
 	   	
-	   	<div class="showDetail">
+	   	<div class="showDetailAdherent">
 			<form:label path="adherent.code" ><spring:message code="label.codeAdh"/></form:label>
 			<form:input class="valeur" name="adherent.code" path="adherent.code" autofocus="true"/>
 			<form:errors class="error" path="adherent.code" />
 		</div>
 		
-	   	<div class="showDetail">
+	   	<div class="showDetailAdherent">
 			<form:label path="adherent.codeERP" ><spring:message code="label.codeERP"/></form:label>
 			<form:input class="valeur" name="adherent.codeERP" path="adherent.codeERP" autofocus="true"/>
 			<form:errors class="error" path="adherent.codeERP" />
 		</div>
 		
-		<div class="showDetail">
-			<form:label path="adherent.libelle" ><spring:message code="label.libelle"/></form:label>
+		<div class="showDetailAdherent">
+			<form:label path="adherent.libelle" ><spring:message code="label.nomRecherche"/></form:label>
 			<form:input class="valeur" name="adherent.libelle" path="adherent.libelle"/>
 			<form:errors class="error" path="adherent.libelle" />
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.denomination" ><spring:message code="label.denomination"/> </form:label>
 			<form:input class="valeur" name="adherent.denomination" path="adherent.denomination"/>
 			<form:errors class="error" path="adherent.denomination" />
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.adresse" ><spring:message code="label.adresse"/></form:label>
 			<form:input class="valeur" name="adherent.adresse" path="adherent.adresse"/>
 			<form:errors class="error" path="adherent.adresse" />
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.adresseComplement" ><spring:message code="label.adresseComplement"/></form:label>
 			<form:input class="valeur" name="adherent.adresseComplement" path="adherent.adresseComplement"/>
 			<form:errors class="error" path="adherent.adresseComplement" />
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.commune" ><spring:message code="label.commune"/></form:label>
 			<div>
 				<form:label class="valeur"  id="communeAdhLibelle" path="adherent.commune" >${adhToAdd.adherent.commune.codePostal} - ${adhToEdit.adherent.commune.libelle}</form:label>
@@ -66,7 +66,7 @@
 	<fieldset>
 	   	<legend><spring:message code="label.activite"/></legend>
 	
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.pole" ><spring:message code="label.pole"/></form:label>
 			<form:select class="valeur" name="adherent.pole" path="adherent.pole.id">
 				<form:option value="" ></form:option>
@@ -75,27 +75,27 @@
 			<form:errors class="error" path="adherent.pole" />
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<form:label path="adherent.isArtipole" ><spring:message code="label.adhArtipole"/></form:label>
 			<form:checkbox path="adherent.isArtipole"/>
 		</div>
 
-		<div  class="showDetail">
+		<div  class="showDetailAdherent">
 			<form:label path="adherent.isArtipole" ><spring:message code="label.charteArtipole"/></form:label>
 			<form:checkbox path="adherent.isCharteArtipole"/>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.isArtipole" ><spring:message code="label.flocageArtipole"/></form:label>
 			<form:checkbox path="adherent.isFlocageArtipole"/>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.isArtipole" ><spring:message code="label.siteArtipole"/></form:label>
 			<form:checkbox path="adherent.isWebArtipole"/>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.isArtipole" ><spring:message code="label.facebookArtipole"/></form:label>
 			<form:checkbox path="adherent.isFacebookArtipole"/>
 		</div>
@@ -105,7 +105,7 @@
 	<fieldset>
 	   	<legend><spring:message code="label.exploitation"/></legend>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.agence"><spring:message code="label.agenceRattachement"/></form:label>
 			<form:select class="valeur" name="adherent.agence" path="adherent.agence.id">
 				<form:options items="${agenceList}" itemValue="id" itemLabel="libelle" />
@@ -113,7 +113,7 @@
 <%-- 			<form:errors class="error" path="adherent.pole" /> --%>
 		</div>
 	
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.secteur"><spring:message code="label.secteur"/></form:label>
 			<form:select class="valeur" name="adherent.secteur" path="adherent.secteur.id">
 				<form:option value="" ></form:option>
@@ -123,14 +123,14 @@
 <%-- 			<form:label class="valeur" path="adherent.secteur.libelle" >${adhToEdit.adherent.secteur.libelle}</form:label> --%>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.tournee"><spring:message code="label.tournee"/></form:label>
 			<form:select class="valeur" name="adherent.tournee" path="adherent.tournee.id">
 				<form:options items="${tourneeList}" itemValue="id" itemLabel="libelle" />
 			</form:select>					        
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.isOutilDechargement"><spring:message code="label.outilDechargement"/></form:label>
 			<form:checkbox path="adherent.isOutilDechargement"/>
 		</div>
@@ -139,7 +139,7 @@
 	<fieldset>
 	   	<legend><spring:message code="label.administratif"/></legend>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.dateEntree"><spring:message code="label.dateEntree"/></form:label>
 			<div>
 				<form:input class="valeur" type="date" name="adherent.dateEntree" path="adherent.dateEntree"/>
@@ -147,7 +147,7 @@
 			</div>
 		</div>
 	
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.role" ><spring:message code="label.role"/></form:label>
 			<form:select class="valeur" name="adherent.role" path="adherent.role.id">
 				<form:options items="${roleList}" itemValue="id" itemLabel="libelle" />
@@ -155,7 +155,7 @@
 			<form:errors class="error" path="adherent.role" />
 		</div>
 	
-		<div class="showDetail"> 
+		<div class="showDetailAdherent"> 
 			<form:label path="adherent.formeJuridique" ><spring:message code="label.formeJuridique"/></form:label>
 			<form:select class="valeur" name="adherent.formeJuridique" path="adherent.formeJuridique.id">
 				<form:options items="${formJuridList}" itemValue="id" itemLabel="libelle" />
@@ -163,32 +163,32 @@
 			<form:errors class="error" path="adherent.formeJuridique" />
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.siren" ><spring:message code="label.siren"/></form:label>
 			<form:input class="valeur" name="adherent.siren" path="adherent.siren"/>
 			<form:errors class="error" path="adherent.siren" />
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.siret" ><spring:message code="label.siret"/></form:label>
 			<form:input class="valeur" name="adherent.siret" path="adherent.siret"/>
 			<form:errors class="error" path="adherent.siret" />
 		</div>
 	
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.ape" ><spring:message code="label.ape"/></form:label>
 			<form:select class="valeur" name="adherent.ape" path="adherent.ape.id">
 				<form:options items="${apeList}" itemValue="id" itemLabel="libelle" />
 			</form:select>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.numRepMetier" ><spring:message code="label.numRepMetier"/></form:label>
 			<form:input class="valeur" name="adherent.numRepMetier" path="adherent.numRepMetier"/>
 			<form:errors class="error" path="adherent.numRepMetier" />
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.rcsRm" ><spring:message code="label.rcsRm"/></form:label>
 			
 			<form:select class="valeur" name="adherent.rcsRm" path="adherent.rcsRm">
@@ -200,7 +200,7 @@
 			<form:errors class="error" path="adherent.rcsRm" />
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.rcsCommune" ><spring:message code="label.rcsCommune"/></form:label>
 			<div>
 				<form:label class="valeur"  id="rcsCommuneLibelle" path="adherent.rcsCommune" >${adhToAdd.adherent.rcsCommune.codePostal} - ${adhToEdit.adherent.rcsCommune.libelle}</form:label>
@@ -212,7 +212,7 @@
 			<form:errors class="error" path="adherent.rcsCommune" />
 		</div>
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.dateClotureExe"><spring:message code="label.dateClotureExe"/></form:label>
 			<form:input class="valeur" type="date" name="adherent.dateClotureExe" path="adherent.dateClotureExe"/>
 			<form:errors class="errors" path="adherent.dateClotureExe" />
@@ -224,12 +224,12 @@
 <%-- 			<b><i><form:errors path="adherent.contactComptable" /></i></b> --%>
 <!-- 		</div> -->
 		
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.isFormationCommerce" ><spring:message code="label.formationCommerce"/></form:label>
 			<form:checkbox path="adherent.isFormationCommerce"/>
 		</div>
 
-		<div class="showDetail">
+		<div class="showDetailAdherent">
 			<form:label path="adherent.etat" ><spring:message code="label.etat"/></form:label>
 			<form:select class="valeur" name="adherent.etat" path="adherent.etat.id">
 				<form:options items="${etatList}" itemValue="id" itemLabel="libelle" />

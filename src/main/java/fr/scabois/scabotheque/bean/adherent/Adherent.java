@@ -221,7 +221,7 @@ public class Adherent {
     }
 
     public String getPhotoImg() {
-	return new String(photo);
+	return photo == null ? "" : new String(photo);
     }
 
     public Pole getPole() {

@@ -172,14 +172,14 @@ public class TablesBasesController {
 	return afficher(AGENCE_CONST, pModel);
     }
 
-    @RequestMapping(value = { "/editTypeContact" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/editContactFonction" }, method = RequestMethod.POST)
     public String modifierContact(@Valid @ModelAttribute(value = "editList") final EditIdLibListForm editForm,
 	    final BindingResult pBindingResult, final ModelMap pModel) {
 
 	if (!pBindingResult.hasErrors()) {
 	    IdLibelle<ContactFonction> computeList = new IdLibelle<>(ContactFonction.class);
 	    service.saveContactFonctions(computeList.setEditList(editForm.getList()));
-	    return "redirect:/parametrage?type=TypeContact";
+	    return "redirect:/parametrage?type=ContactFonction";
 	}
 
 	return afficher(CONTACT_FONCTION_CONST, pModel);
@@ -264,5 +264,4 @@ public class TablesBasesController {
 	service.supprimeSecteur(id);
 	return afficher(SECTEUR_CONST, pModel);
     }
-
 }

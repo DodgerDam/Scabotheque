@@ -1,6 +1,7 @@
 package fr.scabois.scabotheque.dao;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentCommentaire;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Etat;
@@ -24,6 +26,8 @@ import fr.scabois.scabotheque.bean.commun.Agence;
 import fr.scabois.scabotheque.bean.commun.Ape;
 import fr.scabois.scabotheque.bean.commun.Commune;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
+import fr.scabois.scabotheque.bean.security.User;
+import fr.scabois.scabotheque.bean.security.UserRole;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
 import fr.scabois.scabotheque.enums.PageType;
 
@@ -125,6 +129,16 @@ public class AdherentDAO implements IAdherentDAO {
 
     @Override
     @Transactional
+    public void createUtilisateur(String userName, String password) {
+	User usr = new User();
+	usr.setUsername(userName);
+	usr.setPassword(password);
+
+	entityManager.persist(usr);
+    }
+
+    @Override
+    @Transactional
     public void editAdherent(Adherent dataAdherent) {
 
 	// chargement de l'adherent a modifier
@@ -138,14 +152,23 @@ public class AdherentDAO implements IAdherentDAO {
     }
 
     @Override
+    public Activite loadActivite(int activiteId) {
+	try {
+	    return entityManager.find(Activite.class, activiteId);
+	} catch (NoResultException e) {
+	    return null;
+	}
+    }
+
+    @Override
     public List<Activite> loadActivites() {
 	return entityManager.createQuery("from Activite", Activite.class).getResultList();
     }
 
     @Override
-    public List<Activite> loadActivitesAdherents() {
-//	return entityManager.createQuery("select adh.activite from Adherent adh", Activite.class).getResultList();
-	return null;
+    public List<AdherentActivite> loadActivitesAdherent(int idAdh) {
+	return entityManager.createQuery("from AdherentActivite where adherent.id = :idAdh", AdherentActivite.class)
+		.setParameter("idAdh", idAdh).getResultList();
     }
 
     @Override
@@ -167,26 +190,6 @@ public class AdherentDAO implements IAdherentDAO {
 	    return "";
 	}
     }
-
-    /**
-     * Création d'une liste avec tout les type de contacte
-     */
-//    @Override
-//    public Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId) {
-//
-//	Map<TypeContact, List<AdherentContact>> map = new HashMap<>();
-//
-//	List<TypeContact> typeContact = entityManager
-//		.createQuery("from TypeContact order by libelle", TypeContact.class).getResultList();
-//	final List<AdherentContact> contactsAdh = entityManager
-//		.createQuery("from AdherentContact ac where adherent.id = :idAdh ", AdherentContact.class)
-//		.setParameter("idAdh", adhId).getResultList();
-//
-//	typeContact.stream().forEach(t -> map.put(t,
-//		contactsAdh.stream().filter(f -> f.getType().getId() == t.getId()).collect(Collectors.toList())));
-//
-//	return new TreeMap<>(map);
-//    }
 
     /**
      * Création d'une liste avec tout les type de contacte
@@ -289,6 +292,30 @@ public class AdherentDAO implements IAdherentDAO {
 	return entityManager.createQuery("from Tournee", Tournee.class).getResultList();
     }
 
+    @Override
+    public User loadUtilisateur(int userId) {
+	try {
+	    return entityManager.find(User.class, userId);
+	} catch (NoResultException e) {
+	    return null;
+	}
+    }
+
+    @Override
+    public List<User> LoadUtilisateurs() {
+	return entityManager.createQuery("from User", User.class).getResultList();
+    }
+
+    @Override
+    @Transactional
+    public void saveActivitesAdherent(int adhId, List<AdherentActivite> activitesAdh) {
+	// suppression de toutes les activite de l'adherent pour enregistrer les
+	// nouvelles
+	loadActivitesAdherent(adhId).stream().forEach(a -> entityManager.remove(a));
+
+	activitesAdh.stream().forEach(a -> entityManager.persist(a));
+    }
+
     @Transactional
     @Override
     public void saveAdherentCommentaire(int adhId, PageType type, String commentaire) {
@@ -374,6 +401,44 @@ public class AdherentDAO implements IAdherentDAO {
 	    Secteur secteur = a.getId() == null ? new Secteur() : entityManager.find(Secteur.class, a.getId());
 	    secteur.setLibelle(a.getLibelle());
 	    entityManager.persist(secteur);
+	});
+    }
+
+    @Override
+    @Transactional
+    public void saveUtilisateur(List<User> users) {
+	users.stream().forEach(u -> {
+	    User utl = loadUtilisateur(u.getId());
+	    utl.setEnabled(u.getEnabled());
+	    utl.setPassword(u.getPassword());
+	    utl.setUsername(u.getUsername());
+
+	    entityManager.persist(utl);
+	});
+    }
+
+    @Override
+    @Transactional
+    public void saveUtilisateurRoles(int usrId, List<UserRole> newUserRoles) {
+	List<UserRole> usrRoles = entityManager.createQuery("from UserRole where user.id = :usrId", UserRole.class)
+		.setParameter("usrId", usrId).getResultList();
+	// suppression des anciens Roles
+	usrRoles.stream().forEach(r -> {
+	    Optional<UserRole> role = newUserRoles.stream().filter(ur -> ur.getId() == r.getId()).findFirst();
+	    if (!role.isPresent()) {
+		entityManager.remove(r);
+	    }
+	});
+
+	// Ajout des nouveaux Roles
+	newUserRoles.stream().forEach(r -> {
+	    Optional<UserRole> role = usrRoles.stream().filter(f -> f.getId() == r.getId()).findFirst();
+	    if (!role.isPresent()) {
+		UserRole newRole = new UserRole();
+		newRole.setRole(r.getRole());
+		newRole.setUser(r.getUser());
+		entityManager.persist(newRole);
+	    }
 	});
     }
 

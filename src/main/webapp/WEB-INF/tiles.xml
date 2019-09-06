@@ -110,6 +110,11 @@
         <put-attribute name="pageName"  value="listeCommunes" />
     </definition>
 
+	<definition name="listeUtilisateurs" extends="base.definition">
+        <put-attribute name="body"  value="/vues/parametrage/listeUtilisateurs.jsp" />
+        <put-attribute name="pageName"  value="listeUtl" />
+    </definition>
+
     <definition name="enCours" extends="base.definition">
         <put-attribute name="body"  value="/vues/enCours.jsp" />
         <put-attribute name="pageName"  value="enCours" />

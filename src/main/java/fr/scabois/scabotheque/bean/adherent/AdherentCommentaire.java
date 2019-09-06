@@ -58,7 +58,7 @@ public class AdherentCommentaire implements HasId {
     }
 
     public void setCommentaireString(String commentaire) {
-	this.commentaire = this.commentaire == null ? null : commentaire.getBytes();
+	this.commentaire = commentaire == null ? null : commentaire.getBytes();
     }
 
     @Override

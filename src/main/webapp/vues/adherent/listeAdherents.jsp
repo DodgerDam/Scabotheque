@@ -4,6 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <form:form  method="post" modelAttribute="criteria" action="listeAdherents">
 	<form:input type="hidden" name="sender" path="sender"/>
@@ -52,28 +53,31 @@
 				<c:param name="showAll" value="${criteria.showAll}"/>
 			</c:url>
 			
-			<div class="scabotheque-dropdown">
-				<button id="btnMenu" type="button" class="scabotheque-dropdown-btn" onclick="openMenu()">
-					<svg class="scabotheque-dropdown-btn-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#menu"/>"></use></svg>
-				</button>
-<!-- 			    <a href="#">  -->
-<%-- 					<svg class="appMenu-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#menu"/>"></use></svg> --%>
-<!-- 			    </a> -->
-			    <div id="listAdhMenu" class="scabotheque-dropdown-container">
-			    	<div class="scabotheque-dropdown-item">
-				      	<a href="${urlDownload}" id="exportExcel">
-				      		<svg class="scabotheque-dropdown-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg>
-							<spring:message code="menu.exportExcel"/>
-						</a>
-					</div>
-					<div class="scabotheque-dropdown-item">
-	 			   		<a href="#" id="mailingLink">
-					   		<svg class="scabotheque-dropdown-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#mail"/>"></use></svg>
-							<spring:message code="menu.mailing"/>
-						</a>
+			<sec:authorize access="hasAnyRole('ROLE_MAILING','ROLE_EXPORT')">
+				<div class="scabotheque-dropdown">
+					<button id="btnMenu" type="button" class="scabotheque-dropdown-btn" onclick="openMenu()">
+						<svg class="scabotheque-dropdown-btn-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#menu"/>"></use></svg>
+					</button>
+				    <div id="listAdhMenu" class="scabotheque-dropdown-container">
+						<sec:authorize access="hasRole('ROLE_EXPORT')">
+					    	<div class="scabotheque-dropdown-item">
+						      	<a href="${urlDownload}" id="exportExcel">
+						      		<svg class="scabotheque-dropdown-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg>
+									<spring:message code="menu.exportExcel"/>
+								</a>
+							</div>
+						</sec:authorize>
+						<sec:authorize access="hasRole('ROLE_MAILING')">
+							<div class="scabotheque-dropdown-item">
+			 			   		<a href="#" id="mailingLink">
+							   		<svg class="scabotheque-dropdown-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#mail"/>"></use></svg>
+									<spring:message code="menu.mailing"/>
+								</a>
+							</div>
+						</sec:authorize>
 					</div>
 				</div>
-			</div> 
+			</sec:authorize>
 	    </div>
 	</div>
 </form:form>

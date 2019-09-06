@@ -14,10 +14,10 @@ import fr.scabois.scabotheque.bean.commun.Activite;
 
 @Entity
 @Table(name = "adherent_activite")
-public class AdherentContact implements HasId {
+public class AdherentActivite implements HasId {
 
     @ManyToOne
-    @JoinColumn(name = "type_contact_id")
+    @JoinColumn(name = "activite_id")
     private Activite activite;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adherent_id")

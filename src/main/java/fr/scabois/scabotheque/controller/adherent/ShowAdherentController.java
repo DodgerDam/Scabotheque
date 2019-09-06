@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.enums.PageType;
 import fr.scabois.scabotheque.services.IServiceAdherent;
@@ -22,8 +23,8 @@ public class ShowAdherentController {
     @Autowired
     private IServiceAdherent service;
 
-    @RequestMapping(value = { "/adherentActivite", "/adherentArtipole", "/adherentAdministratif",
-	    "/adherentExploitation", "/adherentInformatique", "/adherentDetail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/adherentArtipole", "/adherentAdministratif", "/adherentExploitation",
+	    "/adherentInformatique", "/adherentDetail" }, method = RequestMethod.GET)
     public String afficher(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
 	    HttpServletRequest request) {
 
@@ -63,6 +64,22 @@ public class ShowAdherentController {
 	pModel.addAttribute("adherent", adherent);
 
 	return request.getServletPath().substring(1);
+    }
+
+    @RequestMapping(value = "/adherentActivite", method = RequestMethod.GET)
+    public String afficherActivite(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
+	    HttpServletRequest request) {
+
+	Adherent adherent = service.LoadAdherent(idAdh);
+	String commentaire = service.LoadAdherentCommentaire(idAdh, PageType.ADHERENT_ACTIVITE);
+
+	List<AdherentActivite> act = service.LoadActivitesAdherent(idAdh);
+
+	pModel.addAttribute("adherent", adherent);
+	pModel.addAttribute("activites", act);
+	pModel.addAttribute("commentaire", commentaire);
+	pModel.addAttribute("pageType", PageType.ADHERENT_ACTIVITE);
+	return "adherentActivite";
     }
 
 }
