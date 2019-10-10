@@ -32,6 +32,7 @@
 <!-- Permet de ne pas perdre les données autre que celles modifié -->
 	<form:input type="hidden" name="adherent.code" path="adherent.code"/>
 	<form:input type="hidden" name="adherent.code" path="adherent.codeERP"/>
+	<form:input type="hidden" name="adherent.codeParent" path="adherent.codeERPParent"/>
 	<form:input type="hidden" name="adherent.libelle" path="adherent.libelle"/>
 	<form:input type="hidden" name="adherent.denomination" path="adherent.denomination"/>
 	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/>

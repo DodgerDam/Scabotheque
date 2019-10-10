@@ -20,19 +20,7 @@
 		</li>
 
 		</br>
-		</br>
-		
-<%-- 		<li> <spring:message code="menu.gestionFournisseur"/> --%>
-<!-- 		<li> -->
-<%-- 			<c:url value="/enCours" var="url" /> --%>
-<%-- 			<a <c:if test = "${pageType == 'GESTION_FOURNISSEUR'}"> class="active"</c:if> href="${url}"> --%>
-<!-- 				<svg class="icon" ><use xlink:href="resources/images/icones.svg#supply"></use></svg> -->
-<%-- 				<spring:message code="menu.gestionFournisseur"/> --%>
-<!-- 			</a> -->
-<!-- 		</li> -->
-		
-		</br>
-				
+						
 		<li> <spring:message code="menu.gestionLiensUtils"/>
 		<li>
 			<a href=<c:url value="http://srvoutils/ScaboisWiki/doku.php?id=start"/> target="_blank">

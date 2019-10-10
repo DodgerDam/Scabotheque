@@ -147,7 +147,6 @@
 				<form:options items="${etatList}" itemValue="id" itemLabel="libelle" />
 			</form:select>
 		</div>
-
 	</fieldset>
 	
 	<fieldset>
