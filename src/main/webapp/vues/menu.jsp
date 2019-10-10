@@ -18,8 +18,6 @@
 				<spring:message code="menu.listeadherent"/>
 			</a>
 		</li>
-		
-		
 
 		</br>
 		</br>
