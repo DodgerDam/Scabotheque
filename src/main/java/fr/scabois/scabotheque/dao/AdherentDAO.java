@@ -1,5 +1,7 @@
 package fr.scabois.scabotheque.dao;
 
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,6 +17,7 @@ import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentCommentaire;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
+import fr.scabois.scabotheque.bean.adherent.AdherentExploitation;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -204,6 +207,45 @@ public class AdherentDAO implements IAdherentDAO {
 	return contacts;
     }
 
+    /**
+     * Création d'une liste avec tout les type de contacte
+     */
+    @Override
+//    public List<AdherentContactRole> loadAdherentContactFonction(int adhId, List<Integer> fonctionIds) {
+    public List<AdherentContactRole> loadAdherentContactFonction(int adhId, Boolean isDirigeant, Boolean isCommerce,
+	    Boolean isAdmin, Boolean isCompta) {
+
+	List<AdherentContactRole> contacts = entityManager
+		.createQuery("from AdherentContactRole where adherent.id = :adhId", AdherentContactRole.class)
+		.setParameter("adhId", adhId).getResultList();
+
+	// filtre sur les differents Type de Mailling
+	List<AdherentContactRole> retour = new ArrayList<>();
+	if (isDirigeant) {
+	    retour.addAll(contacts.stream().filter(c -> c.getIsMailingDirigeant()).collect(Collectors.toList()));
+	}
+	if (isCommerce) {
+	    retour.addAll(contacts.stream().filter(c -> c.getIsMailingCommerce()).collect(Collectors.toList()));
+	}
+	if (isAdmin) {
+	    retour.addAll(contacts.stream().filter(c -> c.getIsMailingAdministratif()).collect(Collectors.toList()));
+	}
+	if (isCompta) {
+	    retour.addAll(contacts.stream().filter(c -> c.getIsMailingCompta()).collect(Collectors.toList()));
+	}
+
+	return retour;
+    }
+
+    @Override
+    public AdherentExploitation LoadAdherentExploitation(int idAdh) {
+	try {
+	    return entityManager.createQuery("from AdherentExploitation", AdherentExploitation.class).getSingleResult();
+	} catch (NoResultException e) {
+	    return new AdherentExploitation();
+	}
+    }
+
     private AdherentCommentaire loadAdherentPageCommentaire(int idAdh, PageType type) {
 	try {
 	    return entityManager
@@ -228,16 +270,28 @@ public class AdherentDAO implements IAdherentDAO {
 
 //	// filtre la liste des adherents sur les libellés
 	return list.stream().filter(adh -> {
-	    boolean isLib = adh.getLibelle().toUpperCase().contains(criteria.getText().toUpperCase());
-	    boolean isCode = adh.getCode().toUpperCase().contains(criteria.getText().toUpperCase());
-	    boolean isDenom = adh.getDenomination() == null ? false
-		    : adh.getDenomination().toUpperCase().contains(criteria.getText().toUpperCase());
+	    String libCompare = Normalizer.normalize(adh.getLibelle().toUpperCase(), Normalizer.Form.NFD)
+		    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	    String codeCompare = Normalizer.normalize(adh.getCode().toUpperCase(), Normalizer.Form.NFD)
+		    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	    String denomCompare = Normalizer.normalize(adh.getDenomination().toUpperCase(), Normalizer.Form.NFD)
+		    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	    String toCompare = Normalizer.normalize(criteria.getText().toUpperCase(), Normalizer.Form.NFD)
+		    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+
+	    boolean isLib = libCompare.contains(toCompare);
+	    boolean isCode = codeCompare.contains(toCompare);
+	    boolean isDenom = denomCompare.contains(toCompare);
 	    boolean isPole = criteria.getPoleId() == 0 ? true : adh.getPole().getId().equals(criteria.getPoleId());
 	    boolean isSecteur = criteria.getSecteurId() == 0 ? true
 		    : adh.getSecteur().getId().equals(criteria.getSecteurId());
 	    boolean isActif = criteria.getShowAll() ? true : adh.getEtat().getId() == 1;
+	    boolean isSousCompte = criteria.getShowSousCompte() ? true : adh.getCodeERPParent() != null;
 
-	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif;
+//	    
+//	    boolean isFonction = criteria.getcontactFonctionIds().stream().anyMatch(f->adh.getContacts());
+
+	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif && isSousCompte;
 	}).collect(Collectors.toList());
 
     }
@@ -522,10 +576,10 @@ public class AdherentDAO implements IAdherentDAO {
 	dbbContact.setCivilite(adhContact.getCivilite());
 	dbbContact.setFixe(adhContact.getFixe());
 	dbbContact.setFonction(adhContact.getFonction());
-	dbbContact.setIsAdministratif(adhContact.getIsAdministratif());
-	dbbContact.setIsCommerce(adhContact.getIsCommerce());
-	dbbContact.setIsCompta(adhContact.getIsCompta());
-	dbbContact.setIsDirigeant(adhContact.getIsDirigeant());
+	dbbContact.setIsMailingAdministratif(adhContact.getIsMailingAdministratif());
+	dbbContact.setIsMailingCommerce(adhContact.getIsMailingCommerce());
+	dbbContact.setIsMailingCompta(adhContact.getIsMailingCompta());
+	dbbContact.setIsMailingDirigeant(adhContact.getIsMailingDirigeant());
 	dbbContact.setMail(adhContact.getMail());
 	dbbContact.setMobile(adhContact.getMobile());
 	dbbContact.setNaissance(adhContact.getNaissance());

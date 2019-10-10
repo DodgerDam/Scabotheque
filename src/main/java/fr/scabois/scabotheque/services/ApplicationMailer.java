@@ -33,7 +33,7 @@ public class ApplicationMailer {
 	try {
 	    InternetAddress[] parsed;
 	    try {
-		parsed = InternetAddress.parse(to);
+		parsed = InternetAddress.parse(to.replaceAll("(?:\\[|\\])s?", ""));
 	    } catch (AddressException e) {
 		throw new IllegalArgumentException("Not valid email: " + to, e);
 	    }

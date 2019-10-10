@@ -33,16 +33,16 @@ public class AdherentContactRole implements HasId {
     private Integer id;
     @Column(name = "administratif")
 //    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isAdministratif;
+    private boolean isMailingAdministratif;
     @Column(name = "commerce")
 //    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isCommerce;
+    private boolean isMailingCommerce;
     @Column(name = "compta")
 //    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isCompta;
+    private boolean isMailingCompta;
     @Column(name = "dirigeant")
 //    @Type(type = "org.hibernate.type.NumericBooleanType")
-    private boolean isDirigeant;
+    private boolean isMailingDirigeant;
     private String mail;
     private String mobile;
 
@@ -72,20 +72,20 @@ public class AdherentContactRole implements HasId {
 	return id;
     }
 
-    public boolean getIsAdministratif() {
-	return isAdministratif;
+    public boolean getIsMailingAdministratif() {
+	return isMailingAdministratif;
     }
 
-    public boolean getIsCommerce() {
-	return isCommerce;
+    public boolean getIsMailingCommerce() {
+	return isMailingCommerce;
     }
 
-    public boolean getIsCompta() {
-	return isCompta;
+    public boolean getIsMailingCompta() {
+	return isMailingCompta;
     }
 
-    public boolean getIsDirigeant() {
-	return isDirigeant;
+    public boolean getIsMailingDirigeant() {
+	return isMailingDirigeant;
     }
 
     public String getMail() {
@@ -137,20 +137,20 @@ public class AdherentContactRole implements HasId {
 	this.id = id;
     }
 
-    public void setIsAdministratif(boolean isAdministratif) {
-	this.isAdministratif = isAdministratif;
+    public void setIsMailingAdministratif(boolean isAdministratif) {
+	this.isMailingAdministratif = isAdministratif;
     }
 
-    public void setIsCommerce(boolean isCommerce) {
-	this.isCommerce = isCommerce;
+    public void setIsMailingCommerce(boolean isCommerce) {
+	this.isMailingCommerce = isCommerce;
     }
 
-    public void setIsCompta(boolean isCompta) {
-	this.isCompta = isCompta;
+    public void setIsMailingCompta(boolean isCompta) {
+	this.isMailingCompta = isCompta;
     }
 
-    public void setIsDirigeant(boolean isDirigeant) {
-	this.isDirigeant = isDirigeant;
+    public void setIsMailingDirigeant(boolean isDirigeant) {
+	this.isMailingDirigeant = isDirigeant;
     }
 
     public void setMail(String mail) {

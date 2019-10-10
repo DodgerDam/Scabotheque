@@ -38,11 +38,12 @@
 		<fieldset>
 			<legend class="legend"><spring:message code="label.addContact"/></legend>
 			<div>
-					<div class="showDetailEditContact">
+					<div class="showDetailEditContactCivilite">
 						<form:label path="contact.civilite" ><spring:message code="label.civilite"/></form:label>
 						<form:select class="valeur" name="contact.civilite" path="contact.civilite">
 							<form:options items="${civilite}" />
 						</form:select>
+						<form:errors class="error" path="contact.civilite" />
 					</div>
 					<div class="showDetailEditContact">
 						<form:label path="contact.nom" ><spring:message code="label.nom"/></form:label>
@@ -82,19 +83,19 @@
 					<div class="editDataList">					
 							inclure dans le mailing :
 					<span class="displayInline">
-						Dirigeant : <form:checkbox path="${contact.isDirigeant}" value="dirigeant"/> 
+						Dirigeant : <form:checkbox path="${contact.isMailingDirigeant}" value="dirigeant"/> 
 					</span>
 
 					<span class="displayInline">
-						Commercial : <form:checkbox path="${contact.isCommerce}" value="commerce"/> 
+						Commercial : <form:checkbox path="${contact.isMailingCommerce}" value="commerce"/> 
 					</span>
 						
 					<span class="displayInline">
-						Administratif : <form:checkbox path="${contact.isAdministratif}" value="administratif"/>  
+						Administratif : <form:checkbox path="${contact.isMailingAdministratif}" value="administratif"/>  
 					</span>
 						
 					<span class="displayInline">
-						Comptabilité : <form:checkbox path="${contact.isCompta}" value="compta"/> 
+						Comptabilité : <form:checkbox path="${contact.isMailingCompta}" value="compta"/> 
 		   	    	</span>
 				</div>
 			</div>
@@ -131,7 +132,7 @@
 				
 				<div >
 					<div style="display:flex; padding: 0 1.1em;">		
-						<form:select class="valeur" path="adherentContacts[${status.index}].civilite">
+						<form:select style="width:5em;" class="valeur" path="adherentContacts[${status.index}].civilite">
 							<form:options items="${civilite}" />
 						</form:select>
 					
@@ -163,19 +164,19 @@
 				<div class="editDataList">						
 					<span class="scabotheque-h3">Inclure dans le mailing : </span>
 					<span class="displayInline">
-						Dirigeant <form:checkbox path="adherentContacts[${status.index}].isDirigeant" value="dirigeant"/> 
+						Dirigeant <form:checkbox path="adherentContacts[${status.index}].isMailingDirigeant" value="dirigeant"/> 
 					</span>
 
 					<span class="displayInline">
-						Commercial <form:checkbox path="adherentContacts[${status.index}].isCommercial" value="commerce"/> 
+						Commercial <form:checkbox path="adherentContacts[${status.index}].isMailingCommercial" value="commerce"/> 
 					</span>
 						
 					<span class="displayInline">
-						Administratif <form:checkbox path="adherentContacts[${status.index}].isAdministratif" value="administratif"/>  
+						Administratif <form:checkbox path="adherentContacts[${status.index}].isMailingAdministratif" value="administratif"/>  
 					</span>
 						
 					<span class="displayInline">
-						Comptabilité <form:checkbox path="adherentContacts[${status.index}].isComptabilite" value="compta"/> 
+						Comptabilité <form:checkbox path="adherentContacts[${status.index}].isMailingComptabilite" value="compta"/> 
 		   	    	</span>
 				
 					<div><b><i><form:errors class="error" path="adherentContacts[${status.index}].nom" escape="false"/></i></b></div>

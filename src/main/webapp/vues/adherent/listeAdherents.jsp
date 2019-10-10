@@ -10,7 +10,7 @@
 	<form:input type="hidden" name="sender" path="sender"/>
 	<form:input type="hidden" name="object" path="object"/>
 	<form:input type="hidden" name="messageMail" path="messageMail"/>
-	<form:input type="hidden" name="contactFonctionId" path="contactFonctionId"/>
+	<form:input type="hidden" name="contactFonctionIds" path="contactFonctionIds"/>
 
 	<div class="listAdherent-recherche">
 		<div class="listAdherent-recherche-criteres">
@@ -30,10 +30,16 @@
 					<form:options items="${secteursList}" itemValue="id" itemLabel="libelle" />
 				</form:select>
 				
-				<div>
+<!-- 				<div> -->
 			    	<form:checkbox id="showAll" name="showAll" path="showAll"/> 
 			    	<label style="float:none;" for="showAll">Afficher les inactifs</label>
-			    </div>
+			    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/> 
+			    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label>
+<!-- 			    </div> -->
+<!-- 			    <div> -->
+<%-- 			    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/>  --%>
+<!-- 			    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label> -->
+<!-- 			    </div> -->
 		    </div>
 		    <div>
 				<spring:message code="count.adherent" arguments="${listeAdherents.size()}"/>
@@ -51,6 +57,7 @@
 				<c:param name="poleId" value="${criteria.poleId}"/>
 				<c:param name="secteurId" value="${criteria.secteurId}"/>
 				<c:param name="showAll" value="${criteria.showAll}"/>
+				<c:param name="showAll" value="${criteria.showSousCompte}"/>
 			</c:url>
 			
 			<sec:authorize access="hasAnyRole('ROLE_MAILING','ROLE_EXPORT')">
@@ -92,10 +99,25 @@
 	<div id="editor" style="display:grid; border: 1px solid #82aa37; border-radius: 0.4em; margin: 0.2em; padding: 0.4em;">
 		<spring:message code="label.mail.note"/>
 		
-		<form:select name="contactFonctionId" path="contactFonctionId">
-			<form:option value="0" label="- tous -" />
-			<form:options items="${contactFonctionList}" itemValue="id" itemLabel="libelle" />
-		</form:select>
+		<span class="displayInline">
+						Dirigeant : <form:checkbox path="mailingDirigeant" /> 
+<!-- 					</span> -->
+
+<!-- 					<span class="displayInline"> -->
+						Commercial : <form:checkbox path="mailingCommerce" /> 
+<!-- 					</span> -->
+						
+<!-- 					<span class="displayInline"> -->
+						Administratif : <form:checkbox path="mailingAdministratif"/>  
+<!-- 					</span> -->
+						
+<!-- 					<span class="displayInline"> -->
+						Compta : <form:checkbox path="mailingCompta"/> 
+		   	    	</span>
+		
+<%-- 		<form:select name="contactFonctionIds" path="contactFonctionIds" multiple="true"> --%>
+<%-- 			<form:options items="${contactFonctionList}" itemValue="id" itemLabel="libelle" /> --%>
+<%-- 		</form:select> --%>
 		
 		<spring:message code="label.mail.expediteur" var="expediteurPH"/>
 		<form:input type="text" path="sender" placeHolder="${expediteurPH}"/>

@@ -122,7 +122,7 @@
 					<div>
 						<div>
 							<c:choose >
-				   	    		<c:when test = "${contact.isDirigeant}"> 
+				   	    		<c:when test = "${contact.isMailingDirigeant}"> 
 									<svg class="showIcone"><use xlink:href="resources/images/icones.svg#check"></use></svg>
 								</c:when>
 				   	    		<c:otherwise> 
@@ -134,7 +134,7 @@
 
 						<div>
 						<c:choose >
-			   	    		<c:when test = "${contact.isCommerce}"> 
+			   	    		<c:when test = "${contact.isMailingCommerce}"> 
 								<svg class="showIcone"><use xlink:href="resources/images/icones.svg#check"></use></svg>
 							</c:when>
 			   	    		<c:otherwise> 
@@ -146,7 +146,7 @@
 						
 						<div >
 						<c:choose >
-			   	    		<c:when test = "${contact.isAdministratif}"> 
+			   	    		<c:when test = "${contact.isMailingAdministratif}"> 
 								<svg class="showIcone"><use xlink:href="resources/images/icones.svg#check"></use></svg>
 							</c:when>
 			   	    		<c:otherwise> 
@@ -158,7 +158,7 @@
 						
 						<div >
 						<c:choose >
-			   	    		<c:when test = "${contact.isCompta}"> 
+			   	    		<c:when test = "${contact.isMailingCompta}"> 
 								<svg class="showIcone"><use xlink:href="resources/images/icones.svg#check"></use></svg>
 							</c:when>
 			   	    		<c:otherwise> 

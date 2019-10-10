@@ -78,6 +78,12 @@
 		</div>
 		
 		<div class="showDetailAdherent">
+			<form:label path="adherent.codeERPParent" ><spring:message code="label.codeERPParent"/></form:label>
+			<form:input class="valeur" name="adherent.codeERPParent" path="adherent.codeERPParent"/>
+			<b><i><form:errors class="valeur" path="adherent.codeERPParent" /></i></b>
+		</div>
+		
+		<div class="showDetailAdherent">
 			<form:label path="adherent.libelle" ><spring:message code="label.libelle"/></form:label>
 			<form:input class="valeur" name="adherent.libelle" path="adherent.libelle"/>
 			<b><i><form:errors class="valeur" path="adherent.libelle" /></i></b>

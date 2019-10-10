@@ -5,6 +5,7 @@ import java.util.List;
 import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
+import fr.scabois.scabotheque.bean.adherent.AdherentExploitation;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -55,6 +56,11 @@ public interface IAdherentDAO {
 
     // Map<TypeContact, List<AdherentContact>> loadAdherentContact(int adhId);
     List<AdherentContactRole> loadAdherentContact(int adhId);
+
+    List<AdherentContactRole> loadAdherentContactFonction(int adhId, Boolean isDirigeant, Boolean isCommerce,
+	    Boolean isAdmin, Boolean isCompta);
+
+    AdherentExploitation LoadAdherentExploitation(int idAdh);
 
     List<Adherent> loadAdherents();
 

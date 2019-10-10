@@ -16,8 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,26 +61,38 @@ public class ExcelControler {
 		    + LocalDate.now().format(DateTimeFormatter.ISO_DATE) + ".xlsx";
 
 	    XSSFWorkbook workBook = openExcelWorkBook();
-	    XSSFSheet sheet = openSheet(workBook);
+	    XSSFSheet sheet = openSheet(workBook, listAdh.size());
 
-	    final AtomicInteger cpt = new AtomicInteger();
+	    final AtomicInteger cpt = new AtomicInteger(1);
 	    listAdh.stream().forEach(a -> {
+		// recherche des
+//		System.out.println(a.getLibelle());
 		AdherentContactRole contact = a.getContacts().stream().filter(c -> c.getFonction().getId().equals(1))
-			.findFirst().get();
+			.findFirst().orElse(null);
 
-		XSSFRow row = sheet.createRow(cpt.incrementAndGet());
+		XSSFRow row = sheet.createRow(cpt.getAndIncrement());
 		row.createCell(0).setCellValue(a.getCodeERP());
 		row.createCell(1).setCellValue(contact == null ? "" : contact.getNom());
 		row.createCell(2).setCellValue(contact == null ? "" : contact.getPrenom());
-		row.createCell(4).setCellValue(a.getSiren());
+		row.createCell(3).setCellValue(a.getSiren());
+//		row.createCell(4).setCellValue(a.getFormeJuridique().getLibelle() + " " + a.getDenomination());
 		row.createCell(4).setCellValue(a.getDenomination());
 		row.createCell(5).setCellValue(a.getAdresse());
 		row.createCell(6).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
 		row.createCell(7).setCellValue(a.getCommune() == null ? "" : a.getCommune().getLibelle());
 		row.createCell(8).setCellValue(a.getAgence().getLibelle());
-		row.createCell(9).setCellValue("");
-
+		row.createCell(9).setCellValue(a.getEtat().getLibelle());
+		row.createCell(10).setCellValue(contact == null ? "" : contact.getFixe());
+		row.createCell(11).setCellValue(contact == null ? "" : contact.getMail());
+		row.createCell(12).setCellValue("");
 	    });
+
+	    // Mise à jour du tableau
+	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A1"),
+		    new CellReference("M" + cpt.get()));
+
+	    XSSFTable table = workBook.getTable("ListeAdherents");
+	    table.setArea(tableArea);
 
 	    FileOutputStream fileOut = new FileOutputStream(fileName);
 	    workBook.write(fileOut);
@@ -120,7 +135,7 @@ public class ExcelControler {
 	    fileToDownload.delete();
 
 	} catch (Exception ex) {
-	    System.out.println(ex);
+	    System.err.println("Erreur: " + ex.getMessage());
 	}
     }
 
@@ -139,7 +154,8 @@ public class ExcelControler {
 	return workBook;
     }
 
-    private XSSFSheet openSheet(XSSFWorkbook workBook) {
+//    private XSSFSheet openSheet(XSSFWorkbook workBook) {
+    private XSSFSheet openSheet(XSSFWorkbook workBook, int size) {
 
 	// essaye d'ouvrir la feuille de calcul duclasseur Excel
 	XSSFSheet sheet = workBook.getSheet("Adherents");
@@ -152,13 +168,24 @@ public class ExcelControler {
 	    rowhead.createCell(0).setCellValue("Code");
 	    rowhead.createCell(1).setCellValue("Nom");
 	    rowhead.createCell(2).setCellValue("Prenom");
-	    rowhead.createCell(3).setCellValue("SIREN");
+//	    rowhead.createCell(3).setCellValue("SIREN");
 	    rowhead.createCell(4).setCellValue("Adherent");
 	    rowhead.createCell(5).setCellValue("Adresse");
 	    rowhead.createCell(6).setCellValue("Code Postal");
 	    rowhead.createCell(7).setCellValue("Ville");
 	    rowhead.createCell(8).setCellValue("Agence");
-	    rowhead.createCell(9).setCellValue("Commentaire");
+	    rowhead.createCell(9).setCellValue("Actif");
+	    rowhead.createCell(10).setCellValue("Telephone");
+	    rowhead.createCell(11).setCellValue("Messagerie");
+	    rowhead.createCell(12).setCellValue("Commentaire");
+
+	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A2"),
+		    new CellReference("M3"));
+
+	    XSSFTable table = sheet.createTable(tableArea);
+	    table.setDisplayName("ListeAdherents");
+	    table.setName("ListeAdherents");
+	    table.setStyleName("TableStyleMedium16");
 	}
 
 	return sheet;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
+import fr.scabois.scabotheque.bean.adherent.AdherentExploitation;
 import fr.scabois.scabotheque.enums.PageType;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 
@@ -23,8 +24,8 @@ public class ShowAdherentController {
     @Autowired
     private IServiceAdherent service;
 
-    @RequestMapping(value = { "/adherentArtipole", "/adherentAdministratif", "/adherentExploitation",
-	    "/adherentInformatique", "/adherentDetail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/adherentArtipole", "/adherentAdministratif", "/adherentInformatique",
+	    "/adherentDetail" }, method = RequestMethod.GET)
     public String afficher(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
 	    HttpServletRequest request) {
 
@@ -42,9 +43,9 @@ public class ShowAdherentController {
 	case "adherentAdministratif":
 	    pageType = PageType.ADHERENT_ADMINISTRATIF;
 	    break;
-	case "adherentExploitation":
-	    pageType = PageType.ADHERENT_EXPLOITATION;
-	    break;
+//	case "adherentExploitation":
+//	    pageType = PageType.ADHERENT_EXPLOITATION;
+//	    break;
 	case "adherentInformatique":
 	    pageType = PageType.ADHERENT_INFORMATIQUE;
 	    break;
@@ -82,4 +83,18 @@ public class ShowAdherentController {
 	return "adherentActivite";
     }
 
+    @RequestMapping(value = "/adherentExploitation", method = RequestMethod.GET)
+    public String afficherExploitation(@RequestParam(value = "idAdh") final int idAdh, final ModelMap pModel,
+	    HttpServletRequest request) {
+
+	Adherent adherent = service.LoadAdherent(idAdh);
+	AdherentExploitation infoExploitation = service.LoadAdherentExploitation(idAdh);
+	String commentaire = service.LoadAdherentCommentaire(idAdh, PageType.ADHERENT_EXPLOITATION);
+
+	pModel.addAttribute("adherent", adherent);
+	pModel.addAttribute("infoExploitation", infoExploitation);
+	pModel.addAttribute("commentaire", commentaire);
+	pModel.addAttribute("pageType", PageType.ADHERENT_EXPLOITATION);
+	return "adherentExploitation";
+    }
 }

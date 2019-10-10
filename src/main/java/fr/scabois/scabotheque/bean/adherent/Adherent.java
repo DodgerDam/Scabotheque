@@ -41,6 +41,9 @@ public class Adherent {
     @Column(name = "code_erp")
     private String codeERP;
 
+    @Column(name = "code_erp_parent")
+    private String codeERPParent;
+
     @ManyToOne
     private Commune commune;
 
@@ -142,6 +145,10 @@ public class Adherent {
 
     public String getCodeERP() {
 	return codeERP;
+    }
+
+    public String getCodeERPParent() {
+	return codeERPParent;
     }
 
     public Commune getCommune() {
@@ -278,6 +285,10 @@ public class Adherent {
 
     public void setCodeERP(String codeERP) {
 	this.codeERP = codeERP;
+    }
+
+    public void setCodeERPParent(String codeERPParent) {
+	this.codeERPParent = codeERPParent;
     }
 
     public void setCommune(Commune commune) {

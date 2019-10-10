@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentActivite;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
+import fr.scabois.scabotheque.bean.adherent.AdherentExploitation;
 import fr.scabois.scabotheque.bean.adherent.Etat;
 import fr.scabois.scabotheque.bean.adherent.FormeJuridique;
 import fr.scabois.scabotheque.bean.adherent.Pole;
@@ -110,6 +111,17 @@ public class ServiceAdherent implements IServiceAdherent {
     @Override
     public List<AdherentContactRole> LoadAdherentContact(int adhId) {
 	return dao.loadAdherentContact(adhId);
+    }
+
+    @Override
+    public List<AdherentContactRole> loadAdherentContactFonction(int adhId, Boolean isDirigeant, Boolean isCommerce,
+	    Boolean isAdmin, Boolean isCompta) {
+	return dao.loadAdherentContactFonction(adhId, isDirigeant, isCommerce, isAdmin, isCompta);
+    }
+
+    @Override
+    public AdherentExploitation LoadAdherentExploitation(int idAdh) {
+	return dao.LoadAdherentExploitation(idAdh);
     }
 
     @Override

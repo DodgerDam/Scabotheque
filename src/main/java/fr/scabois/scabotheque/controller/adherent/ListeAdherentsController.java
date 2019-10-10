@@ -1,5 +1,6 @@
 package fr.scabois.scabotheque.controller.adherent;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
+import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Pole;
 import fr.scabois.scabotheque.bean.adherent.Secteur;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
@@ -36,12 +38,10 @@ public class ListeAdherentsController {
     public String afficher(ModelMap pModel) {
 
 	// Chargement des listes de recherche rapide
-	// List<Metier> adhMetier = service.LoadMetiersAdherents();
 	List<Pole> poles = service.LoadPoles();
 	List<Secteur> secteurs = service.LoadSecteurs();
 	List<ContactFonction> contactFonctions = service.LoadContactFonctions();
 
-	// pModel.addAttribute("adhMetierList", adhMetier);
 	pModel.addAttribute("polesList", poles);
 	pModel.addAttribute("secteursList", secteurs);
 	pModel.addAttribute("contactFonctionList", contactFonctions);
@@ -79,18 +79,34 @@ public class ListeAdherentsController {
     public String sendMail(@ModelAttribute(value = "criteria") final CriteriaAdherent criteria,
 	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
 
+	// recherche de tous mes contact pour envoy de message.
+	final List<Adherent> listeAdherents = service.LoadAdherents(criteria);
+	List<AdherentContactRole> listeTotal = new ArrayList<>();
+
 	try {
-	    mailer.sendHTMLMail(criteria.getSender(), "adrien.fort@scabois.fr", criteria.getObject(),
-		    criteria.getMessageMail() + criteria.getAdherentIds().toString());
+	    listeAdherents.stream().forEach(a -> {
+		final List<AdherentContactRole> contacts = service.loadAdherentContactFonction(a.getId(),
+			criteria.isMailingDirigeant(), criteria.isMailingCommerce(), criteria.isMailingAdministratif(),
+			criteria.isMailingCompta());
+
+		listeTotal.addAll(contacts);
+
+		mailer.sendHTMLMail(criteria.getSender(),
+			contacts.stream().map(m -> m.getMail()).collect(Collectors.toSet()).toString(),
+			criteria.getObject(), criteria.getMessageMail());
+
+	    });
+
+	    // message de compte rendu
+	    mailer.sendHTMLMail(criteria.getSender(), criteria.getSender(), "Compte rendu:" + criteria.getObject(),
+		    "Votre message est envoyé à tout les destinataires suivant :"
+			    + listeTotal.stream().map(m -> m.getMail()).collect(Collectors.toList()).toString());
+
 	    criteria.setAvertissement("Votre message est envoyé.");
 
 	} catch (Exception e) {
-	    criteria.setAvertissement("Une erreur est survenue, Le message na pas été envoyé.");
+	    criteria.setAvertissement("Une erreur est survenue, Le message na pas été envoyé." + e.getMessage());
 	}
-
-//	return modifieAdh(criteria, pBindingResult, pModel, request);
-
-	final List<Adherent> listeAdherents = service.LoadAdherents(criteria);
 
 	pModel.addAttribute("listeAdherents", listeAdherents);
 	criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));

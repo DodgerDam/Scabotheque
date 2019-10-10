@@ -21,10 +21,10 @@ public class EditAdherentContact {
     private String fixe;
     private ContactFonction fonction;
     private Integer id;
-    private boolean isAdministratif;
-    private boolean isCommercial;
-    private boolean isComptabilite;
-    private boolean isDirigeant;
+    private boolean isMailingAdministratif;
+    private boolean isMailingCommercial;
+    private boolean isMailingComptabilite;
+    private boolean isMailingDirigeant;
     @NotEmpty(message = "{modification.mailNotEmpty}")
     private String mail;
 
@@ -65,20 +65,20 @@ public class EditAdherentContact {
 	return id;
     }
 
-    public boolean getIsAdministratif() {
-	return isAdministratif;
+    public boolean getIsMailingAdministratif() {
+	return isMailingAdministratif;
     }
 
-    public boolean getIsCommercial() {
-	return isCommercial;
+    public boolean getIsMailingCommercial() {
+	return isMailingCommercial;
     }
 
-    public boolean getIsComptabilite() {
-	return isComptabilite;
+    public boolean getIsMailingComptabilite() {
+	return isMailingComptabilite;
     }
 
-    public boolean getIsDirigeant() {
-	return isDirigeant;
+    public boolean getIsMailingDirigeant() {
+	return isMailingDirigeant;
     }
 
     public String getMail() {
@@ -133,20 +133,20 @@ public class EditAdherentContact {
 	this.id = id;
     }
 
-    public void setIsAdministratif(boolean isAdministratif) {
-	this.isAdministratif = isAdministratif;
+    public void setIsMailingAdministratif(boolean isAdministratif) {
+	this.isMailingAdministratif = isAdministratif;
     }
 
-    public void setIsCommercial(boolean isCommercial) {
-	this.isCommercial = isCommercial;
+    public void setIsMailingCommercial(boolean isCommercial) {
+	this.isMailingCommercial = isCommercial;
     }
 
-    public void setIsComptabilite(boolean isComptabilite) {
-	this.isComptabilite = isComptabilite;
+    public void setIsMailingComptabilite(boolean isComptabilite) {
+	this.isMailingComptabilite = isComptabilite;
     }
 
-    public void setIsDirigeant(boolean isDirigeant) {
-	this.isDirigeant = isDirigeant;
+    public void setIsMailingDirigeant(boolean isDirigeant) {
+	this.isMailingDirigeant = isDirigeant;
     }
 
     public void setMail(String mail) {
