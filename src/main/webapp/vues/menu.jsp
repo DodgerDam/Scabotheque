@@ -23,7 +23,6 @@
 
 		</br>
 		</br>
-		</br>
 		
 <%-- 		<li> <spring:message code="menu.gestionFournisseur"/> --%>
 <!-- 		<li> -->
