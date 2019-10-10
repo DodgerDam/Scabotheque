@@ -119,6 +119,7 @@ public class EditAdhController {
 	editableAdh.setId(adh.getId());
 	editableAdh.setCode(adh.getCode());
 	editableAdh.setCodeERP(adh.getCodeERP());
+	editableAdh.setCodeERPParent(adh.getCodeERPParent());
 	editableAdh.setLibelle(adh.getLibelle());
 	editableAdh.setDenomination(adh.getDenomination());
 	editableAdh.setFormeJuridique(adh.getFormeJuridique());
@@ -279,6 +280,7 @@ public class EditAdhController {
 	adh.setId(editAdh.getId());
 	adh.setCode(editAdh.getCode());
 	adh.setCodeERP(editAdh.getCodeERP());
+	adh.setCodeERPParent(editAdh.getCodeERPParent());
 	adh.setLibelle(editAdh.getLibelle());
 	adh.setDenomination(editAdh.getDenomination());
 	adh.setFormeJuridique(editAdh.getFormeJuridique());

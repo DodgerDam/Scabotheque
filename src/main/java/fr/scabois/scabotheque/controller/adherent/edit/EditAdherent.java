@@ -27,6 +27,7 @@ public class EditAdherent {
     private String code;
     @NotEmpty(message = "{modification.notempty}")
     private String codeERP;
+    private String codeERPParent;
     // la présence de la commune est testée dans le controleur
     private Commune commune;
     private String contactComptable;
@@ -86,6 +87,10 @@ public class EditAdherent {
 
     public String getCodeERP() {
 	return codeERP;
+    }
+
+    public String getCodeERPParent() {
+	return codeERPParent;
     }
 
     public Commune getCommune() {
@@ -214,6 +219,10 @@ public class EditAdherent {
 
     public void setCodeERP(String codeERP) {
 	this.codeERP = codeERP;
+    }
+
+    public void setCodeERPParent(String codeERPParent) {
+	this.codeERPParent = codeERPParent;
     }
 
     public void setCommune(Commune commune) {

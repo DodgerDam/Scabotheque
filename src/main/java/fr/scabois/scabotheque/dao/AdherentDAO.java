@@ -268,7 +268,7 @@ public class AdherentDAO implements IAdherentDAO {
 
 	List<Adherent> list = entityManager.createQuery("from Adherent adh", Adherent.class).getResultList();
 
-//	// filtre la liste des adherents sur les libellés
+	// filtre la liste des adherents sur les libellés
 	return list.stream().filter(adh -> {
 	    String libCompare = Normalizer.normalize(adh.getLibelle().toUpperCase(), Normalizer.Form.NFD)
 		    .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
@@ -286,7 +286,7 @@ public class AdherentDAO implements IAdherentDAO {
 	    boolean isSecteur = criteria.getSecteurId() == 0 ? true
 		    : adh.getSecteur().getId().equals(criteria.getSecteurId());
 	    boolean isActif = criteria.getShowAll() ? true : adh.getEtat().getId() == 1;
-	    boolean isSousCompte = criteria.getShowSousCompte() ? true : adh.getCodeERPParent() != null;
+	    boolean isSousCompte = criteria.getShowSousCompte() ? true : adh.getCodeERPParent().isEmpty();
 
 //	    
 //	    boolean isFonction = criteria.getcontactFonctionIds().stream().anyMatch(f->adh.getContacts());
@@ -596,6 +596,7 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setId(adherent.getId());
 	bddAdherent.setCode(adherent.getCode());
 	bddAdherent.setCodeERP(adherent.getCodeERP());
+	bddAdherent.setCodeERPParent(adherent.getCodeERPParent());
 	bddAdherent.setLibelle(adherent.getLibelle());
 	bddAdherent.setDenomination(adherent.getDenomination());
 	bddAdherent.setFormeJuridique(adherent.getFormeJuridique());
