@@ -39,11 +39,15 @@
 			</div>	
 		</sec:authorize>
 		
-		<div class="colonnesDouble">
+		<div class="colonnesDouble" style ="padding:10px;">
 			<div>
 				<div class="showDetailAdherent">
 					<span class="adherentLabel"> Code adherent</span>
 					<span class="data" > ${adherent.code} </span>
+				</div>
+				<div class="showDetailAdherent">
+					<span class="adherentLabel"> Code adherent parent</span>
+					<span class="data" > ${adherent.codeERPParent} </span>
 				</div>
 				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.nomRecherche"/></span>
@@ -62,6 +66,9 @@
 						</c:choose>
 					</span>
 				</div>
+				
+			</div>
+			<div>
 				<div  class="showDetailAdherent"> 
 					<span class="adherentLabel"><spring:message code="label.agenceRattachement"/></span>
 					<span class="data">${adherent.agence.libelle}</span>
@@ -71,8 +78,6 @@
 					<span class="adherentLabel"><spring:message code="label.secteur"/></span>
 					<span class="data">${adherent.secteur.libelle}</span>
 				</div>	
-			</div>
-			<div>
 				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adresse"/></span>
 					<span class="data">${adherent.adresse}</span>

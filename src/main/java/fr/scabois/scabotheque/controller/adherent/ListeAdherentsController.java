@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,17 +20,21 @@ import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.bean.adherent.Pole;
 import fr.scabois.scabotheque.bean.adherent.Secteur;
+import fr.scabois.scabotheque.bean.commun.Activite;
 import fr.scabois.scabotheque.bean.commun.ContactFonction;
 import fr.scabois.scabotheque.enums.PageType;
 import fr.scabois.scabotheque.services.ApplicationMailer;
+import fr.scabois.scabotheque.services.ExportService;
 import fr.scabois.scabotheque.services.IServiceAdherent;
 
 @Controller
 public class ListeAdherentsController {
 
     @Autowired
+    public ExportService exportService;
+
+    @Autowired
     public ApplicationMailer mailer;
-    private String msg = "";
 
     @Autowired
     private IServiceAdherent service;
@@ -40,10 +45,12 @@ public class ListeAdherentsController {
 	// Chargement des listes de recherche rapide
 	List<Pole> poles = service.LoadPoles();
 	List<Secteur> secteurs = service.LoadSecteurs();
+	List<Activite> activites = service.LoadActivites();
 	List<ContactFonction> contactFonctions = service.LoadContactFonctions();
 
 	pModel.addAttribute("polesList", poles);
 	pModel.addAttribute("secteursList", secteurs);
+	pModel.addAttribute("activitesList", activites);
 	pModel.addAttribute("contactFonctionList", contactFonctions);
 
 	// Si on arrive de la requestMethode POST
@@ -54,7 +61,6 @@ public class ListeAdherentsController {
 	    pModel.addAttribute("listeAdherents", listeAdherents);
 
 	    final CriteriaAdherent criteria = new CriteriaAdherent();
-	    criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
 	    pModel.addAttribute("criteria", criteria);
 	}
 
@@ -63,14 +69,22 @@ public class ListeAdherentsController {
 	return "listeAdh";
     }
 
+    @RequestMapping(value = "/exportList", method = RequestMethod.POST)
+    public void exportList(@ModelAttribute(value = "criteria") final CriteriaAdherent criteria,
+	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request,
+	    HttpServletResponse response) {
+
+	exportService.downloadFile(criteria, response);
+
+    }
+
     @RequestMapping(value = { "/", "/listeAdherents" }, method = RequestMethod.POST)
-    public String modifieAdh(@ModelAttribute(value = "criteria") final CriteriaAdherent criteria,
+    public String rechercheAdh(@ModelAttribute(value = "criteria") final CriteriaAdherent criteria,
 	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
 
 	final List<Adherent> listeAdherents = service.LoadAdherents(criteria);
 
 	pModel.addAttribute("listeAdherents", listeAdherents);
-	criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
 
 	return afficher(pModel);
     }
@@ -105,11 +119,15 @@ public class ListeAdherentsController {
 	    criteria.setAvertissement("Votre message est envoyé.");
 
 	} catch (Exception e) {
+	    mailer.sendHTMLMail(criteria.getSender(), criteria.getSender(), "Compte rendu:" + criteria.getObject(),
+		    "Une erreur est survenue : \n Exception:" + e.getMessage()
+			    + "\n Le message a été envoyé aux destinataire suivant : "
+			    + listeTotal.stream().map(m -> m.getMail()).collect(Collectors.toList()).toString());
+
 	    criteria.setAvertissement("Une erreur est survenue, Le message na pas été envoyé." + e.getMessage());
 	}
 
 	pModel.addAttribute("listeAdherents", listeAdherents);
-	criteria.setAdherentIds(listeAdherents.stream().map(m -> m.getCode()).collect(Collectors.toList()));
 
 	return afficher(pModel);
     }

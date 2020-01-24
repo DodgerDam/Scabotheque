@@ -104,11 +104,15 @@ public class Adherent {
     private Pole pole;
 
     @ManyToOne
-    @JoinColumn(name = "rcs_rm_commune_id")
+    @JoinColumn(name = "rcs_commune_id")
     private Commune rcsCommune;
 
     @Column(name = "rcs_rm")
     private String rcsRm;
+
+    @ManyToOne
+    @JoinColumn(name = "rm_commune_id")
+    private Commune rmCommune;
 
     @ManyToOne
     private Role role;
@@ -241,6 +245,10 @@ public class Adherent {
 
     public String getRcsRm() {
 	return rcsRm;
+    }
+
+    public Commune getRmCommune() {
+	return rmCommune;
     }
 
     public Role getRole() {
@@ -378,6 +386,10 @@ public class Adherent {
 
     public void setRcsRm(String rcsRm) {
 	this.rcsRm = rcsRm;
+    }
+
+    public void setRmCommune(Commune rmCommune) {
+	this.rmCommune = rmCommune;
     }
 
     public void setRole(Role role) {

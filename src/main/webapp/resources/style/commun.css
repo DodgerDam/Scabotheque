@@ -112,6 +112,14 @@ hr{
 	display:none;
 }
 
+#exportListForm{
+	display:none;
+}
+
+#advanceSearchForm{
+	display:none;
+}
+
 .dropMenuLayout{
 	margin-top:-1.5em;
 	margin-left:-0.5em;

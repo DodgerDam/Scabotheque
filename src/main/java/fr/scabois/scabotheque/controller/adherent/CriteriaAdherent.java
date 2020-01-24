@@ -1,32 +1,38 @@
 package fr.scabois.scabotheque.controller.adherent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CriteriaAdherent {
 
-    public List<String> adherentIds;
+    private List<Integer> activiteIds = new ArrayList<>();
+//    public List<String> adherentIds;
     private String avertissement;
-    private List<Integer> contactFonctionIds = new ArrayList<>();
 
+    private List<Integer> contactFonctionIds = new ArrayList<>();
     private boolean mailingAdministratif = true;
     private boolean mailingCommerce = true;
     private boolean mailingCompta = true;
     private boolean mailingDirigeant = true;
     private String messageMail;
-    private String object;
 
-    private int poleId;
+    private String object;
+    private List<Integer> poleIds = new ArrayList<>();
     // private Metier metier;
-    private int secteurId;
+    private List<Integer> secteurIds = new ArrayList<>();
     private String sender;
     private boolean showAll = false;
     private boolean showSousCompte = true;
     private String text;
 
-    public List<String> getAdherentIds() {
-	return adherentIds;
+    public List<Integer> getActiviteIds() {
+	return activiteIds.isEmpty() ? Arrays.asList(0) : activiteIds;
     }
+
+//    public List<String> getAdherentIds() {
+//	return adherentIds;
+//    }
 
     public String getAvertissement() {
 	return avertissement;
@@ -44,12 +50,12 @@ public class CriteriaAdherent {
 	return object;
     }
 
-    public int getPoleId() {
-	return poleId;
+    public List<Integer> getPoleIds() {
+	return poleIds.isEmpty() ? Arrays.asList(0) : poleIds;
     }
 
-    public int getSecteurId() {
-	return secteurId;
+    public List<Integer> getSecteurIds() {
+	return secteurIds.isEmpty() ? Arrays.asList(0) : secteurIds;
     }
 
     public String getSender() {
@@ -84,9 +90,13 @@ public class CriteriaAdherent {
 	return mailingDirigeant;
     }
 
-    public void setAdherentIds(List<String> adherentIds) {
-	this.adherentIds = adherentIds;
+    public void setActiviteIds(List<Integer> activiteId) {
+	this.activiteIds = activiteId;
     }
+
+//    public void setAdherentIds(List<String> adherentIds) {
+//	this.adherentIds = adherentIds;
+//    }
 
     public void setAvertissement(String avertissement) {
 	this.avertissement = avertissement;
@@ -120,12 +130,12 @@ public class CriteriaAdherent {
 	this.object = object;
     }
 
-    public void setPoleId(int poleId) {
-	this.poleId = poleId;
+    public void setPoleIds(List<Integer> poleIds) {
+	this.poleIds = poleIds;
     }
 
-    public void setSecteurId(int secteurId) {
-	this.secteurId = secteurId;
+    public void setSecteurIds(List<Integer> secteurIds) {
+	this.secteurIds = secteurIds;
     }
 
     public void setSender(String sender) {

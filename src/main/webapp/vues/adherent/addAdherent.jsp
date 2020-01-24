@@ -254,12 +254,14 @@
 	<select id="communeListe" class="communeListe" multiple >
 		<option value="" >trop de résultat</option>
 	</select>
-	
 </div>
+
 <script>
 $( function() {
+	var globalTimeout = null;  
 	var communeId;
 	var communeLib;
+	
 	communeDialog = $('#dialogCommune').dialog({
         show: "fade",
         hide: "fade",
@@ -302,11 +304,20 @@ $( function() {
 		$("#overlay").show();
 		communeDialog.dialog("open");
 	});
-	
-	$('#filterCP').bind("keyup", function(){
-		setTimeout(populateListe,1000);
-	});
 	  
+	$('#filterCP').bind("keyup", function(){
+		// Si un delay est en cour, on le supprime
+		if (globalTimeout != null) {
+			clearTimeout(globalTimeout);
+		}
+		
+		// execution d'un delay
+		globalTimeout = setTimeout(function() {
+			globalTimeout = null;  
+			populateListe();
+		}, 1000);  
+	});
+
 	
 	function populateListe(){
  		var params={filter: $("#filterCP").val()};
@@ -318,7 +329,7 @@ $( function() {
 			        $selectList = $("#communeListe");
 			        $selectList.find("option").remove();  
 			        $.each(JSON.parse(response), function(index, commune) {
-				        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
+				        $("<option>").val(commune.id).text(commune.codePostal + " - " + commune.libelle).appendTo($selectList);
 			        });                   
 			 
 			    });

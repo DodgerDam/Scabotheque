@@ -1,9 +1,9 @@
 
-.appMenu-background {
+.menuBar-background {
   background-color: #333;
 }
 
-.appMenu-position {
+.menuBar-position {
   display: flex;
   margin: auto;
   width: 1200px;
@@ -14,9 +14,25 @@
   overflow: hidden;
 }
 
-.appMenu-dropdown {
+.menu-item{
+    border-right: #f0f0f0 1px solid;
+	color: #f2f2f2;
+	display: block;
+	float: left;
+	fill:white;
+	min-width: 12em;
+	padding: 0.4em 1em;
+	text-decoration: none;
+}
+
+
+.menu-dropdown{
   float: left;
-  overflow: hidden;
+  padding: 0em 0.6em 0em 0em;
+}
+
+.menu-dropdown-complement{
+/* 	text-decoration: none; */
 }
 
 .bottomNavBar {
@@ -28,35 +44,41 @@
 	margin: 0.3em 0;
 }
 
-.appMenu a, .bottomNavBar a, .dropMenuLayout a{
-  float: left;
-  display: block;
+.menu-item a, .bottomNavBar a, .dropMenuLayout a{
   color: #f2f2f2;
   fill:white;
-  padding: 0.4em 1.6em;
   text-decoration: none;
-  font-size: 1em;
-  min-width: 180px;
   text-align: -webkit-center;  
 }
 
-.appMenu a:hover, .bottomNavBar a:hover , .dropMenuLayout a:hover {
+
+.sub-menu-item{
+  padding: 0.4em 1.6em;
+  min-width: 12em;
+}
+.sub-menu-item:hover{
 	background-color: #82aa37;
+/* 	color: white; */
+/* 	fill:white; */
+/* 	text-decoration: none; */
+}
+.menu-dropdown-container:hover, .menu-item:hover, .menu-item a:hover, .bottomNavBar a:hover , .dropMenuLayout a:hover {
+/* 	background-color: #82aa37; */
 	color: white;
 	fill:white;
+	text-decoration: none;
  }
 
-.appMenu-active, .bottomNavBar-active {
+.menu-active, .bottomNavBar-active {
     background-color: #82aa37;
     color: white;
     fill:white;
 }
 
-.appMenu-icon, .bottomNavBar-icon, .optionDropDown-icon{
+.menu-item-icon, .bottomNavBar-icon, .optionDropDown-icon{
 	height:1.5em;
 	vertical-align: middle;
 	width:1.5em;
-/* 	padding: 0 0.5em; */
 }
 
 /*  Positionnement de la barre de menu apres scroll */
@@ -68,7 +90,7 @@
 
 .sticky-dropdown {
 	position: fixed !important;
-	top: 0 !important;
+	top: 1.9em !important;
 }
 
 .sticky + .content {
@@ -80,12 +102,14 @@
   fill:#f2f2f2;
 }
 
-.appMenu-dropdown-container {
+.menu-dropdown-container {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+/*   width: 160px; */
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  margin: 0em 0 0 -1em; 
+/*   padding: 0.4em 1.6em; */
   z-index: 1;
   width: auto;
 }
@@ -95,8 +119,7 @@
 	fill:#f2f2f2 !important;
 }
 
-.appMenu-dropdown-container a {
-	
+.menu-dropdown-container a {
   float: none;
   color: black;
   fill: black;
@@ -105,7 +128,7 @@
   text-align: left;
 }
 
-.appMenu-dropdown:hover .appMenu-dropdown-container {
+.menu-dropdown:hover .menu-dropdown-container {
   display: block;
 }
 

@@ -1,4 +1,4 @@
-package fr.scabois.scabotheque.controller.export;
+package fr.scabois.scabotheque.services;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.openxml4j.exceptions.InvalidOperationException;
@@ -23,42 +22,29 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFTable;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Service;
 
 import fr.scabois.scabotheque.bean.adherent.Adherent;
 import fr.scabois.scabotheque.bean.adherent.AdherentContactRole;
 import fr.scabois.scabotheque.controller.adherent.CriteriaAdherent;
-import fr.scabois.scabotheque.services.IServiceAdherent;
 import fr.scabois.scabotheque.utils.AppProperties;
 
-@Controller
-public class ExcelControler {
+@Service("exportService")
+public class ExportService {
 
     @Autowired
     private IServiceAdherent service;
 
-    @RequestMapping("/downloadFile")
-    public void downloadFile(@RequestParam(value = "findText") final String findText,
-	    @RequestParam(value = "poleId") final int poleId, @RequestParam(value = "secteurId") final int secteurId,
-	    @RequestParam(value = "showAll") final Boolean showAll, HttpServletRequest request,
-	    HttpServletResponse response) {
-
+    public void downloadFile(CriteriaAdherent criteria, HttpServletResponse response) {
 	try {
 
 	    AppProperties.getPropertie("export.template.excel");
 
-	    CriteriaAdherent criteria = new CriteriaAdherent();
-	    criteria.setText(findText);
-	    criteria.setPoleId(poleId);
-	    criteria.setSecteurId(secteurId);
-	    criteria.setShowAll(showAll);
-
 	    List<Adherent> listAdh = service.LoadAdherents(criteria);
 
-	    String fileName = AppProperties.getPropertie("export.path") + "/ListAdhernet"
-		    + LocalDate.now().format(DateTimeFormatter.ISO_DATE) + ".xlsx";
+	    String fileName = AppProperties.getPropertie("export.path") + "/"
+		    + AppProperties.getPropertie("export.fileName") + LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+		    + ".xlsx";
 
 	    XSSFWorkbook workBook = openExcelWorkBook();
 	    XSSFSheet sheet = openSheet(workBook, listAdh.size());
@@ -78,13 +64,14 @@ public class ExcelControler {
 //		row.createCell(4).setCellValue(a.getFormeJuridique().getLibelle() + " " + a.getDenomination());
 		row.createCell(4).setCellValue(a.getDenomination());
 		row.createCell(5).setCellValue(a.getAdresse());
-		row.createCell(6).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
-		row.createCell(7).setCellValue(a.getCommune() == null ? "" : a.getCommune().getLibelle());
-		row.createCell(8).setCellValue(a.getAgence().getLibelle());
-		row.createCell(9).setCellValue(a.getEtat().getLibelle());
-		row.createCell(10).setCellValue(contact == null ? "" : contact.getFixe());
-		row.createCell(11).setCellValue(contact == null ? "" : contact.getMail());
-		row.createCell(12).setCellValue("");
+		row.createCell(6).setCellValue(a.getAdresseComplement());
+		row.createCell(7).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
+		row.createCell(8).setCellValue(a.getCommune() == null ? "" : a.getCommune().getLibelle());
+		row.createCell(9).setCellValue(a.getAgence().getLibelle());
+		row.createCell(10).setCellValue(a.getEtat().getLibelle());
+		row.createCell(11).setCellValue(contact == null ? "" : contact.getFixe());
+		row.createCell(12).setCellValue(contact == null ? "" : contact.getMail());
+		row.createCell(13).setCellValue("");
 	    });
 
 	    // Mise à jour du tableau
@@ -171,6 +158,7 @@ public class ExcelControler {
 //	    rowhead.createCell(3).setCellValue("SIREN");
 	    rowhead.createCell(4).setCellValue("Adherent");
 	    rowhead.createCell(5).setCellValue("Adresse");
+	    rowhead.createCell(5).setCellValue("Complement d'adresse");
 	    rowhead.createCell(6).setCellValue("Code Postal");
 	    rowhead.createCell(7).setCellValue("Ville");
 	    rowhead.createCell(8).setCellValue("Agence");

@@ -282,16 +282,17 @@ public class AdherentDAO implements IAdherentDAO {
 	    boolean isLib = libCompare.contains(toCompare);
 	    boolean isCode = codeCompare.contains(toCompare);
 	    boolean isDenom = denomCompare.contains(toCompare);
-	    boolean isPole = criteria.getPoleId() == 0 ? true : adh.getPole().getId().equals(criteria.getPoleId());
-	    boolean isSecteur = criteria.getSecteurId() == 0 ? true
-		    : adh.getSecteur().getId().equals(criteria.getSecteurId());
+	    List<Integer> activitiesId = loadActivitesAdherent(adh.getId()).stream().map(m -> m.getActivite().getId())
+		    .collect(Collectors.toList());
+	    boolean isActivite = criteria.getActiviteIds().stream().anyMatch(m -> activitiesId.contains(m) || m == 0);
+	    boolean isPole = criteria.getPoleIds().get(0) == 0 ? true
+		    : criteria.getPoleIds().contains(adh.getPole().getId());
+	    boolean isSecteur = criteria.getSecteurIds().get(0) == 0 ? true
+		    : criteria.getSecteurIds().contains(adh.getSecteur().getId());
 	    boolean isActif = criteria.getShowAll() ? true : adh.getEtat().getId() == 1;
 	    boolean isSousCompte = criteria.getShowSousCompte() ? true : adh.getCodeERPParent().isEmpty();
 
-//	    
-//	    boolean isFonction = criteria.getcontactFonctionIds().stream().anyMatch(f->adh.getContacts());
-
-	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif && isSousCompte;
+	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif && isSousCompte && isActivite;
 	}).collect(Collectors.toList());
 
     }
@@ -304,6 +305,14 @@ public class AdherentDAO implements IAdherentDAO {
     @Override
     public List<Ape> loadApes() {
 	return entityManager.createQuery("from Ape", Ape.class).getResultList();
+    }
+
+    private Commune loadCommune(int communeId) {
+	try {
+	    return entityManager.find(Commune.class, communeId);
+	} catch (NoResultException e) {
+	    return null;
+	}
     }
 
     @Override
@@ -603,7 +612,9 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setDateEntree(adherent.getDateEntree());
 	bddAdherent.setAdresse(adherent.getAdresse());
 	bddAdherent.setAdresseComplement(adherent.getAdresseComplement());
-	bddAdherent.setCommune(adherent.getCommune());
+	if (adherent.getCommune().getId() != null) {
+	    bddAdherent.setCommune(loadCommune(adherent.getCommune().getId()));
+	}
 	bddAdherent.setPole(adherent.getPole());
 	bddAdherent.setRole(adherent.getRole());
 	bddAdherent.setSecteur(adherent.getSecteur());
@@ -618,7 +629,12 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setSiret(adherent.getSiret());
 	bddAdherent.setNumRepMetier(adherent.getNumRepMetier());
 	bddAdherent.setRcsRm(adherent.getRcsRm());
-	bddAdherent.setRcsCommune(adherent.getRcsCommune());
+	if (adherent.getRcsCommune().getId() != null) {
+	    bddAdherent.setRcsCommune(loadCommune(adherent.getRcsCommune().getId()));
+	}
+//	if (adherent.getRmCommune().getId() != null) {
+//	    bddAdherent.setRmCommune(loadCommune(adherent.getRmCommune().getId()));
+//	}
 	bddAdherent.setAgence(adherent.getAgence());
 	bddAdherent.setDateClotureExe(adherent.getDateClotureExe());
 	bddAdherent.setTournee(adherent.getTournee());

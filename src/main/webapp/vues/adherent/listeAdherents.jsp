@@ -11,35 +11,14 @@
 	<form:input type="hidden" name="object" path="object"/>
 	<form:input type="hidden" name="messageMail" path="messageMail"/>
 	<form:input type="hidden" name="contactFonctionIds" path="contactFonctionIds"/>
-
+	
 	<div class="listAdherent-recherche">
 		<div class="listAdherent-recherche-criteres">
 			<div>
-
-				<spring:message code="label.texteRecherche" var="recherchePH"/>
 				<form:input type="text" path="text" placeholder="${recherchePH}" autofocus="true"/>
-<%-- 					<form:select class="valeur" name="metier" path="metier"> --%>
-<%-- 						<form:options items="${adhMetierList}" itemValue="id" itemLabel="libelle" /> --%>
-<%-- 					</form:select> --%>
-				<form:select name="poleId" path="poleId">
-					<form:option value="0" label="- Pole -" />
-					<form:options items="${polesList}" itemValue="id" itemLabel="libelle" />
-				</form:select>
-				<form:select name="secteurId" path="secteurId">
-					<form:option value="0" label="- Secteur -"  />
-					<form:options items="${secteursList}" itemValue="id" itemLabel="libelle" />
-				</form:select>
-				
-<!-- 				<div> -->
-			    	<form:checkbox id="showAll" name="showAll" path="showAll"/> 
-			    	<label style="float:none;" for="showAll">Afficher les inactifs</label>
-			    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/> 
-			    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label>
-<!-- 			    </div> -->
-<!-- 			    <div> -->
-<%-- 			    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/>  --%>
-<!-- 			    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label> -->
-<!-- 			    </div> -->
+				<a href="#" id="advanceSearch">
+					<spring:message code="label.rechercheAvance"/>
+				</a>
 		    </div>
 		    <div>
 				<spring:message code="count.adherent" arguments="${listeAdherents.size()}"/>
@@ -47,19 +26,10 @@
 			<div <c:if test = "${criteria.avertissement == ''}"> style="display: none;" </c:if> >
 				${criteria.avertissement}
 			</div>
-			
 		</div>
 		<div class="listAdherent-recherche-button">
-			
 			<button class="action-button" type="submit">Rechercher</button>
-			<c:url value="/downloadFile" var="urlDownload">
-				<c:param name="findText" value="${criteria.text}"/>
-				<c:param name="poleId" value="${criteria.poleId}"/>
-				<c:param name="secteurId" value="${criteria.secteurId}"/>
-				<c:param name="showAll" value="${criteria.showAll}"/>
-				<c:param name="showAll" value="${criteria.showSousCompte}"/>
-			</c:url>
-			
+
 			<sec:authorize access="hasAnyRole('ROLE_MAILING','ROLE_EXPORT')">
 				<div class="scabotheque-dropdown">
 					<button id="btnMenu" type="button" class="scabotheque-dropdown-btn" onclick="openMenu()">
@@ -68,7 +38,8 @@
 				    <div id="listAdhMenu" class="scabotheque-dropdown-container">
 						<sec:authorize access="hasRole('ROLE_EXPORT')">
 					    	<div class="scabotheque-dropdown-item">
-						      	<a href="${urlDownload}" id="exportExcel">
+<%-- 						      	<a href="${urlDownload}" id="exportExcel"> --%>
+						      	<a href="#" id="exportExcel">
 						      		<svg class="scabotheque-dropdown-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg>
 									<spring:message code="menu.exportExcel"/>
 								</a>
@@ -87,54 +58,88 @@
 			</sec:authorize>
 	    </div>
 	</div>
-</form:form>
-
-<form:form id="mailingForm" method="post" modelAttribute="criteria" action="sendMail">
-	<form:input type="hidden" name="adherentIds" path="adherentIds"/>
-	<form:input type="hidden" name="text" path="text"/>
-	<form:input type="hidden" name="poleId" path="poleId"/>
-	<form:input type="hidden" name="secteurId" path="secteurId"/>
-	<form:input type="hidden" name="showAll" path="showAll"/>
-
-	<div id="editor" style="display:grid; border: 1px solid #82aa37; border-radius: 0.4em; margin: 0.2em; padding: 0.4em;">
-		<spring:message code="label.mail.note"/>
+	<div id="advanceSearchForm" style="border: 1px solid #82aa37; border-radius: 0.4em; margin: 0.2em; padding: 0.4em;">
+		<spring:message code="label.texteRecherche" var="recherchePH"/>
+		<spring:message code="label.filtre.pole" var="poleLib"/>
+		<spring:message code="label.filtre.secteur" var="secteurLib"/>
+		<spring:message code="label.filtre.activite" var="activiteLib"/>
 		
-		<span class="displayInline">
-						Dirigeant : <form:checkbox path="mailingDirigeant" /> 
-<!-- 					</span> -->
-
-<!-- 					<span class="displayInline"> -->
-						Commercial : <form:checkbox path="mailingCommerce" /> 
-<!-- 					</span> -->
-						
-<!-- 					<span class="displayInline"> -->
-						Administratif : <form:checkbox path="mailingAdministratif"/>  
-<!-- 					</span> -->
-						
-<!-- 					<span class="displayInline"> -->
-						Compta : <form:checkbox path="mailingCompta"/> 
-		   	    	</span>
-		
-<%-- 		<form:select name="contactFonctionIds" path="contactFonctionIds" multiple="true"> --%>
-<%-- 			<form:options items="${contactFonctionList}" itemValue="id" itemLabel="libelle" /> --%>
-<%-- 		</form:select> --%>
-		
-		<spring:message code="label.mail.expediteur" var="expediteurPH"/>
-		<form:input type="text" path="sender" placeHolder="${expediteurPH}"/>
-		
-		<spring:message code="label.mail.objet" var="objetPH"/>
-		<form:input type="text" path="object" placeHolder="${objetPH}"/>
-		
-		<!-- Create the editor container -->
-		<spring:message code="label.mail.message" var="messagePH"/>
-		<form:textarea id="summernote" name="editordata" path="messageMail"  placeholder="${messagePH }"/>
-			
+		<div style="display:grid; grid-template-columns: 1fr 1fr 1fr;" >
+			<form:select style="height: 200px; padding:0.4em;" name="poleIds" path="poleIds" multiple="true">
+				<form:option value="0" label="${poleLib}"/>
+				<form:options items="${polesList}" itemValue="id" itemLabel="libelle" />
+			</form:select>
+			<form:select name="secteurIds" path="secteurIds" multiple="true">
+				<form:option value="0" label="${secteurLib}"  />
+				<form:options items="${secteursList}" itemValue="id" itemLabel="libelle" />
+			</form:select>
+			<form:select name="activiteIds" path="activiteIds" multiple="true">
+				<form:option value="0" label="${activiteLib}"  />
+				<form:options items="${activitesList}" itemValue="id" itemLabel="libelle" />
+			</form:select>
+		</div>	
 		<div>
-			<button class="action-button"  type="submit">Envoyer</button>
-		</div>
-	
+	    	<form:checkbox id="showAll" name="showAll" path="showAll"/> 
+	    	<label style="float:none;" for="showAll">Afficher les inactifs</label>
+	    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/> 
+	    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label>
+    	</div>
 	</div>
 </form:form>
+
+<sec:authorize access="hasRole('ROLE_EXPORT')">
+	<form:form id="exportListForm" method="post" modelAttribute="criteria" action="exportList">
+		<form:input type="hidden" name="text" path="text"/>
+		<form:input type="hidden" name="poleIds" path="poleIds"/>
+		<form:input type="hidden" name="secteurIds" path="secteurIds"/>
+		<form:input type="hidden" name="activiteIds" path="activiteIds"/>
+		<form:input type="hidden" name="showAll" path="showAll"/>
+		<form:input type="hidden" name="showSousCompte" path="showSousCompte"/>
+		
+		<div>
+			<spring:message code="label.exportExcel" arguments="${listeAdherents.size()}"/> 
+			<button id="buttonExport" class="action-button"  type="submit">Exporter</button>
+		</div>
+		
+	</form:form>
+</sec:authorize>
+
+<sec:authorize access="hasRole('ROLE_MAILING')">
+	<form:form id="mailingForm" method="post" modelAttribute="criteria" action="sendMail">
+		<form:input type="hidden" name="text" path="text"/>
+		<form:input type="hidden" name="poleIds" path="poleIds"/>
+		<form:input type="hidden" name="secteurIds" path="secteurIds"/>
+		<form:input type="hidden" name="activiteIds" path="activiteIds"/>
+		<form:input type="hidden" name="showAll" path="showAll"/>
+		<form:input type="hidden" name="showSousCompte" path="showSousCompte"/>
+	
+		<div id="editor" style="display:grid; border: 1px solid #82aa37; border-radius: 0.4em; margin: 0.2em; padding: 0.4em;">
+			<spring:message code="label.mail.note"/>
+			
+			<span class="displayInline">
+				Dirigeant : <form:checkbox path="mailingDirigeant" /> 
+				Commercial : <form:checkbox path="mailingCommerce" /> 
+				Administratif : <form:checkbox path="mailingAdministratif"/>  
+				Compta : <form:checkbox path="mailingCompta"/> 
+   	    	</span>
+			
+			<spring:message code="label.mail.expediteur" var="expediteurPH"/>
+			<form:input type="text" path="sender" placeHolder="${expediteurPH}"/>
+			
+			<spring:message code="label.mail.objet" var="objetPH"/>
+			<form:input type="text" path="object" placeHolder="${objetPH}"/>
+			
+			<!-- Create the editor container -->
+			<spring:message code="label.mail.message" var="messagePH"/>
+			<form:textarea id="summernote" name="editordata" path="messageMail"  placeholder="${messagePH }"/>
+				
+			<div>
+				<button class="action-button"  type="submit">Envoyer</button>
+			</div>
+		
+		</div>
+	</form:form>
+</sec:authorize>
 
 <div class="listeAdherents">
 	<c:forEach items="${listeAdherents}" var="adherent">
@@ -196,12 +201,6 @@ $(document).ready(function() {
 	  
 	});
 	
-// 	$('#summernote').summernote({
-// 		placeholder: 'Hello stand alone ui',
-// 		tabsize: 4,
-// 		height: 100
-// 	});
-
 	$( function() {
 		$('#btnMenu').click(function(e){ 
 			$( "#listAdhMenu" ).toggle( 'slow' );
@@ -209,11 +208,21 @@ $(document).ready(function() {
 		
 		$('#exportExcel').click(function(e){ 
 			$( "#listAdhMenu" ).toggle( 'slow' );
+			$( "#exportListForm" ).toggle( 'slow' );
+		});
+
+		$('#buttonExport').click(function(e){ 
+			$( "#exportListForm" ).toggle( 'slow' );
 		});
 	
 		$('#mailingLink').click(function(e){ 
 			$( "#listAdhMenu" ).toggle( 'slow' );
 			$( "#mailingForm" ).toggle( 'slow' );
 		});
+		
+		$('#advanceSearch').click(function(e){ 
+			$( "#advanceSearchForm" ).toggle( 'slow' );
+		});
+		
 	});
 </script>

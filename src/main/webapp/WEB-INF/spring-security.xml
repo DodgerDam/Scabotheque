@@ -34,6 +34,8 @@
 		<sec:intercept-url pattern="/edit/editAdministratifAdh" access="hasAnyRole('ROLE_ADMIN', 'ROLE_ADMIN_FINANCE_EDIT')" />
 		<sec:intercept-url pattern="/edit/editInformatiqueAdh" access="hasAnyRole('ROLE_ADMIN', 'ROLE_INFORMATIQUE_EDIT')" />
 
+		<sec:intercept-url pattern="/downloadFile**" access="hasAnyRole('ROLE_ADMIN', 'ROLE_EXPORT')" />
+
 		<sec:intercept-url pattern="/login**" access="permitAll"/>
 		<sec:intercept-url pattern="/listeAdherents**" access="permitAll"/>
 		
@@ -49,10 +51,9 @@
 		<sec:csrf/>
 	</sec:http>
 
- 	<!-- Mode BDD fonctionne aussi  --> 
+ 	<!-- Mode BDD fonctionne aussi actuellement utilisé  --> 
 	<sec:authentication-manager>
 	  <sec:authentication-provider>
-<!-- 	    <sec:password-encoder hash="bcrypt"/> -->
 	    <sec:password-encoder ref="passwordEncoder"/>
     	<sec:jdbc-user-service data-source-ref="dataSource"
 		  users-by-username-query=
@@ -66,7 +67,7 @@
 		<constructor-arg name="strength" value="10"/>
     </bean>
 	
- 	<!-- Mode manuel Fonctionne   --> 
+ 	<!-- Mode manuel Fonctionne PLUS UTILISE  --> 
 <!-- 	<sec:authentication-manager> -->
 <!-- 		<sec:authentication-provider> -->
 <!-- 			<sec:user-service> -->
@@ -76,19 +77,19 @@
 <!-- 		</sec:authentication-provider> -->
 <!-- 	</sec:authentication-manager> -->
 
-	<!-- Mode LDAP en cour -->
-<!-- <sec:authentication-manager erase-credentials="true"> -->
-<!--          <sec:ldap-authentication-provider  -->
-<!--            user-search-filter="(uid={0})" -->
-<!--            user-search-base="ou=Scabois" -->
-<!--            group-search-filter="(uniqueMember={0})" -->
-<!--            group-search-base="ou=Scabois" -->
-<!--            group-role-attribute="cn" -->
-<!--            role-prefix="ROLE_"> -->
-<!--          </sec:ldap-authentication-provider> -->
-<!--  </sec:authentication-manager> -->
+	<!-- Mode LDAP en cour de paramétrage -->
+<!-- 	<sec:authentication-manager erase-credentials="true"> -->
+<!--     	<sec:ldap-authentication-provider  -->
+<!--         	user-search-filter="(uid={0})" -->
+<!--         	user-search-base="OU=Scabois,DC=scabois,DC=local" -->
+<!--         	group-search-filter="(uniqueMember={0})" -->
+<!--         	group-search-base="ou=Scabois" -->
+<!--         	group-role-attribute="cn" -->
+<!--         	role-prefix="ROLE_"> -->
+<!--         </sec:ldap-authentication-provider> -->
+<!-- 	</sec:authentication-manager> -->
  
-<!--  <sec:ldap-server url="ldap://10.211.40.230" port="389" manager-dn="uid=scabois\Admininstrateur" /> -->
+<!--  <sec:ldap-server url="ldap://10.211.40.230" port="389" manager-dn="uid=srv_ldap" /> -->
 
 <!-- 	<sec:authentication-manager alias="authenticationManager"> 837d61a351196d2dc4810d2d2f266b8cdffe445e-->
 <!--         <sec:ldap-authentication-provider -->

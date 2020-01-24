@@ -33,9 +33,9 @@ public class ApplicationMailer {
 	try {
 	    InternetAddress[] parsed;
 	    try {
-		parsed = InternetAddress.parse(to.replaceAll("(?:\\[|\\])s?", ""));
+		parsed = InternetAddress.parse(to.replaceAll("(?:\\[|\\])?", ""));
 	    } catch (AddressException e) {
-		throw new IllegalArgumentException("Not valid email: " + to, e);
+		throw new IllegalArgumentException("Not valid email: " + to + "\nSource -> " + e.getMessage(), e);
 	    }
 
 	    MimeMessage mailMessage = javaMailSender.createMimeMessage();

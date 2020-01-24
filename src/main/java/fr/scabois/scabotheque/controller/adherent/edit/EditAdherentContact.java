@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,8 @@ public class EditAdherentContact {
     private boolean isMailingComptabilite;
     private boolean isMailingDirigeant;
     @NotEmpty(message = "{modification.mailNotEmpty}")
+    @Email(message = "{modification.mailNotValid}")
+    @Pattern(regexp = "[^()<>,;:\"|ç%&]+", message = "{modification.mailNotValid}")
     private String mail;
 
     @Pattern(regexp = "^$|0[6-9](([ ][0-9]{2}){4})$", message = "{modification.phoneMobileFormat}")
