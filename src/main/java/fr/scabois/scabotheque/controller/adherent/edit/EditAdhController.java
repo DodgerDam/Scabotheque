@@ -143,6 +143,7 @@ public class EditAdhController {
 	editableAdh.setNumRepMetier(adh.getNumRepMetier());
 	editableAdh.setRcsRm(adh.getRcsRm());
 	editableAdh.setRcsCommune(adh.getRcsCommune());
+	editableAdh.setRmCommune(adh.getRmCommune());
 	editableAdh.setAgence(adh.getAgence());
 	editableAdh.setDateClotureExe(adh.getDateClotureExe());
 	editableAdh.setTournee(adh.getTournee());
@@ -304,6 +305,7 @@ public class EditAdhController {
 	adh.setNumRepMetier(editAdh.getNumRepMetier());
 	adh.setRcsRm(editAdh.getRcsRm());
 	adh.setRcsCommune(editAdh.getRcsCommune());
+	adh.setRmCommune(editAdh.getRmCommune());
 	adh.setAgence(editAdh.getAgence());
 	adh.setDateClotureExe(editAdh.getDateClotureExe());
 	adh.setTournee(editAdh.getTournee());
@@ -379,7 +381,7 @@ public class EditAdhController {
 	}
     }
 
-    @RequestMapping(value = "/edit/editActivitesAdh", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit/editActiviteAdh", method = RequestMethod.POST)
     public String modifieActiviteAdh(
 	    @Valid @ModelAttribute(value = "editForm") final EditAdherentActivitesForm editForm,
 	    final BindingResult pBindingResult, final ModelMap pModel, HttpServletRequest request) {
@@ -403,7 +405,7 @@ public class EditAdhController {
 	    });
 
 	    service.saveActivitesAdherent(adhId, activitesAdh);
-	    return redirectOkPage(PageType.ADHERENT_ACTIVITE, 1);
+	    return redirectOkPage(PageType.ADHERENT_ACTIVITE, adhId);
 	}
 
 	return editAdherentActivite(adhId, pModel, request);

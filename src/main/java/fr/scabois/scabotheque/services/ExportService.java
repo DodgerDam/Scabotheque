@@ -57,8 +57,9 @@ public class ExcelControler {
 
 	    List<Adherent> listAdh = service.LoadAdherents(criteria);
 
-	    String fileName = AppProperties.getPropertie("export.path") + "/ListAdhernet"
-		    + LocalDate.now().format(DateTimeFormatter.ISO_DATE) + ".xlsx";
+	    String fileName = AppProperties.getPropertie("export.path") + "/"
+		    + AppProperties.getPropertie("export.fileName") + LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+		    + ".xlsx";
 
 	    XSSFWorkbook workBook = openExcelWorkBook();
 	    XSSFSheet sheet = openSheet(workBook, listAdh.size());

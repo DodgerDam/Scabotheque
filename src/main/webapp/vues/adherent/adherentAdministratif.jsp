@@ -72,14 +72,19 @@
 			<span class="data">${adherent.numRepMetier}</span>
 		</div>
 		
-		<div  class="showDetailAdherent">
-	        <span class="adherentLabel"><spring:message code="label.rcsRm"/></span>
-			<span class="data">${adherent.rcsRm}</span>
-		</div>
+<!-- 		<div  class="showDetailAdherent"> -->
+<%-- 	        <span class="adherentLabel"><spring:message code="label.rcsRm"/></span> --%>
+<%-- 			<span class="data">${adherent.rcsRm}</span> --%>
+<!-- 		</div> -->
 
 		<div  class="showDetailAdherent">
 			<span class="adherentLabel"><spring:message code="label.rcsCommune"/></span>
-			<span class="data">${adherent.rcsCommune.libelle}</span>
+			<span class="data"><spring:message code="message.commune" arguments="${adherent.rcsCommune.codePostal}, ${adherent.rcsCommune.libelle}"/></span>
+		</div>
+
+		<div  class="showDetailAdherent">
+			<span class="adherentLabel"><spring:message code="label.rmCommune"/></span>
+			<span class="data"><spring:message code="message.commune" arguments="${adherent.rmCommune.codePostal}, ${adherent.rmCommune.libelle}"/></span>
 		</div>
 
 		<div  class="showDetailAdherent">

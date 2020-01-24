@@ -57,6 +57,7 @@
 	<form:input type="hidden" path="adherent.numRepMetier"/>
 	<form:input type="hidden" path="adherent.rcsRm"/>
 	<form:input type="hidden" path="adherent.rcsCommune.id"/>
+	<form:input type="hidden" path="adherent.rmCommune.id"/>
 	<form:input type="hidden" path="adherent.dateClotureExe"/>
 	<form:input type="hidden" path="adherent.contactComptable"/>
 	<form:input type="hidden" path="adherent.isFormationCommerce"/>

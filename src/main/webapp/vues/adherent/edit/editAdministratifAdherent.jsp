@@ -56,6 +56,7 @@
 <%-- 	<form:input type="hidden" path="adherent.ape.id"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.numRepMetier"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.rcsRm"/> --%>
+<%-- 	<form:input type="hidden" path="adherent.rmCommune.id"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.rcsCommune.id"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.dateClotureExe"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.contactComptable"/> --%>
@@ -67,10 +68,10 @@
 
 		<div class="showDetail">
 			<form:label path="adherent.dateEntree"><spring:message code="label.dateEntree"/></form:label>
-			<div>
+			<span>
 				<form:input class="valeur" type="date" name="adherent.dateEntree" path="adherent.dateEntree"/>
 				<form:errors class="errors" path="adherent.dateEntree" />
-			</div>
+			</span>
 		</div>
 	
 		<div class="showDetail">
@@ -113,11 +114,11 @@
 			<b><i><form:errors path="adherent.numRepMetier" /></i></b>
 		</div>
 
-		<div class="showDetail">
-			<form:label path="adherent.rcsRm" ><spring:message code="label.rcsRm"/></form:label>
-			<form:input class="valeur" name="adherent.rcsRm" path="adherent.rcsRm"/>
-			<b><i><form:errors path="adherent.rcsRm" /></i></b>
-		</div>
+<!-- 		<div class="showDetail"> -->
+<%-- 			<form:label path="adherent.rcsRm" ><spring:message code="label.rcsRm"/></form:label> --%>
+<%-- 			<form:input class="valeur" name="adherent.rcsRm" path="adherent.rcsRm"/> --%>
+<%-- 			<b><i><form:errors path="adherent.rcsRm" /></i></b> --%>
+<!-- 		</div> -->
 
 		<div class="showDetail">
 			<form:label path="adherent.rcsCommune" ><spring:message code="label.rcsCommune"/></form:label>
@@ -129,11 +130,20 @@
 		</div>
 		
 		<div class="showDetail">
+			<form:label path="adherent.rmCommune" ><spring:message code="label.rmCommune"/></form:label>
+			<form:label class="valeur"  id="CommuneRmLibelle" path="adherent.rmCommune" >${adhToEdit.adherent.rmCommune.codePostal} - ${adhToEdit.adherent.rmCommune.libelle}</form:label>
+			<form:input id="CommuneRm" type="hidden" path="adherent.rmCommune.id"/>
+			<form:input type="hidden" path="adherent.rmCommune.libelle"/>
+			<form:input type="hidden" path="adherent.rmCommune.codePostal"/>
+			<span><a href="#" id="editRmCommune"><svg><use xlink:href="../resources/images/icones.svg#edit"></use></svg></a></span>
+		</div>
+		
+		<div class="showDetail">
 			<form:label path="adherent.dateClotureExe"><spring:message code="label.dateClotureExe"/></form:label>
-			<div>
-			<form:input class="valeur" type="date" name="adherent.dateClotureExe" path="adherent.dateClotureExe"/>
-			<form:errors class="errors" path="adherent.dateClotureExe" />
-			</div>
+			<span>
+				<form:input class="valeur" type="date" name="adherent.dateClotureExe" path="adherent.dateClotureExe"/>
+				<form:errors class="errors" path="adherent.dateClotureExe" />
+			</span>
 		</div>
 		
 		<div class="showDetail">
@@ -162,18 +172,22 @@
 
 </form:form>
 
+<div id="overlay"></div>
 <div  id="dialogCommune" title="Selection de la commune" >
-		<span>commune actuel </span>
-		<span id="currentCommune"></span></br>
-		
-		<span>recherche de la nouvelle </span>
-		<span>saisir le code postal</span>
-		<input id="filterCP" type="text" />
-		<select id="communeListe" multiple></select>
+
+	<span>Recherche de la commune:</span>
+	<input id="filterCP" type="text" placeholder="Code postale ou Nom"  />
+	<br>
+	<select id="communeListe" class="communeListe" multiple >
+		<option value="" >trop de résultat</option>
+	</select>
 </div>
 
 <script>
 $( function() {
+	var globalTimeout = null;  
+	var editRcs;  
+
 	$(document).ready(function() {
 		  $('#summernote').summernote({
 		 		placeholder: '<spring:message code="label.commentaire"/>',
@@ -183,21 +197,27 @@ $( function() {
 		});
 	
 	communeDialog = $('#dialogCommune').dialog({
-		resizable:false,
-	    modal:true,
-	    autoOpen:false,
-	    height:400,
-	    width:315,
-
+		show: "fade",
+        hide: "fade",
+        resizable: false,
+        autoOpen: false,
+	    modal: true,
 	    buttons: {
 	    	"Selectionner" : function() {
-	        	$("#CommuneRcs").val($('#communeListe :selected').val());
-	        	$("#CommuneRcsLibelle").text($('#communeListe :selected').text());
+	    		if (editRcs){
+		        	$("#CommuneRcs").val($('#communeListe :selected').val());
+		        	$("#CommuneRcsLibelle").text($('#communeListe :selected').text());
+	    		}else{
+	    			$("#CommuneRm").val($('#communeListe :selected').val());
+		        	$("#CommuneRmLibelle").text($('#communeListe :selected').text());
+	    		}
 				$(this).dialog("close");
+				$("#overlay").hide();
 				return true;
 	        },
 	        "Annuler" : function() {
 	        	$(this).dialog("close");
+	        	$("#overlay").hide();
 				return false;
 	        }
 	      }
@@ -205,26 +225,46 @@ $( function() {
 	
 	$('#currentCommune').text($('#communeAdhLibelle').text());
 	  
-	$('#editCommune').click(function(e){ 
+	$('#editRcsCommune').click(function(e){ 
+		editRcs = true;
+		communeId = $("#rcsCommune");
+		communeLib = $("#rcsCommuneLibelle");
+		$("#overlay").show();
+		communeDialog.dialog("open");
+	});
+	
+	$('#editRmCommune').click(function(e){
+		editRcs = false;
+		communeId = $("#rmCommune");
+		communeLib = $("#rmCommuneLibelle");
+		$("#overlay").show();
 		communeDialog.dialog("open");
 	});
 	
 	$('#filterCP').bind("keyup", function(){
-		setTimeout(populateListe,1000);
+		// Si un delay est en cour, on le supprime
+		if (globalTimeout != null) {
+			clearTimeout(globalTimeout);
+		}
+		
+		// execution d'un delay
+		globalTimeout = setTimeout(function() {
+			globalTimeout = null;  
+			populateListe();
+		}, 1000);  
 	});
-	  
 	
 	function populateListe(){
  		var params={filter: $("#filterCP").val()};
  		console.log (params);
 		
-		$.get("loadCommuneListe",params, function(response) {
+		$.get("/scabotheque/loadCommuneListe",params, function(response) {
 			console.log("retour servlet : " + response.length);
 
 			        $selectList = $("#communeListe");
 			        $selectList.find("option").remove();  
 			        $.each(JSON.parse(response), function(index, commune) {
-				        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
+				        $("<option>").val(commune.id).text(commune.codePostal + " - " + commune.libelle).appendTo($selectList);
 			        });                   
 			 
 			    });

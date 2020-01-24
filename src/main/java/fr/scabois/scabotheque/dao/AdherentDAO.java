@@ -306,6 +306,14 @@ public class AdherentDAO implements IAdherentDAO {
 	return entityManager.createQuery("from Ape", Ape.class).getResultList();
     }
 
+    private Commune loadCommune(int communeId) {
+	try {
+	    return entityManager.find(Commune.class, communeId);
+	} catch (NoResultException e) {
+	    return null;
+	}
+    }
+
     @Override
     public List<Commune> loadCommunes() {
 	return entityManager.createQuery("from Commune", Commune.class).getResultList();
@@ -603,7 +611,9 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setDateEntree(adherent.getDateEntree());
 	bddAdherent.setAdresse(adherent.getAdresse());
 	bddAdherent.setAdresseComplement(adherent.getAdresseComplement());
-	bddAdherent.setCommune(adherent.getCommune());
+	if (adherent.getCommune().getId() != null) {
+	    bddAdherent.setCommune(loadCommune(adherent.getCommune().getId()));
+	}
 	bddAdherent.setPole(adherent.getPole());
 	bddAdherent.setRole(adherent.getRole());
 	bddAdherent.setSecteur(adherent.getSecteur());
@@ -618,7 +628,12 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setSiret(adherent.getSiret());
 	bddAdherent.setNumRepMetier(adherent.getNumRepMetier());
 	bddAdherent.setRcsRm(adherent.getRcsRm());
-	bddAdherent.setRcsCommune(adherent.getRcsCommune());
+	if (adherent.getRmCommune().getId() != null) {
+	    bddAdherent.setRcsCommune(loadCommune(adherent.getRcsCommune().getId()));
+	}
+	if (adherent.getRmCommune().getId() != null) {
+	    bddAdherent.setRmCommune(loadCommune(adherent.getRmCommune().getId()));
+	}
 	bddAdherent.setAgence(adherent.getAgence());
 	bddAdherent.setDateClotureExe(adherent.getDateClotureExe());
 	bddAdherent.setTournee(adherent.getTournee());

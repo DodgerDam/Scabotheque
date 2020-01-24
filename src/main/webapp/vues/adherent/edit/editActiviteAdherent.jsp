@@ -26,7 +26,7 @@
 	</div>
 </div>   
 	
-<form:form class="editAdherent" method="post" modelAttribute="editForm" action="editActivitesAdh">
+<form:form class="editAdherent" method="post" modelAttribute="editForm" action="editActiviteAdh">
 	<fieldset>
 	   	<legend class="legend"><spring:message code="label.activite"/></legend>
 		

@@ -56,6 +56,7 @@
 	<form:input type="hidden" path="adherent.numRepMetier"/>
 	<form:input type="hidden" path="adherent.rcsRm"/>
 	<form:input type="hidden" path="adherent.rcsCommune.id"/>
+	<form:input type="hidden" path="adherent.rmCommune.id"/>
 	<form:input type="hidden" path="adherent.dateClotureExe"/>
 	<form:input type="hidden" path="adherent.contactComptable"/>
 	<form:input type="hidden" path="adherent.isFormationCommerce"/>
@@ -146,7 +147,7 @@
 
 
 <div id="overlay"></div>
-<div  id="dialogCommune" title="Selection de la commune" >
+<div id="dialogCommune" title="Selection de la commune" >
 
 	<span>Recherche de la commune:</span>
 	<input id="filterCP" type="text" placeholder="Code postale ou Nom"  />
@@ -154,28 +155,30 @@
 	<select id="communeListe" class="communeListe" multiple >
 		<option value="" >trop de résultat</option>
 	</select>
-
 </div>
 
 <script>
 $( function() {
+	
+	var globalTimeout = null;  
+
 	communeDialog = $('#dialogCommune').dialog({
-		
 		show: "fade",
         hide: "fade",
         resizable: false,
         autoOpen: false,
 	    modal: true,
-
 	    buttons: {
 	    	"Selectionner" : function() {
 	        	$("#communeAdh").val($('#communeListe :selected').val());
 	        	$("#communeAdhLibelle").text($('#communeListe :selected').text());
 				$(this).dialog("close");
+				$("#overlay").hide();
 				return true;
 	        },
 	        "Annuler" : function() {
 	        	$(this).dialog("close");
+	        	$("#overlay").hide();
 				return false;
 	        }
 	      }
@@ -184,14 +187,25 @@ $( function() {
 	$('#currentCommune').text($('#communeAdhLibelle').text());
 	  
 	$('#editCommune').click(function(e){ 
+		communeId = $("#rcsCommune");
+		communeLib = $("#rcsCommuneLibelle");
+		$("#overlay").show();
 		communeDialog.dialog("open");
 	});
 	
 	$('#filterCP').bind("keyup", function(){
-		setTimeout(populateListe,1000);
+		// Si un delay est en cour, on le supprime
+		if (globalTimeout != null) {
+			clearTimeout(globalTimeout);
+		}
+		
+		// execution d'un delay
+		globalTimeout = setTimeout(function() {
+			globalTimeout = null;  
+			populateListe();
+		}, 1000);  
 	});
-	  
-	
+		
 	function populateListe(){
  		var params={filter: $("#filterCP").val()};
  		console.log (params);
@@ -201,7 +215,7 @@ $( function() {
 	        $selectList = $("#communeListe");
 	        $selectList.find("option").remove();  
 	        $.each(JSON.parse(response), function(index, commune) {
-		        $("<option>").val(commune.id).text(commune.libelle).appendTo($selectList);
+		        $("<option>").val(commune.id).text(commune.codePostal + " - " + commune.libelle).appendTo($selectList);
 	        });                   
 		});
 	}

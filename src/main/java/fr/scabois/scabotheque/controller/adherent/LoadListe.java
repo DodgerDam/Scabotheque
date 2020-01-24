@@ -31,6 +31,7 @@ public class LoadListe {
 	}).collect(Collectors.toList());
 
 	if (list.size() < 150) {
+
 	    String jsonList = new Gson().toJson(list.stream()
 		    .sorted((o1, o2) -> o1.getLibelle().compareTo(o2.getLibelle())).collect(Collectors.toList()));
 	    return jsonList;

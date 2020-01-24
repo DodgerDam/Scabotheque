@@ -51,12 +51,11 @@ public class EditAdherent {
     private String libelle;
     private String numRepMetier;
     private String photo;
-    // la présence de la commune est testée dans le controleur
     private Pole pole;
-    // la présence de la commune est testée dans le controleur
+    // la présence de la commune RCS est testée dans le controleur
     private Commune rcsCommune;
-    @NotEmpty(message = "{modification.notempty}")
     private String rcsRm;
+    private Commune rmCommune;
     private Role role;
     // la présence de la commune est testée dans le controleur
     private Secteur secteur;
@@ -175,6 +174,10 @@ public class EditAdherent {
 
     public String getRcsRm() {
 	return rcsRm;
+    }
+
+    public Commune getRmCommune() {
+	return rmCommune;
     }
 
     public Role getRole() {
@@ -307,6 +310,10 @@ public class EditAdherent {
 
     public void setRcsRm(String rcsRm) {
 	this.rcsRm = rcsRm;
+    }
+
+    public void setRmCommune(Commune rmCommune) {
+	this.rmCommune = rmCommune;
     }
 
     public void setRole(Role role) {
