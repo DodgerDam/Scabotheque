@@ -43,15 +43,15 @@
 			<span class="data" >${adherent.pole.libelle}</span>
 		</div>
 	
-		<div class="showDetailAdherent">
-			<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
-			<span class="data">
-				<c:choose>
-					<c:when test="${adherent.isArtipole}"><spring:message code="yes"/></c:when> 
-					<c:otherwise><spring:message code="no"/></c:otherwise> 
-				</c:choose>
-			</span>
-		</div>
+<!-- 		<div class="showDetailAdherent"> -->
+<%-- 			<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span> --%>
+<!-- 			<span class="data"> -->
+<%-- 				<c:choose> --%>
+<%-- 					<c:when test="${adherent.isArtipole}"><spring:message code="yes"/></c:when>  --%>
+<%-- 					<c:otherwise><spring:message code="no"/></c:otherwise>  --%>
+<%-- 				</c:choose> --%>
+<!-- 			</span> -->
+<!-- 		</div> -->
 
 <!-- 		<div class="colonnesTriple" style ="padding:10px;"> -->
 		<c:forEach items="${activites}" var="activite">

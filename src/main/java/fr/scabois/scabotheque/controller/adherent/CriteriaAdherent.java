@@ -23,6 +23,7 @@ public class CriteriaAdherent {
     private List<Integer> secteurIds = new ArrayList<>();
     private String sender;
     private boolean showAll = false;
+    private boolean showIsArtipole = false;
     private boolean showSousCompte = true;
     private String text;
 
@@ -90,13 +91,17 @@ public class CriteriaAdherent {
 	return mailingDirigeant;
     }
 
-    public void setActiviteIds(List<Integer> activiteId) {
-	this.activiteIds = activiteId;
+    public boolean isShowIsArtipole() {
+	return showIsArtipole;
     }
 
 //    public void setAdherentIds(List<String> adherentIds) {
 //	this.adherentIds = adherentIds;
 //    }
+
+    public void setActiviteIds(List<Integer> activiteId) {
+	this.activiteIds = activiteId;
+    }
 
     public void setAvertissement(String avertissement) {
 	this.avertissement = avertissement;
@@ -144,6 +149,10 @@ public class CriteriaAdherent {
 
     public void setShowAll(Boolean showAll) {
 	this.showAll = showAll;
+    }
+
+    public void setShowIsArtipole(boolean showIsArtipole) {
+	this.showIsArtipole = showIsArtipole;
     }
 
     public void setShowSousCompte(boolean showSousCompte) {

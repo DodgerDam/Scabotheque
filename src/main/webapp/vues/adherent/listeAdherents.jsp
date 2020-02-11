@@ -78,11 +78,19 @@
 				<form:options items="${activitesList}" itemValue="id" itemLabel="libelle" />
 			</form:select>
 		</div>	
-		<div>
+		<div style="display:grid; grid-template-columns: 1fr 1fr 1fr;" >
+	    	<div>
 	    	<form:checkbox id="showAll" name="showAll" path="showAll"/> 
-	    	<label style="float:none;" for="showAll">Afficher les inactifs</label>
+	    	<label style="float:none;" for="showAll"><spring:message code="label.filtre.inactif"/></label>
+	    	</div>
+	    	<div>
 	    	<form:checkbox id="showSousCompte" name="showSousCompte" path="showSousCompte"/> 
-	    	<label style="float:none;" for="showSousCompte">Afficher les sous comptes</label>
+	    	<label style="float:none;" for="showSousCompte"><spring:message code="label.filtre.sousCompte"/></label>
+	    	</div>
+	    	<div>
+	    	<form:checkbox id="showIsArtipole" name="showIsArtipole" path="showIsArtipole"/> 
+	    	<label style="float:none;" for="showIsArtipole"><spring:message code="label.filtre.isArtipole"/></label>
+	    	</div>
     	</div>
 	</div>
 </form:form>

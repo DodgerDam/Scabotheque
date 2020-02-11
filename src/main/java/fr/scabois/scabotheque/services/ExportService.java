@@ -55,28 +55,29 @@ public class ExportService {
 //		System.out.println(a.getLibelle());
 		AdherentContactRole contact = a.getContacts().stream().filter(c -> c.getFonction().getId().equals(1))
 			.findFirst().orElse(null);
-
+		int i = 0;
 		XSSFRow row = sheet.createRow(cpt.getAndIncrement());
-		row.createCell(0).setCellValue(a.getCodeERP());
-		row.createCell(1).setCellValue(contact == null ? "" : contact.getNom());
-		row.createCell(2).setCellValue(contact == null ? "" : contact.getPrenom());
-		row.createCell(3).setCellValue(a.getSiren());
-//		row.createCell(4).setCellValue(a.getFormeJuridique().getLibelle() + " " + a.getDenomination());
-		row.createCell(4).setCellValue(a.getDenomination());
-		row.createCell(5).setCellValue(a.getAdresse());
-		row.createCell(6).setCellValue(a.getAdresseComplement());
-		row.createCell(7).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
-		row.createCell(8).setCellValue(a.getCommune() == null ? "" : a.getCommune().getLibelle());
-		row.createCell(9).setCellValue(a.getAgence().getLibelle());
-		row.createCell(10).setCellValue(a.getEtat().getLibelle());
-		row.createCell(11).setCellValue(contact == null ? "" : contact.getFixe());
-		row.createCell(12).setCellValue(contact == null ? "" : contact.getMail());
-		row.createCell(13).setCellValue("");
+		row.createCell(i++).setCellValue(a.getCodeERP());
+		row.createCell(i++).setCellValue(contact == null ? "" : contact.getNom());
+		row.createCell(i++).setCellValue(contact == null ? "" : contact.getPrenom());
+		row.createCell(i++).setCellValue(a.getSiren());
+		row.createCell(i++).setCellValue(a.getPole().getLibelle());
+//		row.createCell(i++).setCellValue(a.getFormeJuridique().getLibelle() + " " + a.getDenomination());
+		row.createCell(i++).setCellValue(a.getDenomination());
+		row.createCell(i++).setCellValue(a.getAdresse());
+		row.createCell(i++).setCellValue(a.getAdresseComplement());
+		row.createCell(i++).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
+		row.createCell(i++).setCellValue(a.getCommune() == null ? "" : a.getCommune().getLibelle());
+		row.createCell(i++).setCellValue(a.getAgence().getLibelle());
+		row.createCell(i++).setCellValue(a.getEtat().getLibelle());
+		row.createCell(i++).setCellValue(contact == null ? "" : contact.getFixe());
+		row.createCell(i++).setCellValue(contact == null ? "" : contact.getMail());
+		row.createCell(i++).setCellValue("");
 	    });
 
 	    // Mise à jour du tableau
 	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A1"),
-		    new CellReference("M" + cpt.get()));
+		    new CellReference("O" + cpt.get()));
 
 	    XSSFTable table = workBook.getTable("ListeAdherents");
 	    table.setArea(tableArea);
@@ -93,7 +94,6 @@ public class ExportService {
 	    String mimeType = new MimetypesFileTypeMap().getContentType(fileName);
 
 	    if (mimeType == null) {
-		// Set to binary type if MIME mapping not found
 		mimeType = "application/octet-stream";
 	    }
 

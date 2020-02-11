@@ -37,8 +37,8 @@
 <%-- 	<form:input type="hidden" name="adherent.adresse" path="adherent.adresse"/> --%>
 <%-- 	<form:input type="hidden" name="adherent.adresseComplement" path="adherent.adresseComplement"/> --%>
 <%-- 	<form:input type="hidden" path="adherent.commune.id"/> --%>
-	<form:input type="hidden" path="adherent.pole.id"/>
-	<form:input type="hidden" path="adherent.isArtipole"/>
+<%-- 	<form:input type="hidden" path="adherent.pole.id"/> --%>
+<%-- 	<form:input type="hidden" path="adherent.isArtipole"/> --%>
 	<form:input type="hidden" path="adherent.isCharteArtipole"/>
 	<form:input type="hidden" path="adherent.isFlocageArtipole"/>
 	<form:input type="hidden" path="adherent.isWebArtipole"/>
@@ -116,6 +116,17 @@
 			<form:input type="hidden" path="adherent.commune.libelle"/>
 			<span><a href="#" id="editCommune"><svg><use xlink:href="<c:url value="/resources/images/icones.svg#edit"/>"></use></svg></a>
 			<b><i><form:errors class="error" path="adherent.commune" /></i></b></span>
+		</div>
+		<div class="showDetailAdherent">
+			<form:label path="adherent.pole" ><spring:message code="label.pole"/></form:label>
+			<form:select class="valeur" name="adherent.pole" path="adherent.pole.id">
+				<form:options items="${poleList}" itemValue="id" itemLabel="libelle" />
+			</form:select>
+			<b><i><form:errors path="adherent.pole" /></i></b>
+		</div>
+		<div  class="showDetailAdherent">
+			<form:label path="adherent.isArtipole" ><spring:message code="label.adhArtipole"/></form:label>
+			<form:checkbox path="adherent.isArtipole"/>
 		</div>
 	</fieldset>
 

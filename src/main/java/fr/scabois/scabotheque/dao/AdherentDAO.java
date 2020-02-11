@@ -291,8 +291,10 @@ public class AdherentDAO implements IAdherentDAO {
 		    : criteria.getSecteurIds().contains(adh.getSecteur().getId());
 	    boolean isActif = criteria.getShowAll() ? true : adh.getEtat().getId() == 1;
 	    boolean isSousCompte = criteria.getShowSousCompte() ? true : adh.getCodeERPParent().isEmpty();
+	    boolean isArtipole = criteria.isShowIsArtipole() ? adh.getIsArtipole() : true;
 
-	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif && isSousCompte && isActivite;
+	    return (isLib || isDenom || isCode) && isPole && isSecteur && isActif && isSousCompte && isActivite
+		    && isArtipole;
 	}).collect(Collectors.toList());
 
     }

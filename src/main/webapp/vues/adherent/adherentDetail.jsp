@@ -58,6 +58,10 @@
 					<span class="data">${adherent.denomination}</span>
 				</div>
 				<div  class="showDetailAdherent">
+					<span class="adherentLabel"><spring:message code="label.pole"/></span>
+					<span class="data">${adherent.pole.libelle}</span>
+				</div>
+				<div  class="showDetailAdherent">
 					<span class="adherentLabel"><spring:message code="label.adhArtipole"/></span>
 					<span class="data">
 						<c:choose>
@@ -66,7 +70,6 @@
 						</c:choose>
 					</span>
 				</div>
-				
 			</div>
 			<div>
 				<div  class="showDetailAdherent"> 

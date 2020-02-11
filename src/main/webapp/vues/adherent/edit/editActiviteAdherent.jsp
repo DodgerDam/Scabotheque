@@ -29,7 +29,7 @@
 <form:form class="editAdherent" method="post" modelAttribute="editForm" action="editActiviteAdh">
 	<fieldset>
 	   	<legend class="legend"><spring:message code="label.activite"/></legend>
-		
+	
 		<c:forEach items="${editForm.activitesAdh}" var="activite" varStatus="status">
 			<form:input type="hidden" path="activitesAdh[${status.index}].id"/>
 			<form:input type="hidden" path="activitesAdh[${status.index}].adherentId"/>
