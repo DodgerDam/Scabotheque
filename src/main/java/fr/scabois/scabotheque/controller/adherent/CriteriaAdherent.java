@@ -11,6 +11,7 @@ public class CriteriaAdherent {
     private String avertissement;
 
     private List<Integer> contactFonctionIds = new ArrayList<>();
+    private boolean exportAll = false;
     private boolean mailingAdministratif = true;
     private boolean mailingCommerce = true;
     private boolean mailingCompta = true;
@@ -41,6 +42,10 @@ public class CriteriaAdherent {
 
     public List<Integer> getContactFonctionIds() {
 	return contactFonctionIds;
+    }
+
+    public boolean getExportAll() {
+	return exportAll;
     }
 
     public String getMessageMail() {
@@ -109,6 +114,10 @@ public class CriteriaAdherent {
 
     public void setContactFonctionIds(List<Integer> contactFonctionIds) {
 	this.contactFonctionIds = contactFonctionIds;
+    }
+
+    public void setExportAll(Boolean exportAll) {
+	this.exportAll = exportAll;
     }
 
     public void setMailingAdministratif(boolean mailingAdministratif) {

@@ -11,13 +11,13 @@
 		<div class="appMenu" >
 		
 			<!-- 	Menu Adherents -->
+			<c:url value="/listeAdherents" var="urlListe" />
+			<c:url value="/addAdherent" var="urlAdd" />
 			<div class="menu-item <c:if test = "${pageType == 'LIST_ADHERENT' || pageType == 'CREATE_ADHERENT' || pageType == 'ADHERENT_DETAIL' || 
 												pageType == 'ADHERENT_ACTIVITE' || pageType == 'ADHERENT_EXPLOITATION' || pageType == 'ADHERENT_ADMINISTRATIF' ||
 												pageType == 'ADHERENT_INFORMATIQUE'}">
 										menu-active 
 								</c:if>">
-				<c:url value="/listeAdherents" var="urlListe" />
-				<c:url value="/addAdherent" var="urlAdd" />
 				
 				<div class="menu-dropdown">
 					<a href="#"> 
@@ -43,35 +43,59 @@
 			
 			
 			<!-- 	Menu Fournisseur sans menu déroulant -->
-			<c:url value="/enCours" var="url" />
-			<a class="menu-item <c:if test = "${pageType == 'GESTION_FOURNISSEUR'}"> menu-active</c:if>" href="${url}">
-				<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg>
-				<spring:message code="menu.gestionFournisseur"/>
-			</a>
+<%-- 			<c:url value="/enCours" var="url" /> --%>
+<%-- 			<a class="menu-item <c:if test = "${pageType == 'GESTION_FOURNISSEUR'}"> menu-active</c:if>" href="${url}"> --%>
+<%-- 				<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#supply"/>"></use></svg> --%>
+<%-- 				<spring:message code="menu.gestionFournisseur"/> --%>
+<!-- 			</a> -->
 			
 			
 			<!-- 	Fichiers partagés -->
-			<div class="menu-item">
+<!-- 			<div class="menu-item"> -->
+<!-- 				<div class="menu-dropdown"> -->
+<!-- 				    <a href="#">  -->
+<%-- 						<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#arrow-dropdown"/>"></use></svg> --%>
+<!-- 					</a> -->
+<!-- 				    <div class="menu-dropdown-container scroll-stop"> -->
+<!-- 						<a class="sub-menu-item" href=<c:url value="https://scabois-my.sharepoint.com/:x:/g/personal/dslowensky_scabois_onmicrosoft_com/Ea2sNJqVMptPhJSnvU_-UqoBqd2XJ9hZ7XXdXMGowEI_tA?e=6sCPV1"/> target="_blank"> -->
+<%-- 							<svg class="menu-item-icon"><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg> --%>
+<%-- 							<spring:message code="menu.testExcel"/> --%>
+<!-- 						</a> -->
+<!-- 				     </div> -->
+<!-- 				</div>  -->
+<!-- 			    	Menu liste des adhernets sans menu déroulant -->
+<!-- 				<a class="menu-dropdown-complement"  href="#"> -->
+<%-- 					<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg> --%>
+<%-- 					<spring:message code="menu.shareFiles"/> --%>
+<!-- 				</a> -->
+<!-- 			</div> -->
+			
+			<!-- 	Gestion des produits -->
+			<c:url value="/enCours" var="urlNewProduct" />
+				
+			<div class="menu-item <c:if test = "${pageType == 'GESTION_PRODUIT'}"> menu-active</c:if>">
 				<div class="menu-dropdown">
 				    <a href="#"> 
 						<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#arrow-dropdown"/>"></use></svg>
 					</a>
-				    <div class="menu-dropdown-container scroll-stop">
+				    
+				    <div  class="menu-dropdown-container scroll-stop-drop">
+				   		<a class="sub-menu-item" href="${urlNewProduct}">
+					   		<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#card-add"/>"></use></svg>
+							<spring:message code="menu.addProduit"/>
+						</a>
 						<a class="sub-menu-item" href=<c:url value="https://scabois-my.sharepoint.com/:x:/g/personal/dslowensky_scabois_onmicrosoft_com/Ea2sNJqVMptPhJSnvU_-UqoBqd2XJ9hZ7XXdXMGowEI_tA?e=6sCPV1"/> target="_blank">
 							<svg class="menu-item-icon"><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg>
 							<spring:message code="menu.testExcel"/>
 						</a>
 				     </div>
 				</div> 
-			    <!-- 	Menu liste des adhernets sans menu déroulant -->
-				<a class="menu-dropdown-complement"  href="#">
+			    <!-- 	Menu gestion des produits, partie sans menu déroulant -->
+			    <a class="menu-dropdown-complement <c:if test = "${pageType == 'GESTION_PRODUIT'}"> appMenu-active</c:if>"  > <%-- href="#"> --%>
 					<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#excel"/>"></use></svg>
-					<spring:message code="menu.shareFiles"/>
+					<spring:message code="menu.produit"/>
 				</a>
 			</div>
-			
-			
-			
 			
 			<!-- 	Liens Utiles -->
 			<div class="menu-item">
@@ -84,7 +108,7 @@
 							<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#wiki"/>"></use></svg>
 							<spring:message code="menu.wiki"/>
 						</a>
-						<a class="sub-menu-item" href=<c:url value="http://preprod-scabois.orcab.net"/> target="_blank">
+						<a class="sub-menu-item" href=<c:url value="http://macoop.scabois.fr"/> target="_blank">
 							<svg class="menu-item-icon"><use xlink:href="<c:url value="/resources/images/icones.svg#modus"/>"></use></svg>
 							<spring:message code="menu.extranet"/>
 						</a>
@@ -106,7 +130,7 @@
 						</a>
 					</div>
 				</div> 
-				<a class="menu-dropdown-complement"  href="#">
+				<a class="menu-dropdown-complement" > <%-- href="#"> --%>
 					<svg class="menu-item-icon" ><use xlink:href="<c:url value="/resources/images/icones.svg#card-v2"/>"></use></svg>
 					<spring:message code="menu.gestionLiensUtils"/>
 				</a>

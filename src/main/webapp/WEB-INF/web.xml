@@ -52,7 +52,7 @@
 
 	<!-- session valide pendant 4 heure -->
 	<session-config>
-        <session-timeout>240</session-timeout> 
+        <session-timeout>480</session-timeout> 
     </session-config>
     
 <!-- 	<error-page> -->

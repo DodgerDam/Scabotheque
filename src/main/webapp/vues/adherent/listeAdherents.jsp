@@ -104,9 +104,19 @@
 		<form:input type="hidden" name="showAll" path="showAll"/>
 		<form:input type="hidden" name="showSousCompte" path="showSousCompte"/>
 		
-		<div>
-			<spring:message code="label.exportExcel" arguments="${listeAdherents.size()}"/> 
-			<button id="buttonExport" class="action-button"  type="submit">Exporter</button>
+		<div style="display: flex; align-items: center;">
+			<div style="margin: 0 1.5em;">			
+				<spring:message code="label.exportExcel" arguments="${listeAdherents.size()}"/> 
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div style="margin: 0.5em 0;">
+				    	<form:checkbox id="exportAll" name="exportAll" path="exportAll"/> 
+				    	<label style="float:none;" for="exportAll"><spring:message code="label.exportAll"/></label>
+			    	</div>
+				</sec:authorize>
+			</div>
+			<div>
+				<button id="buttonExport" class="action-button"  type="submit">Exporter</button>
+			</div>
 		</div>
 		
 	</form:form>

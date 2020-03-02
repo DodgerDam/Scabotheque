@@ -38,7 +38,7 @@ public class ExportService {
     public void downloadFile(CriteriaAdherent criteria, HttpServletResponse response) {
 	try {
 
-	    AppProperties.getPropertie("export.template.excel");
+//	    AppProperties.getPropertie("export.template.excel");
 
 	    List<Adherent> listAdh = service.LoadAdherents(criteria);
 
@@ -46,7 +46,7 @@ public class ExportService {
 		    + AppProperties.getPropertie("export.fileName") + LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 		    + ".xlsx";
 
-	    XSSFWorkbook workBook = openExcelWorkBook();
+	    XSSFWorkbook workBook = openExcelWorkBook(criteria.getExportAll());
 	    XSSFSheet sheet = openSheet(workBook, listAdh.size());
 
 	    final AtomicInteger cpt = new AtomicInteger(1);
@@ -64,6 +64,9 @@ public class ExportService {
 		row.createCell(i++).setCellValue(a.getPole().getLibelle());
 //		row.createCell(i++).setCellValue(a.getFormeJuridique().getLibelle() + " " + a.getDenomination());
 		row.createCell(i++).setCellValue(a.getDenomination());
+		if (criteria.getExportAll()) {
+		    row.createCell(i++).setCellValue(a.getSecteur().getLibelle());
+		}
 		row.createCell(i++).setCellValue(a.getAdresse());
 		row.createCell(i++).setCellValue(a.getAdresseComplement());
 		row.createCell(i++).setCellValue(a.getCommune() == null ? "" : a.getCommune().getCodePostal());
@@ -126,12 +129,16 @@ public class ExportService {
 	}
     }
 
-    private XSSFWorkbook openExcelWorkBook() {
+    private XSSFWorkbook openExcelWorkBook(boolean exportAll) {
 
 	// test ouverture fichier template.
 	XSSFWorkbook workBook;
 	try {
-	    workBook = new XSSFWorkbook(AppProperties.getPropertie("export.template.excel"));
+	    if (exportAll) {
+		workBook = new XSSFWorkbook(AppProperties.getPropertie("export.template.excel.interne"));
+	    } else {
+		workBook = new XSSFWorkbook(AppProperties.getPropertie("export.template.excel"));
+	    }
 
 	} catch (InvalidOperationException | IOException i) {
 	    // Le fichier n'exist pas
@@ -150,25 +157,26 @@ public class ExportService {
 	// si pas d feuille -> création.
 	if (sheet == null) {
 	    sheet = workBook.createSheet("Adherents");
-
+	    int cpt = 0;
 	    XSSFRow rowhead = sheet.createRow((short) 0);
-	    rowhead.createCell(0).setCellValue("Code");
-	    rowhead.createCell(1).setCellValue("Nom");
-	    rowhead.createCell(2).setCellValue("Prenom");
-//	    rowhead.createCell(3).setCellValue("SIREN");
-	    rowhead.createCell(4).setCellValue("Adherent");
-	    rowhead.createCell(5).setCellValue("Adresse");
-	    rowhead.createCell(5).setCellValue("Complement d'adresse");
-	    rowhead.createCell(6).setCellValue("Code Postal");
-	    rowhead.createCell(7).setCellValue("Ville");
-	    rowhead.createCell(8).setCellValue("Agence");
-	    rowhead.createCell(9).setCellValue("Actif");
-	    rowhead.createCell(10).setCellValue("Telephone");
-	    rowhead.createCell(11).setCellValue("Messagerie");
-	    rowhead.createCell(12).setCellValue("Commentaire");
+	    rowhead.createCell(cpt++).setCellValue("Code");
+	    rowhead.createCell(cpt++).setCellValue("Nom");
+	    rowhead.createCell(cpt++).setCellValue("Prenom");
+	    rowhead.createCell(cpt++).setCellValue("SIREN");
+	    rowhead.createCell(cpt++).setCellValue("Pole");
+	    rowhead.createCell(cpt++).setCellValue("Adherent");
+	    rowhead.createCell(cpt++).setCellValue("Adresse");
+	    rowhead.createCell(cpt++).setCellValue("Complement d'adresse");
+	    rowhead.createCell(cpt++).setCellValue("Code Postal");
+	    rowhead.createCell(cpt++).setCellValue("Ville");
+	    rowhead.createCell(cpt++).setCellValue("Agence");
+	    rowhead.createCell(cpt++).setCellValue("Actif");
+	    rowhead.createCell(cpt++).setCellValue("Telephone");
+	    rowhead.createCell(cpt++).setCellValue("Messagerie");
+	    rowhead.createCell(cpt++).setCellValue("Commentaire");
 
-	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A2"),
-		    new CellReference("M3"));
+	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A1"),
+		    new CellReference("N3"));
 
 	    XSSFTable table = sheet.createTable(tableArea);
 	    table.setDisplayName("ListeAdherents");

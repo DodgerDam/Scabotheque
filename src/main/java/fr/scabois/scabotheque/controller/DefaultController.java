@@ -13,7 +13,8 @@ public class DefaultController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String afficherBonjour(final ModelMap pModel) {
-	pModel.addAttribute("pageType", PageType.GESTION_FOURNISSEUR);
+//	pModel.addAttribute("pageType", PageType.GESTION_FOURNISSEUR);
+	pModel.addAttribute("pageType", PageType.GESTION_PRODUIT);
 	return "enCours";
     }
 }
