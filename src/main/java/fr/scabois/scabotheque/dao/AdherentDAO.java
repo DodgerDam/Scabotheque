@@ -631,12 +631,12 @@ public class AdherentDAO implements IAdherentDAO {
 	bddAdherent.setSiret(adherent.getSiret());
 	bddAdherent.setNumRepMetier(adherent.getNumRepMetier());
 	bddAdherent.setRcsRm(adherent.getRcsRm());
-	if (adherent.getRcsCommune().getId() != null) {
+	if (adherent.getRmCommune().getId() != null) {
 	    bddAdherent.setRcsCommune(loadCommune(adherent.getRcsCommune().getId()));
 	}
-//	if (adherent.getRmCommune().getId() != null) {
-//	    bddAdherent.setRmCommune(loadCommune(adherent.getRmCommune().getId()));
-//	}
+	if (adherent.getRmCommune().getId() != null) {
+	    bddAdherent.setRmCommune(loadCommune(adherent.getRmCommune().getId()));
+	}
 	bddAdherent.setAgence(adherent.getAgence());
 	bddAdherent.setDateClotureExe(adherent.getDateClotureExe());
 	bddAdherent.setTournee(adherent.getTournee());

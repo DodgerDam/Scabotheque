@@ -70,6 +70,10 @@
 						</c:choose>
 					</span>
 				</div>
+<<<<<<< HEAD
+=======
+				
+>>>>>>> branch 'master' of https://github.com/DodgerDam/Scabotheque.git
 			</div>
 			<div>
 				<div  class="showDetailAdherent"> 

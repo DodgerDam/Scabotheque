@@ -177,7 +177,6 @@ public class ExportService {
 
 	    AreaReference tableArea = workBook.getCreationHelper().createAreaReference(new CellReference("A1"),
 		    new CellReference("N3"));
-
 	    XSSFTable table = sheet.createTable(tableArea);
 	    table.setDisplayName("ListeAdherents");
 	    table.setName("ListeAdherents");
